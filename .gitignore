@@ -1,0 +1,6 @@
+#ignore dir
+.idea/
+.idea_modules/
+assembly/
+examples/
+lib_managed/

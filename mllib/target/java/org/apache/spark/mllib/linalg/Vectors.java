@@ -1,0 +1,56 @@
+package org.apache.spark.mllib.linalg;
+// no position
+// not preceding
+public  class Vectors {
+  /**
+   * Creates a dense vector from its values.
+   */
+  static public  org.apache.spark.mllib.linalg.Vector dense (double firstValue, double... otherValues) { throw new RuntimeException(); }
+  /**
+   * Creates a dense vector from its values.
+   */
+  static public  org.apache.spark.mllib.linalg.Vector dense (double firstValue, scala.collection.Seq<java.lang.Object> otherValues) { throw new RuntimeException(); }
+  /**
+   * Creates a dense vector from a double array.
+   */
+  static public  org.apache.spark.mllib.linalg.Vector dense (double[] values) { throw new RuntimeException(); }
+  /**
+   * Creates a sparse vector providing its index array and value array.
+   * <p>
+   * @param size vector size.
+   * @param indices index array, must be strictly increasing.
+   * @param values value array, must have the same length as indices.
+   */
+  static public  org.apache.spark.mllib.linalg.Vector sparse (int size, int[] indices, double[] values) { throw new RuntimeException(); }
+  /**
+   * Creates a sparse vector using unordered (index, value) pairs.
+   * <p>
+   * @param size vector size.
+   * @param elements vector elements in (index, value) pairs.
+   */
+  static public  org.apache.spark.mllib.linalg.Vector sparse (int size, scala.collection.Seq<scala.Tuple2<java.lang.Object, java.lang.Object>> elements) { throw new RuntimeException(); }
+  /**
+   * Creates a sparse vector using unordered (index, value) pairs in a Java friendly way.
+   * <p>
+   * @param size vector size.
+   * @param elements vector elements in (index, value) pairs.
+   */
+  static public  org.apache.spark.mllib.linalg.Vector sparse (int size, java.lang.Iterable<scala.Tuple2<java.lang.Integer, java.lang.Double>> elements) { throw new RuntimeException(); }
+  /**
+   * Creates a dense vector of all zeros.
+   * <p>
+   * @param size vector size
+   * @return a zero vector
+   */
+  static public  org.apache.spark.mllib.linalg.Vector zeros (int size) { throw new RuntimeException(); }
+  /**
+   * Parses a string resulted from <code>Vector#toString</code> into
+   * an {@link org.apache.spark.mllib.linalg.Vector}.
+   */
+  static public  org.apache.spark.mllib.linalg.Vector parse (java.lang.String s) { throw new RuntimeException(); }
+  static private  org.apache.spark.mllib.linalg.Vector parseNumeric (Object any) { throw new RuntimeException(); }
+  /**
+   * Creates a vector instance from a breeze vector.
+   */
+  static private  org.apache.spark.mllib.linalg.Vector fromBreeze (breeze.linalg.Vector<java.lang.Object> breezeVector) { throw new RuntimeException(); }
+}
