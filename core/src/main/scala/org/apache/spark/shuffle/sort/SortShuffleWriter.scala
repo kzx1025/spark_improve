@@ -33,6 +33,15 @@ private[spark] class SortShuffleWriter[K, V, C](
     context: TaskContext)
   extends ShuffleWriter[K, V] with Logging {
 
+
+  //add by kzx
+  //add a constructor
+//  def this(handleK: BaseShuffleHandle[K, V, C],mapIdK: Int,contextK: TaskContext,isRDDCache: Boolean)={
+//    this(handleK,mapIdK,contextK)
+//    this.isRDDCache = isRDDCache
+//  }
+
+
   private val dep = handle.dependency
   private val numPartitions = dep.partitioner.numPartitions
 
@@ -64,6 +73,7 @@ private[spark] class SortShuffleWriter[K, V, C](
       }
       sorter = new ExternalSorter[K, V, C](
         dep.aggregator, Some(dep.partitioner), dep.keyOrdering, dep.serializer)
+      sorter.setRDDCache(isRDDCache)
       sorter.insertAll(records)
     } else {
       // In this case we pass neither an aggregator nor an ordering to the sorter, because we don't
@@ -71,6 +81,7 @@ private[spark] class SortShuffleWriter[K, V, C](
       // if the operation being run is sortByKey.
       sorter = new ExternalSorter[K, V, V](
         None, Some(dep.partitioner), None, dep.serializer)
+      sorter.setRDDCache(isRDDCache)
       sorter.insertAll(records)
     }
 

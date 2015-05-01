@@ -47,6 +47,22 @@ private[spark] class ResultTask[T, U](
     val outputId: Int)
   extends Task[U](stageId, partition.index) with Serializable {
 
+
+  /**
+   * add by kzx
+   */
+  def this(stageIdK: Int,
+           taskBinaryK: Broadcast[Array[Byte]],
+           partitionK: Partition,
+           rddCacheInStageK: Boolean,
+           @transient locsK: Seq[TaskLocation],
+           outputIdK: Int){
+
+    this(stageIdK,taskBinaryK,partitionK,locsK,outputIdK)
+    this.isRDDCache = rddCacheInStageK;
+
+  }
+
   @transient private[this] val preferredLocs: Seq[TaskLocation] = {
     if (locs == null) Nil else locs.toSet.toSeq
   }
@@ -59,7 +75,13 @@ private[spark] class ResultTask[T, U](
 
     metrics = Some(context.taskMetrics)
     try {
-      func(context, rdd.iterator(partition, context))
+      if(isRDDCache) {
+        //logInfo("shuffleMapTask->runTask: in cache")
+        func(context, rdd.iterator(partition, context))
+      }else{
+        //logInfo("shuffleMapTask->runTask: in cache")
+        func(context, rdd.iteratorK(partition, context))
+      }
     } finally {
       context.markTaskCompleted()
     }

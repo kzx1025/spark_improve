@@ -107,6 +107,12 @@ private  class ExternalSorter<K extends java.lang.Object, V extends java.lang.Ob
   // TypeTree().setOriginal(TypeBoundsTree(TypeTree().setOriginal(Select(Select(Ident(_root_), scala), scala.Nothing)), TypeTree().setOriginal(Select(Select(Ident(_root_), scala), scala.Any))))
   // TypeTree().setOriginal(TypeBoundsTree(TypeTree().setOriginal(Select(Select(Ident(_root_), scala), scala.Nothing)), TypeTree().setOriginal(Select(Select(Ident(_root_), scala), scala.Any))))
   public   ExternalSorter (scala.Option<org.apache.spark.Aggregator<K, V, C>> aggregator, scala.Option<org.apache.spark.Partitioner> partitioner, scala.Option<scala.math.Ordering<K>> ordering, scala.Option<org.apache.spark.serializer.Serializer> serializer) { throw new RuntimeException(); }
+  /**
+   * add by kzx
+   */
+  public  boolean isRDDCache () { throw new RuntimeException(); }
+  public  void setRDDCache (boolean flag) { throw new RuntimeException(); }
+  public  boolean getRDDCache () { throw new RuntimeException(); }
   private  int numPartitions () { throw new RuntimeException(); }
   private  boolean shouldPartition () { throw new RuntimeException(); }
   private  org.apache.spark.storage.BlockManager blockManager () { throw new RuntimeException(); }

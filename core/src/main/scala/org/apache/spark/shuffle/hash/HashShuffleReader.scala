@@ -32,6 +32,18 @@ private[spark] class HashShuffleReader[K, C](
   require(endPartition == startPartition + 1,
     "Hash shuffle currently only supports fetching one partition")
 
+  //add by kzx
+
+//  def this( handle: BaseShuffleHandle[K, _, C],
+//            startPartition: Int,
+//            endPartition: Int,
+//            context: TaskContext,
+//            isRDDCache:Boolean){
+//    this(handle,startPartition,endPartition,context)
+//    this.isRDDCache = isRDDCache
+//  }
+
+
   private val dep = handle.dependency
 
   /** Read the combined key-values for this reduce task */
@@ -43,9 +55,9 @@ private[spark] class HashShuffleReader[K, C](
 
     val aggregatedIter: Iterator[Product2[K, C]] = if (dep.aggregator.isDefined) {
       if (dep.mapSideCombine) {
-        new InterruptibleIterator(context, dep.aggregator.get.combineCombinersByKey(iter, context))
+        new InterruptibleIterator(context, dep.aggregator.get.combineCombinersByKey(iter, context,isRDDCache))
       } else {
-        new InterruptibleIterator(context, dep.aggregator.get.combineValuesByKey(iter, context))
+        new InterruptibleIterator(context, dep.aggregator.get.combineValuesByKey(iter, context,isRDDCache))
       }
     } else if (dep.aggregator.isEmpty && dep.mapSideCombine) {
       throw new IllegalStateException("Aggregator is empty for map-side combine")
@@ -60,6 +72,7 @@ private[spark] class HashShuffleReader[K, C](
         // Create an ExternalSorter to sort the data. Note that if spark.shuffle.spill is disabled,
         // the ExternalSorter won't spill to disk.
         val sorter = new ExternalSorter[K, C, C](ordering = Some(keyOrd), serializer = Some(ser))
+        sorter.setRDDCache(isRDDCache);
         sorter.insertAll(aggregatedIter)
         context.taskMetrics.memoryBytesSpilled += sorter.memoryBytesSpilled
         context.taskMetrics.diskBytesSpilled += sorter.diskBytesSpilled

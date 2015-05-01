@@ -1,10 +1,109 @@
+[0m[[0mdebug[0m] [0mThe org.apache.spark.rdd.MapPartitionsRDD$ source file has the following regular definitions changed:[0m
+[0m[[0mdebug[0m] [0m	setHasPersist, iteratorK, compute, getHasPersist, hasPersist, computeOrReadCheckpoint.[0m
+[0m[[0mdebug[0m] [0mAll member reference dependencies will be considered within this context.[0m
+[0m[[0mdebug[0m] [0mFiles invalidated by inheriting from (external) org.apache.spark.rdd.MapPartitionsRDD$: Set(); now invalidating by inheritance (internally).[0m
+[0m[[0mdebug[0m] [0mGetting direct dependencies of all sources transitively invalidated by inheritance.[0m
+[0m[[0mdebug[0m] [0mGetting sources that directly depend on (external) org.apache.spark.rdd.MapPartitionsRDD$.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/dstream/ReducedWindowedDStream.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mThe org.apache.spark.rdd.PartitionerAwareUnionRDD source file has the following regular definitions changed:[0m
+[0m[[0mdebug[0m] [0m	setHasPersist, iteratorK, compute, getHasPersist, hasPersist, computeOrReadCheckpoint.[0m
+[0m[[0mdebug[0m] [0mAll member reference dependencies will be considered within this context.[0m
+[0m[[0mdebug[0m] [0mFiles invalidated by inheriting from (external) org.apache.spark.rdd.PartitionerAwareUnionRDD: Set(); now invalidating by inheritance (internally).[0m
+[0m[[0mdebug[0m] [0mGetting direct dependencies of all sources transitively invalidated by inheritance.[0m
+[0m[[0mdebug[0m] [0mGetting sources that directly depend on (external) org.apache.spark.rdd.PartitionerAwareUnionRDD.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/dstream/WindowedDStream.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mThe org.apache.spark.rdd.RDD source file has the following regular definitions changed:[0m
+[0m[[0mdebug[0m] [0m	hasPersist, setHasPersist, getHasPersist.[0m
+[0m[[0mdebug[0m] [0mAll member reference dependencies will be considered within this context.[0m
+[0m[[0mdebug[0m] [0mFiles invalidated by inheriting from (external) org.apache.spark.rdd.RDD: Set(); now invalidating by inheritance (internally).[0m
+[0m[[0mdebug[0m] [0mGetting direct dependencies of all sources transitively invalidated by inheritance.[0m
+[0m[[0mdebug[0m] [0mGetting sources that directly depend on (external) org.apache.spark.rdd.RDD.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/util/MasterFailureTest.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/dstream/FilteredDStream.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/api/java/JavaPairDStream.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/api/java/JavaDStream.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/api/java/JavaDStreamLike.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/dstream/MappedDStream.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/dstream/TransformedDStream.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/dstream/ShuffledDStream.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/dstream/MapPartitionedDStream.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/dstream/GlommedDStream.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/dstream/MapValuedDStream.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/util/RawTextHelper.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/dstream/ForEachDStream.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/dstream/ReceiverInputDStream.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/dstream/ConstantInputDStream.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/StreamingContext.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/dstream/ReducedWindowedDStream.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/dstream/PairDStreamFunctions.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/dstream/FlatMappedDStream.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/dstream/FileInputDStream.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/dstream/DStreamCheckpointData.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/dstream/QueueInputDStream.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/dstream/DStream.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/dstream/FlatMapValuedDStream.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/dstream/StateDStream.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/api/java/JavaStreamingContext.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/dstream/UnionDStream.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/dstream/WindowedDStream.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/scheduler/ReceiverTracker.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mThe org.apache.spark.rdd.CoGroupedRDD source file has the following regular definitions changed:[0m
+[0m[[0mdebug[0m] [0m	createExternalMap, setHasPersist, iteratorK, compute, getHasPersist, hasPersist, computeOrReadCheckpoint.[0m
+[0m[[0mdebug[0m] [0mAll member reference dependencies will be considered within this context.[0m
+[0m[[0mdebug[0m] [0mFiles invalidated by inheriting from (external) org.apache.spark.rdd.CoGroupedRDD: Set(); now invalidating by inheritance (internally).[0m
+[0m[[0mdebug[0m] [0mGetting direct dependencies of all sources transitively invalidated by inheritance.[0m
+[0m[[0mdebug[0m] [0mGetting sources that directly depend on (external) org.apache.spark.rdd.CoGroupedRDD.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/dstream/ReducedWindowedDStream.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mThe org.apache.spark.util.Utils$ source file has the following regular definitions changed:[0m
+[0m[[0mdebug[0m] [0m	mbToString, memoryStringToMb2.[0m
+[0m[[0mdebug[0m] [0mAll member reference dependencies will be considered within this context.[0m
+[0m[[0mdebug[0m] [0mFiles invalidated by inheriting from (external) org.apache.spark.util.Utils$: Set(); now invalidating by inheritance (internally).[0m
+[0m[[0mdebug[0m] [0mGetting direct dependencies of all sources transitively invalidated by inheritance.[0m
+[0m[[0mdebug[0m] [0mGetting sources that directly depend on (external) org.apache.spark.util.Utils$.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/util/MasterFailureTest.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/Duration.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/receiver/ReceiverSupervisorImpl.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mThe org.apache.spark.rdd.BlockRDD source file has the following regular definitions changed:[0m
+[0m[[0mdebug[0m] [0m	setHasPersist, iteratorK, iterator, getHasPersist, hasPersist.[0m
+[0m[[0mdebug[0m] [0mAll member reference dependencies will be considered within this context.[0m
+[0m[[0mdebug[0m] [0mFiles invalidated by inheriting from (external) org.apache.spark.rdd.BlockRDD: Set(); now invalidating by inheritance (internally).[0m
+[0m[[0mdebug[0m] [0mGetting direct dependencies of all sources transitively invalidated by inheritance.[0m
+[0m[[0mdebug[0m] [0mGetting sources that directly depend on (external) org.apache.spark.rdd.BlockRDD.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/dstream/ReceiverInputDStream.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/dstream/DStream.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mThe org.apache.spark.util.Utils source file has the following regular definitions changed:[0m
+[0m[[0mdebug[0m] [0m	mbToString, memoryStringToMb2.[0m
+[0m[[0mdebug[0m] [0mAll member reference dependencies will be considered within this context.[0m
+[0m[[0mdebug[0m] [0mFiles invalidated by inheriting from (external) org.apache.spark.util.Utils: Set(); now invalidating by inheritance (internally).[0m
+[0m[[0mdebug[0m] [0mGetting direct dependencies of all sources transitively invalidated by inheritance.[0m
+[0m[[0mdebug[0m] [0mGetting sources that directly depend on (external) org.apache.spark.util.Utils.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/util/MasterFailureTest.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/Duration.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/receiver/ReceiverSupervisorImpl.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mThe org.apache.spark.rdd.UnionRDD source file has the following regular definitions changed:[0m
+[0m[[0mdebug[0m] [0m	setHasPersist, iteratorK, compute, getHasPersist, hasPersist, computeOrReadCheckpoint.[0m
+[0m[[0mdebug[0m] [0mAll member reference dependencies will be considered within this context.[0m
+[0m[[0mdebug[0m] [0mFiles invalidated by inheriting from (external) org.apache.spark.rdd.UnionRDD: Set(); now invalidating by inheritance (internally).[0m
+[0m[[0mdebug[0m] [0mGetting direct dependencies of all sources transitively invalidated by inheritance.[0m
+[0m[[0mdebug[0m] [0mGetting sources that directly depend on (external) org.apache.spark.rdd.UnionRDD.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/dstream/FileInputDStream.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/dstream/QueueInputDStream.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/dstream/UnionDStream.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/dstream/WindowedDStream.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mThe org.apache.spark.rdd.MapPartitionsRDD source file has the following regular definitions changed:[0m
+[0m[[0mdebug[0m] [0m	setHasPersist, iteratorK, compute, getHasPersist, hasPersist, computeOrReadCheckpoint.[0m
+[0m[[0mdebug[0m] [0mAll member reference dependencies will be considered within this context.[0m
+[0m[[0mdebug[0m] [0mFiles invalidated by inheriting from (external) org.apache.spark.rdd.MapPartitionsRDD: Set(); now invalidating by inheritance (internally).[0m
+[0m[[0mdebug[0m] [0mGetting direct dependencies of all sources transitively invalidated by inheritance.[0m
+[0m[[0mdebug[0m] [0mGetting sources that directly depend on (external) org.apache.spark.rdd.MapPartitionsRDD.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/streaming/src/main/scala/org/apache/spark/streaming/dstream/ReducedWindowedDStream.scala. This dependency is not being considered for invalidation.[0m
 [0m[[0mdebug[0m] [0m[0m
 [0m[[0mdebug[0m] [0mInitial source changes: [0m
 [0m[[0mdebug[0m] [0m	removed:Set()[0m
 [0m[[0mdebug[0m] [0m	added: Set()[0m
 [0m[[0mdebug[0m] [0m	modified: Set()[0m
 [0m[[0mdebug[0m] [0mRemoved products: Set()[0m
-[0m[[0mdebug[0m] [0mExternal API changes: API Changes: Set()[0m
+[0m[[0mdebug[0m] [0mExternal API changes: API Changes: Set(NamesChange(org.apache.spark.rdd.MapPartitionsRDD$,ModifiedNames(regularNames = setHasPersist, iteratorK, compute, getHasPersist, hasPersist, computeOrReadCheckpoint, implicitNames = )), NamesChange(org.apache.spark.rdd.PartitionerAwareUnionRDD,ModifiedNames(regularNames = setHasPersist, iteratorK, compute, getHasPersist, hasPersist, computeOrReadCheckpoint, implicitNames = )), NamesChange(org.apache.spark.rdd.RDD,ModifiedNames(regularNames = hasPersist, setHasPersist, getHasPersist, implicitNames = )), NamesChange(org.apache.spark.rdd.CoGroupedRDD,ModifiedNames(regularNames = createExternalMap, setHasPersist, iteratorK, compute, getHasPersist, hasPersist, computeOrReadCheckpoint, implicitNames = )), NamesChange(org.apache.spark.util.Utils$,ModifiedNames(regularNames = mbToString, memoryStringToMb2, implicitNames = )), NamesChange(org.apache.spark.rdd.BlockRDD,ModifiedNames(regularNames = setHasPersist, iteratorK, iterator, getHasPersist, hasPersist, implicitNames = )), NamesChange(org.apache.spark.util.Utils,ModifiedNames(regularNames = mbToString, memoryStringToMb2, implicitNames = )), NamesChange(org.apache.spark.rdd.UnionRDD,ModifiedNames(regularNames = setHasPersist, iteratorK, compute, getHasPersist, hasPersist, computeOrReadCheckpoint, implicitNames = )), NamesChange(org.apache.spark.rdd.MapPartitionsRDD,ModifiedNames(regularNames = setHasPersist, iteratorK, compute, getHasPersist, hasPersist, computeOrReadCheckpoint, implicitNames = )))[0m
 [0m[[0mdebug[0m] [0mModified binary dependencies: Set()[0m
 [0m[[0mdebug[0m] [0mInitial directly invalidated sources: Set()[0m
 [0m[[0mdebug[0m] [0m[0m

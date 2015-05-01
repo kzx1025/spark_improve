@@ -14,7 +14,7 @@ private  class PartitionerAwareUnionRDD<T extends java.lang.Object> extends org.
   public  scala.Option<org.apache.spark.Partitioner> partitioner () { throw new RuntimeException(); }
   public  org.apache.spark.Partition[] getPartitions () { throw new RuntimeException(); }
   public  scala.collection.Seq<java.lang.String> getPreferredLocations (org.apache.spark.Partition s) { throw new RuntimeException(); }
-  public  scala.collection.Iterator<T> compute (org.apache.spark.Partition s, org.apache.spark.TaskContext context) { throw new RuntimeException(); }
+  public  scala.collection.Iterator<T> compute (org.apache.spark.Partition s, org.apache.spark.TaskContext context, boolean isRDDCache) { throw new RuntimeException(); }
   public  void clearDependencies () { throw new RuntimeException(); }
   private  scala.collection.Seq<java.lang.String> currPrefLocs (org.apache.spark.rdd.RDD<?> rdd, org.apache.spark.Partition part) { throw new RuntimeException(); }
 }

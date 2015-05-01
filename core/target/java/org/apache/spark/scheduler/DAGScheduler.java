@@ -33,6 +33,11 @@ private  class DAGScheduler implements org.apache.spark.Logging {
   public  scala.collection.mutable.HashSet<org.apache.spark.scheduler.Stage> runningStages () { throw new RuntimeException(); }
   public  scala.collection.mutable.HashSet<org.apache.spark.scheduler.Stage> failedStages () { throw new RuntimeException(); }
   public  scala.collection.mutable.HashSet<org.apache.spark.scheduler.ActiveJob> activeJobs () { throw new RuntimeException(); }
+  public  scala.collection.mutable.HashSet<org.apache.spark.scheduler.Stage> finishStages () { throw new RuntimeException(); }
+  /**
+   * the former stages cached rdds
+   */
+  public  scala.collection.mutable.HashSet<org.apache.spark.rdd.RDD<?>> allCacheRDDs () { throw new RuntimeException(); }
   private  scala.collection.mutable.HashMap<java.lang.Object, scala.collection.Seq<org.apache.spark.scheduler.TaskLocation>[]> cacheLocs () { throw new RuntimeException(); }
   private  scala.collection.mutable.HashMap<java.lang.String, java.lang.Object> failedEpoch () { throw new RuntimeException(); }
   private  akka.actor.ActorRef dagSchedulerActorSupervisor () { throw new RuntimeException(); }
@@ -82,7 +87,20 @@ private  class DAGScheduler implements org.apache.spark.Logging {
   private  scala.collection.immutable.List<org.apache.spark.scheduler.Stage> getParentStages (org.apache.spark.rdd.RDD<?> rdd, int jobId) { throw new RuntimeException(); }
   private  void registerShuffleDependencies (org.apache.spark.ShuffleDependency<?, ?, ?> shuffleDep, int jobId) { throw new RuntimeException(); }
   private  scala.collection.mutable.Stack<org.apache.spark.ShuffleDependency<?, ?, ?>> getAncestorShuffleDependencies (org.apache.spark.rdd.RDD<?> rdd) { throw new RuntimeException(); }
+  /**
+   * add a handle for stage
+   * @param stage
+   * @return
+   */
   private  scala.collection.immutable.List<org.apache.spark.scheduler.Stage> getMissingParentStages (org.apache.spark.scheduler.Stage stage) { throw new RuntimeException(); }
+  /**
+   * Judge the rdd is the first time to cache in memory or not
+   * add by kzx
+   * @param rdd
+   * @return
+   */
+  private  boolean getRDDFirstPersist (org.apache.spark.rdd.RDD<?> rdd) { throw new RuntimeException(); }
+  private  void describeRDDInfo () { throw new RuntimeException(); }
   /**
    * Registers the given jobId among the jobs that need the given stage and
    * all of that stage's ancestors.
@@ -145,6 +163,14 @@ private  class DAGScheduler implements org.apache.spark.Logging {
   private  void submitStage (org.apache.spark.scheduler.Stage stage) { throw new RuntimeException(); }
   /** Called when stage's parents are available and we can now do its task. */
   private  void submitMissingTasks (org.apache.spark.scheduler.Stage stage, int jobId) { throw new RuntimeException(); }
+  /**
+   * add by kzx
+   * judge a set is subset of another set or not
+   * @param cacheRDDs
+   * @param allCacheRDDs
+   * @return
+   */
+  private  boolean isSubSetOf (scala.collection.mutable.HashSet<org.apache.spark.rdd.RDD<?>> cacheRDDs, scala.collection.mutable.HashSet<org.apache.spark.rdd.RDD<?>> allCacheRDDs) { throw new RuntimeException(); }
   /**
    * Responds to a task finishing. This is called inside the event loop so it assumes that it can
    * modify the scheduler's internal state. Use taskEnded() to post a task end event from outside.

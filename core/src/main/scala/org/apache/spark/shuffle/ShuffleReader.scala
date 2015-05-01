@@ -22,6 +22,15 @@ package org.apache.spark.shuffle
  */
 private[spark] trait ShuffleReader[K, C] {
   /** Read the combined key-values for this reduce task */
+
+  var isRDDCache = true;
+  def setRDDCache(isRDDCache: Boolean):Unit ={
+    this.isRDDCache = isRDDCache
+  }
+
+  def getRDDCaChe():Boolean ={
+    this.isRDDCache
+  }
   def read(): Iterator[Product2[K, C]]
 
   /** Close this reader */

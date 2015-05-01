@@ -81,12 +81,48 @@ private[spark] class ExternalSorter[K, V, C](
     ordering: Option[Ordering[K]] = None,
     serializer: Option[Serializer] = None) extends Logging {
 
+
+  /**
+   * add by kzx
+   */
+
+  //add by kzx > a constructor
+//  def this(aggregatorK: Option[Aggregator[K, V, C]]=None,partitionerK:Option[Partitioner]=None,
+//           orderingK: Option[Ordering[K]] = None, serializerK: Option[Serializer] = None,isRDDCacheK: Boolean=true)={
+//    this(aggregatorK,partitionerK,orderingK,serializerK)
+//    this.isRDDCache = isRDDCacheK
+//
+//  }
+  var isRDDCache = true;
+
+  def setRDDCache(flag:Boolean):Unit={
+    isRDDCache = flag;
+  }
+
+  def getRDDCache:Boolean={
+    isRDDCache;
+  }
+
+
+
+
   private val numPartitions = partitioner.map(_.numPartitions).getOrElse(1)
   private val shouldPartition = numPartitions > 1
 
   private val blockManager = SparkEnv.get.blockManager
   private val diskBlockManager = blockManager.diskBlockManager
-  private val shuffleMemoryManager = SparkEnv.get.shuffleMemoryManager
+  //if not exist cache,then use specificShuffleManager
+  private val shuffleMemoryManager =
+  if(!isRDDCache){
+    new Throwable().printStackTrace()
+    logInfo("ExternalSorter:get specificShuffleMemoryManager")
+    SparkEnv.get.specificShuffleMemoryManager}
+  else {
+    new Throwable().printStackTrace()
+    logInfo("ExternalSorter:get ShuffleMemoryManager")
+    SparkEnv.get.shuffleMemoryManager
+  }
+
   private val ser = Serializer.getSerializer(serializer)
   private val serInstance = ser.newInstance()
 

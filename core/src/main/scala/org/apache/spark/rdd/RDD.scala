@@ -91,8 +91,11 @@ abstract class RDD[T: ClassTag](
    * :: DeveloperApi ::
    * Implemented by subclasses to compute a given partition.
    */
+
+  //def compute(split: Partition, context: TaskContext): Iterator[T]
   @DeveloperApi
-  def compute(split: Partition, context: TaskContext): Iterator[T]
+  def compute(split: Partition, context: TaskContext,isRDDCache: Boolean): Iterator[T]
+
 
   /**
    * Implemented by subclasses to return the set of partitions in this RDD. This method will only
@@ -127,6 +130,19 @@ abstract class RDD[T: ClassTag](
   /** A friendly name for this RDD */
   @transient var name: String = null
 
+  /**
+   * this rdd has persist or not
+   */
+  private var hasPersist = false
+
+  def setHasPersist(hasPersist: Boolean):Unit={
+    this.hasPersist = hasPersist
+  }
+
+  def getHasPersist(): Boolean={
+    this.hasPersist
+  }
+
   /** Assign a name to this RDD */
   def setName(_name: String): this.type = {
     name = _name
@@ -148,6 +164,7 @@ abstract class RDD[T: ClassTag](
     // Register the RDD with the ContextCleaner for automatic GC-based cleanup
     sc.cleaner.foreach(_.registerRDDForCleanup(this))
     storageLevel = newLevel
+    hasPersist = true
     this
   }
 
@@ -224,9 +241,24 @@ abstract class RDD[T: ClassTag](
    */
   final def iterator(split: Partition, context: TaskContext): Iterator[T] = {
     if (storageLevel != StorageLevel.NONE) {
-      SparkEnv.get.cacheManager.getOrCompute(this, split, context, storageLevel)
+      SparkEnv.get.cacheManager.getOrCompute(this, split, context, storageLevel,true)
+   } else {
+      computeOrReadCheckpoint(split, context,true)
+   }
+  }
+
+  /**
+   * for no cache rdd iterator
+   * add by kzx
+   * @param split
+   * @param context
+   * @return
+   */
+  final def iteratorK(split: Partition, context: TaskContext): Iterator[T] = {
+    if (storageLevel != StorageLevel.NONE) {
+      SparkEnv.get.cacheManager.getOrCompute(this, split, context, storageLevel,false)
     } else {
-      computeOrReadCheckpoint(split, context)
+      computeOrReadCheckpoint(split, context,false)
     }
   }
 
@@ -257,9 +289,17 @@ abstract class RDD[T: ClassTag](
   /**
    * Compute an RDD partition or read it from a checkpoint if the RDD is checkpointing.
    */
-  private[spark] def computeOrReadCheckpoint(split: Partition, context: TaskContext): Iterator[T] =
-  {
-    if (isCheckpointed) firstParent[T].iterator(split, context) else compute(split, context)
+  private[spark] def computeOrReadCheckpoint(split: Partition, context: TaskContext,isRDDCache: Boolean): Iterator[T] = {
+    if (isCheckpointed) {
+    if (isRDDCache) {
+      firstParent[T].iterator(split, context)
+    }
+    else {
+      firstParent[T].iteratorK(split, context)
+    }
+  }
+    else compute(split, context,isRDDCache)
+
   }
 
   // Transformations (return a new RDD)

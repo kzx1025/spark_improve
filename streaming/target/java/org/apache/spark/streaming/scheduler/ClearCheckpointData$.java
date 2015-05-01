@@ -1,5 +1,6 @@
 package org.apache.spark.streaming.scheduler;
 // no position
+// not preceding
 private  class ClearCheckpointData$ extends scala.runtime.AbstractFunction1<org.apache.spark.streaming.Time, org.apache.spark.streaming.scheduler.ClearCheckpointData> implements scala.Serializable {
   /**
    * Static reference to the singleton instance of this Scala object.

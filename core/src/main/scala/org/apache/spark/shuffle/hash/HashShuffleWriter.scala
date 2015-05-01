@@ -30,6 +30,8 @@ private[spark] class HashShuffleWriter[K, V](
     context: TaskContext)
   extends ShuffleWriter[K, V] with Logging {
 
+
+
   private val dep = handle.dependency
   private val numOutputSplits = dep.partitioner.numPartitions
   private val metrics = context.taskMetrics
@@ -52,7 +54,7 @@ private[spark] class HashShuffleWriter[K, V](
   override def write(records: Iterator[_ <: Product2[K, V]]): Unit = {
     val iter = if (dep.aggregator.isDefined) {
       if (dep.mapSideCombine) {
-        dep.aggregator.get.combineValuesByKey(records, context)
+        dep.aggregator.get.combineValuesByKey(records, context,isRDDCache)
       } else {
         records
       }

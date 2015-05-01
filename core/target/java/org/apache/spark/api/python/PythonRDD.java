@@ -139,6 +139,6 @@ private  class PythonRDD extends org.apache.spark.rdd.RDD<byte[]> {
   public  int bufferSize () { throw new RuntimeException(); }
   public  org.apache.spark.Partition[] getPartitions () { throw new RuntimeException(); }
   public  scala.Option<org.apache.spark.Partitioner> partitioner () { throw new RuntimeException(); }
-  public  scala.collection.Iterator<byte[]> compute (org.apache.spark.Partition split, org.apache.spark.TaskContext context) { throw new RuntimeException(); }
+  public  scala.collection.Iterator<byte[]> compute (org.apache.spark.Partition split, org.apache.spark.TaskContext context, boolean isRDDCache) { throw new RuntimeException(); }
   public  org.apache.spark.api.java.JavaRDD<byte[]> asJavaRDD () { throw new RuntimeException(); }
 }

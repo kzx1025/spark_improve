@@ -57,7 +57,7 @@ private[spark] class PythonRDD(
 
   override val partitioner = if (preservePartitoning) parent.partitioner else None
 
-  override def compute(split: Partition, context: TaskContext): Iterator[Array[Byte]] = {
+  override def compute(split: Partition, context: TaskContext,isRDDCache: Boolean): Iterator[Array[Byte]] = {
     val startTime = System.currentTimeMillis
     val env = SparkEnv.get
     val localdir = env.blockManager.diskBlockManager.localDirs.map(
@@ -261,7 +261,7 @@ private class PythonException(msg: String, cause: Exception) extends RuntimeExce
 private class PairwiseRDD(prev: RDD[Array[Byte]]) extends
   RDD[(Long, Array[Byte])](prev) {
   override def getPartitions = prev.partitions
-  override def compute(split: Partition, context: TaskContext) =
+  override def compute(split: Partition, context: TaskContext,isRDDCache: Boolean) =
     prev.iterator(split, context).grouped(2).map {
       case Seq(a, b) => (Utils.deserializeLongValue(a), b)
       case x => throw new SparkException("PairwiseRDD: unexpected value: " + x)

@@ -31,6 +31,10 @@ private[spark] class MapPartitionsRDD[U: ClassTag, T: ClassTag](
 
   override def getPartitions: Array[Partition] = firstParent[T].partitions
 
-  override def compute(split: Partition, context: TaskContext) =
+  override def compute(split: Partition, context: TaskContext,isRDDCache: Boolean) =
+  if(isRDDCache) {
     f(context, split.index, firstParent[T].iterator(split, context))
+  }else{
+    f(context, split.index, firstParent[T].iteratorK(split, context))
+  }
 }

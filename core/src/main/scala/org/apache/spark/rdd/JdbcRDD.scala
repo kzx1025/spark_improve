@@ -67,7 +67,7 @@ class JdbcRDD[T: ClassTag](
     }).toArray
   }
 
-  override def compute(thePart: Partition, context: TaskContext) = new NextIterator[T] {
+  override def compute(thePart: Partition, context: TaskContext,isRDDCache: Boolean) = new NextIterator[T] {
     context.addTaskCompletionListener{ context => closeIfNeeded() }
     val part = thePart.asInstanceOf[JdbcPartition]
     val conn = getConnection()

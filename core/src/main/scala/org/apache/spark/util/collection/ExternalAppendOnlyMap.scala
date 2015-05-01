@@ -68,11 +68,46 @@ class ExternalAppendOnlyMap[K, V, C](
     blockManager: BlockManager = SparkEnv.get.blockManager)
   extends Iterable[(K, C)] with Serializable with Logging {
 
+
+//add by kzx
+  //@DeveloperApi
+
+//  def this(createCombinerK: V => C,
+//           mergeValueK: (C, V) => C,
+//           mergeCombinersK: (C, C) => C,
+//           serializerK: Serializer = SparkEnv.get.serializer,
+//           blockManagerK: BlockManager = SparkEnv.get.blockManager,
+//           isRDDCache: Boolean)={
+//    this(createCombinerK,mergeValueK,mergeCombinersK,serializerK,blockManagerK)
+//    this.isRDDCache = isRDDCache
+//
+//  }
+  var isRDDCache = false;
+
+  def setRDDCache(flag:Boolean):Unit={
+    isRDDCache = flag;
+  }
+
+  def getRDDCache:Boolean={
+    isRDDCache;
+  }
+
+
   private var currentMap = new SizeTrackingAppendOnlyMap[K, C]
   private val spilledMaps = new ArrayBuffer[DiskMapIterator]
   private val sparkConf = SparkEnv.get.conf
   private val diskBlockManager = blockManager.diskBlockManager
-  private val shuffleMemoryManager = SparkEnv.get.shuffleMemoryManager
+  private val shuffleMemoryManager =
+    if(isRDDCache) {
+      new Throwable().printStackTrace()
+      logInfo("AppendOnlyMap get shuffleMemoryManager")
+      SparkEnv.get.shuffleMemoryManager
+    }
+  else {
+      new Throwable().printStackTrace()
+      logInfo("AppendOnlyMap get specificShuffleMemoryManager")
+      SparkEnv.get.specificShuffleMemoryManager
+    }
 
   // Number of pairs inserted since last spill; note that we count them even if a value is merged
   // with a previous key in case we're doing something like groupBy where the result grows

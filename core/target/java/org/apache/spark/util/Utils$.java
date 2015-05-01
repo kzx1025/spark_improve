@@ -175,9 +175,16 @@ private  class Utils$ implements org.apache.spark.Logging {
    */
   public  int memoryStringToMb (java.lang.String str) { throw new RuntimeException(); }
   /**
+   * add by kzx
+   * @param str
+   * @return
+   */
+  public  double memoryStringToMb2 (java.lang.String str) { throw new RuntimeException(); }
+  /**
    * Convert a quantity in bytes to a human-readable string such as "4.0 MB".
    */
   public  java.lang.String bytesToString (long size) { throw new RuntimeException(); }
+  public  java.lang.String mbToString (long size) { throw new RuntimeException(); }
   /**
    * Returns a human-readable string representing a duration such as "35ms"
    */

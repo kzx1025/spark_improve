@@ -49,8 +49,12 @@ class EdgeRDD[@specialized ED: ClassTag, VD: ClassTag](
   override val partitioner =
     partitionsRDD.partitioner.orElse(Some(new HashPartitioner(partitionsRDD.partitions.size)))
 
-  override def compute(part: Partition, context: TaskContext): Iterator[Edge[ED]] = {
-    val p = firstParent[(PartitionID, EdgePartition[ED, VD])].iterator(part, context)
+  override def compute(part: Partition, context: TaskContext,isRDDCache:Boolean): Iterator[Edge[ED]] = {
+    //add by kzx
+    val p = if(isRDDCache)
+      firstParent[(PartitionID, EdgePartition[ED, VD])].iterator(part, context)
+    else
+      firstParent[(PartitionID, EdgePartition[ED, VD])].iteratorK(part, context)
     if (p.hasNext) {
       p.next._2.iterator.map(_.copy())
     } else {

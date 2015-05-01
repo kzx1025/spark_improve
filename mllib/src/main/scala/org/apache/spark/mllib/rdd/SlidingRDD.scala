@@ -49,9 +49,14 @@ class SlidingRDD[T: ClassTag](@transient val parent: RDD[T], val windowSize: Int
 
   require(windowSize > 1, s"Window size must be greater than 1, but got $windowSize.")
 
-  override def compute(split: Partition, context: TaskContext): Iterator[Seq[T]] = {
+  override def compute(split: Partition, context: TaskContext,isRDDCache: Boolean): Iterator[Seq[T]] = {
     val part = split.asInstanceOf[SlidingRDDPartition[T]]
+    if(isRDDCache)
     (firstParent[T].iterator(part.prev, context) ++ part.tail)
+      .sliding(windowSize)
+      .withPartial(false)
+    else
+    (firstParent[T].iteratorK(part.prev, context) ++ part.tail)
       .sliding(windowSize)
       .withPartial(false)
   }

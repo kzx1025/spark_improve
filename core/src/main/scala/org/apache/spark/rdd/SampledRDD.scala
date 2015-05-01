@@ -48,23 +48,38 @@ private[spark] class SampledRDD[T: ClassTag](
   override def getPreferredLocations(split: Partition): Seq[String] =
     firstParent[T].preferredLocations(split.asInstanceOf[SampledRDDPartition].prev)
 
-  override def compute(splitIn: Partition, context: TaskContext): Iterator[T] = {
+  override def compute(splitIn: Partition, context: TaskContext,isRDDCache: Boolean): Iterator[T] = {
     val split = splitIn.asInstanceOf[SampledRDDPartition]
     if (withReplacement) {
       // For large datasets, the expected number of occurrences of each element in a sample with
       // replacement is Poisson(frac). We use that to get a count for each element.
       val poisson = new Poisson(frac, new DRand(split.seed))
-      firstParent[T].iterator(split.prev, context).flatMap { element =>
-        val count = poisson.nextInt()
-        if (count == 0) {
-          Iterator.empty  // Avoid object allocation when we return 0 items, which is quite often
-        } else {
-          Iterator.fill(count)(element)
+      if(isRDDCache) {
+        firstParent[T].iterator(split.prev, context).flatMap { element =>
+          val count = poisson.nextInt()
+          if (count == 0) {
+            Iterator.empty // Avoid object allocation when we return 0 items, which is quite often
+          } else {
+            Iterator.fill(count)(element)
+          }
+        }
+      }else{
+        firstParent[T].iteratorK(split.prev, context).flatMap { element =>
+          val count = poisson.nextInt()
+          if (count == 0) {
+            Iterator.empty // Avoid object allocation when we return 0 items, which is quite often
+          } else {
+            Iterator.fill(count)(element)
+          }
         }
       }
     } else { // Sampling without replacement
       val rand = new Random(split.seed)
-      firstParent[T].iterator(split.prev, context).filter(x => (rand.nextDouble <= frac))
+      if(isRDDCache) {
+        firstParent[T].iterator(split.prev, context).filter(x => (rand.nextDouble <= frac))
+      }else{
+        firstParent[T].iteratorK(split.prev, context).filter(x => (rand.nextDouble <= frac))
+      }
     }
   }
 }

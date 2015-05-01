@@ -43,16 +43,21 @@ private[spark] class SortShuffleManager extends ShuffleManager {
       handle: ShuffleHandle,
       startPartition: Int,
       endPartition: Int,
-      context: TaskContext): ShuffleReader[K, C] = {
+      context: TaskContext,
+      isRDDCache: Boolean): ShuffleReader[K, C] = {
     // We currently use the same block store shuffle fetcher as the hash-based shuffle.
-    new HashShuffleReader(
+    val hashReader = new HashShuffleReader(
       handle.asInstanceOf[BaseShuffleHandle[K, _, C]], startPartition, endPartition, context)
+    hashReader.setRDDCache(isRDDCache)
+    hashReader
   }
 
   /** Get a writer for a given partition. Called on executors by map tasks. */
-  override def getWriter[K, V](handle: ShuffleHandle, mapId: Int, context: TaskContext)
+  override def getWriter[K, V](handle: ShuffleHandle, mapId: Int, context: TaskContext,isRDDCache: Boolean)
       : ShuffleWriter[K, V] = {
-    new SortShuffleWriter(handle.asInstanceOf[BaseShuffleHandle[K, V, _]], mapId, context)
+   val sortWriter =  new SortShuffleWriter(handle.asInstanceOf[BaseShuffleHandle[K, V, _]], mapId, context)
+    sortWriter.setRDDCache(isRDDCache)
+    sortWriter
   }
 
   /** Remove a shuffle's metadata from the ShuffleManager. */

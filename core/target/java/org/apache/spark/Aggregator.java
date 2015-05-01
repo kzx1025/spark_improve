@@ -15,7 +15,7 @@ public  class Aggregator<K extends java.lang.Object, V extends java.lang.Object,
   public   Aggregator (scala.Function1<V, C> createCombiner, scala.Function2<C, V, C> mergeValue, scala.Function2<C, C, C> mergeCombiners) { throw new RuntimeException(); }
   private  boolean externalSorting () { throw new RuntimeException(); }
   public  scala.collection.Iterator<scala.Tuple2<K, C>> combineValuesByKey (scala.collection.Iterator<scala.Product2<K, V>> iter) { throw new RuntimeException(); }
-  public  scala.collection.Iterator<scala.Tuple2<K, C>> combineValuesByKey (scala.collection.Iterator<scala.Product2<K, V>> iter, org.apache.spark.TaskContext context) { throw new RuntimeException(); }
+  public  scala.collection.Iterator<scala.Tuple2<K, C>> combineValuesByKey (scala.collection.Iterator<scala.Product2<K, V>> iter, org.apache.spark.TaskContext context, boolean isRDDCache) { throw new RuntimeException(); }
   public  scala.collection.Iterator<scala.Tuple2<K, C>> combineCombinersByKey (scala.collection.Iterator<scala.Product2<K, C>> iter) { throw new RuntimeException(); }
-  public  scala.collection.Iterator<scala.Tuple2<K, C>> combineCombinersByKey (scala.collection.Iterator<scala.Product2<K, C>> iter, org.apache.spark.TaskContext context) { throw new RuntimeException(); }
+  public  scala.collection.Iterator<scala.Tuple2<K, C>> combineCombinersByKey (scala.collection.Iterator<scala.Product2<K, C>> iter, org.apache.spark.TaskContext context, boolean isRDDCache) { throw new RuntimeException(); }
 }

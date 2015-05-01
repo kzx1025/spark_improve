@@ -26,6 +26,6 @@ private  class SubtractedRDD<K extends java.lang.Object, V extends java.lang.Obj
   public  scala.collection.Seq<org.apache.spark.Dependency<?>> getDependencies () { throw new RuntimeException(); }
   public  org.apache.spark.Partition[] getPartitions () { throw new RuntimeException(); }
   public  scala.Some<org.apache.spark.Partitioner> partitioner () { throw new RuntimeException(); }
-  public  scala.collection.Iterator<scala.Tuple2<K, V>> compute (org.apache.spark.Partition p, org.apache.spark.TaskContext context) { throw new RuntimeException(); }
+  public  scala.collection.Iterator<scala.Tuple2<K, V>> compute (org.apache.spark.Partition p, org.apache.spark.TaskContext context, boolean isRDDCache) { throw new RuntimeException(); }
   public  void clearDependencies () { throw new RuntimeException(); }
 }

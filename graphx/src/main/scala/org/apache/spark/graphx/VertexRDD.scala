@@ -114,7 +114,7 @@ class VertexRDD[@specialized VD: ClassTag](
   /**
    * Provides the `RDD[(VertexId, VD)]` equivalent output.
    */
-  override def compute(part: Partition, context: TaskContext): Iterator[(VertexId, VD)] = {
+  override def compute(part: Partition, context: TaskContext,isRDDCache:Boolean): Iterator[(VertexId, VD)] = {
     firstParent[ShippableVertexPartition[VD]].iterator(part, context).next.iterator
   }
 

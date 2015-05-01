@@ -39,7 +39,7 @@ public abstract class RDD<T extends java.lang.Object> implements scala.Serializa
    * :: DeveloperApi ::
    * Implemented by subclasses to compute a given partition.
    */
-  public abstract  scala.collection.Iterator<T> compute (org.apache.spark.Partition split, org.apache.spark.TaskContext context) ;
+  public abstract  scala.collection.Iterator<T> compute (org.apache.spark.Partition split, org.apache.spark.TaskContext context, boolean isRDDCache) ;
   /**
    * Implemented by subclasses to return the set of partitions in this RDD. This method will only
    * be called once, so it is safe to implement a time-consuming computation in it.
@@ -62,6 +62,12 @@ public abstract class RDD<T extends java.lang.Object> implements scala.Serializa
   public  int id () { throw new RuntimeException(); }
   /** A friendly name for this RDD */
   public  java.lang.String name () { throw new RuntimeException(); }
+  /**
+   * this rdd has persist or not
+   */
+  private  boolean hasPersist () { throw new RuntimeException(); }
+  public  void setHasPersist (boolean hasPersist) { throw new RuntimeException(); }
+  public  boolean getHasPersist () { throw new RuntimeException(); }
   /** Assign a name to this RDD */
   public  org.apache.spark.rdd.RDD<T> setName (java.lang.String _name) { throw new RuntimeException(); }
   /**
@@ -109,6 +115,14 @@ public abstract class RDD<T extends java.lang.Object> implements scala.Serializa
    */
   public final  scala.collection.Iterator<T> iterator (org.apache.spark.Partition split, org.apache.spark.TaskContext context) { throw new RuntimeException(); }
   /**
+   * for no cache rdd iterator
+   * add by kzx
+   * @param split
+   * @param context
+   * @return
+   */
+  public final  scala.collection.Iterator<T> iteratorK (org.apache.spark.Partition split, org.apache.spark.TaskContext context) { throw new RuntimeException(); }
+  /**
    * Return the ancestors of the given RDD that are related to it only through a sequence of
    * narrow dependencies. This traverses the given RDD's dependency tree using DFS, but maintains
    * no ordering on the RDDs returned.
@@ -117,7 +131,7 @@ public abstract class RDD<T extends java.lang.Object> implements scala.Serializa
   /**
    * Compute an RDD partition or read it from a checkpoint if the RDD is checkpointing.
    */
-  private  scala.collection.Iterator<T> computeOrReadCheckpoint (org.apache.spark.Partition split, org.apache.spark.TaskContext context) { throw new RuntimeException(); }
+  private  scala.collection.Iterator<T> computeOrReadCheckpoint (org.apache.spark.Partition split, org.apache.spark.TaskContext context, boolean isRDDCache) { throw new RuntimeException(); }
   /**
    * Return a new RDD by applying a function to all elements of this RDD.
    */
@@ -497,7 +511,21 @@ public abstract class RDD<T extends java.lang.Object> implements scala.Serializa
    * Return the first element in this RDD.
    */
   public  T first () { throw new RuntimeException(); }
-  // not preceding
+  /**
+   * Returns the top K (largest) elements from this RDD as defined by the specified
+   * implicit Ordering[T]. This does the opposite of {@link takeOrdered}. For example:
+   * <pre><code>
+   *   sc.parallelize(Seq(10, 4, 2, 12, 3)).top(1)
+   *   // returns Array(12)
+   *
+   *   sc.parallelize(Seq(2, 3, 4, 5, 6)).top(2)
+   *   // returns Array(6, 5)
+   * </code></pre>
+   * <p>
+   * @param num the number of top elements to return
+   * @param ord the implicit ordering for T
+   * @return an array of top elements
+   */
   public  java.lang.Object top (int num, scala.math.Ordering<T> ord) { throw new RuntimeException(); }
   /**
    * Returns the first K (smallest) elements from this RDD as defined by the specified

@@ -153,7 +153,7 @@ public abstract interface JavaRDDLike<T extends java.lang.Object, This extends o
   public  java.util.Iterator<T> toLocalIterator () ;
   /**
    * Return an array that contains all of the elements in this RDD.
-   * @deprecated As of Spark 1.0.0, toArray() is deprecated, use {@link #collect()} instead
+   * @deprecated As of Spark 1.0.0, toArray() is deprecated, use { #collect()} instead
    */
   public  java.util.List<T> toArray () ;
   /**

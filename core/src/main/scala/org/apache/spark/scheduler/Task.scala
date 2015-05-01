@@ -54,6 +54,27 @@ private[spark] abstract class Task[T](val stageId: Int, var partitionId: Int) ex
     runTask(context)
   }
 
+  /**
+   * add by kzx
+   */
+  var isRDDCache = false;
+
+  /**
+   * add by kzx
+   * @param flag
+   */
+  def setRDDCache(flag:Boolean):Unit={
+    isRDDCache = flag;
+  }
+
+  /**
+   * add by kzx
+   * @return
+   */
+  def getRDDCache:Boolean={
+    isRDDCache;
+  }
+
   def runTask(context: TaskContext): T
 
   def preferredLocations: Seq[TaskLocation] = Nil

@@ -59,7 +59,7 @@ class PartitionPruningRDD[T: ClassTag](
     @transient partitionFilterFunc: Int => Boolean)
   extends RDD[T](prev.context, List(new PruneDependency(prev, partitionFilterFunc))) {
 
-  override def compute(split: Partition, context: TaskContext) = firstParent[T].iterator(
+  override def compute(split: Partition, context: TaskContext,isRDDCache: Boolean) = firstParent[T].iterator(
     split.asInstanceOf[PartitionPruningRDDPartition].parentSplit, context)
 
   override protected def getPartitions: Array[Partition] =

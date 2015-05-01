@@ -73,7 +73,7 @@ class PairRDDFunctions[K, V](self: RDD[(K, V)])
       mergeValue: (C, V) => C,
       mergeCombiners: (C, C) => C,
       partitioner: Partitioner,
-      mapSideCombine: Boolean = false,
+      mapSideCombine: Boolean = true,
       serializer: Serializer = null): RDD[(K, C)] = {
     require(mergeCombiners != null, "mergeCombiners must be defined") // required as of Spark 0.9.0
     if (keyClass.isArray) {
@@ -87,7 +87,7 @@ class PairRDDFunctions[K, V](self: RDD[(K, V)])
     val aggregator = new Aggregator[K, V, C](createCombiner, mergeValue, mergeCombiners)
     if (self.partitioner == Some(partitioner)) {
       self.mapPartitionsWithContext((context, iter) => {
-        new InterruptibleIterator(context, aggregator.combineValuesByKey(iter, context))
+        new InterruptibleIterator(context, aggregator.combineValuesByKey(iter, context,true))
       }, preservesPartitioning = true)
     } else {
       new ShuffledRDD[K, V, C](self, partitioner)
@@ -468,9 +468,11 @@ class PairRDDFunctions[K, V](self: RDD[(K, V)])
    * (k, v2) is in `other`. Uses the given Partitioner to partition the output RDD.
    */
   def join[W](other: RDD[(K, W)], partitioner: Partitioner): RDD[(K, (V, W))] = {
-    this.cogroup(other, partitioner).flatMapValues( pair =>
+    val rdd =this.cogroup(other, partitioner).flatMapValues( pair =>
       for (v <- pair._1; w <- pair._2) yield (v, w)
     )
+    rdd.setHasPersist(false)
+    rdd
   }
 
   /**
@@ -533,7 +535,10 @@ class PairRDDFunctions[K, V](self: RDD[(K, V)])
    * (k, v2) is in `other`. Performs a hash join across the cluster.
    */
   def join[W](other: RDD[(K, W)]): RDD[(K, (V, W))] = {
-    join(other, defaultPartitioner(self, other))
+    val rdd = join(other, defaultPartitioner(self, other))
+    rdd.setHasPersist(false)
+    logInfo("new CoGroupRDD!"+rdd)
+    rdd
   }
 
   /**
@@ -542,7 +547,9 @@ class PairRDDFunctions[K, V](self: RDD[(K, V)])
    * (k, v2) is in `other`. Performs a hash join across the cluster.
    */
   def join[W](other: RDD[(K, W)], numPartitions: Int): RDD[(K, (V, W))] = {
-    join(other, new HashPartitioner(numPartitions))
+    val rdd = join(other, new HashPartitioner(numPartitions))
+    rdd.setHasPersist(false)
+    rdd
   }
 
   /**
@@ -605,7 +612,10 @@ class PairRDDFunctions[K, V](self: RDD[(K, V)])
    */
   def mapValues[U](f: V => U): RDD[(K, U)] = {
     val cleanF = self.context.clean(f)
-    new MappedValuesRDD(self, cleanF)
+    val rdd = new MappedValuesRDD(self, cleanF)
+    rdd.setHasPersist(false)
+    logInfo("new MapValueRDD!"+rdd)
+    rdd
   }
 
   /**

@@ -82,9 +82,13 @@ private[spark] class ZippedPartitionsRDD2[A: ClassTag, B: ClassTag, V: ClassTag]
     preservesPartitioning: Boolean = false)
   extends ZippedPartitionsBaseRDD[V](sc, List(rdd1, rdd2), preservesPartitioning) {
 
-  override def compute(s: Partition, context: TaskContext): Iterator[V] = {
+  override def compute(s: Partition, context: TaskContext,isRDDCache: Boolean): Iterator[V] = {
     val partitions = s.asInstanceOf[ZippedPartitionsPartition].partitions
-    f(rdd1.iterator(partitions(0), context), rdd2.iterator(partitions(1), context))
+    if(isRDDCache) {
+      f(rdd1.iterator(partitions(0), context), rdd2.iterator(partitions(1), context))
+    }else{
+      f(rdd1.iteratorK(partitions(0), context), rdd2.iteratorK(partitions(1), context))
+    }
   }
 
   override def clearDependencies() {
@@ -104,11 +108,17 @@ private[spark] class ZippedPartitionsRDD3
     preservesPartitioning: Boolean = false)
   extends ZippedPartitionsBaseRDD[V](sc, List(rdd1, rdd2, rdd3), preservesPartitioning) {
 
-  override def compute(s: Partition, context: TaskContext): Iterator[V] = {
+  override def compute(s: Partition, context: TaskContext,isRDDCache: Boolean): Iterator[V] = {
     val partitions = s.asInstanceOf[ZippedPartitionsPartition].partitions
-    f(rdd1.iterator(partitions(0), context),
-      rdd2.iterator(partitions(1), context),
-      rdd3.iterator(partitions(2), context))
+    if(isRDDCache) {
+      f(rdd1.iterator(partitions(0), context),
+        rdd2.iterator(partitions(1), context),
+        rdd3.iterator(partitions(2), context))
+    }else{
+      f(rdd1.iteratorK(partitions(0), context),
+        rdd2.iteratorK(partitions(1), context),
+        rdd3.iteratorK(partitions(2), context))
+    }
   }
 
   override def clearDependencies() {
@@ -130,12 +140,19 @@ private[spark] class ZippedPartitionsRDD4
     preservesPartitioning: Boolean = false)
   extends ZippedPartitionsBaseRDD[V](sc, List(rdd1, rdd2, rdd3, rdd4), preservesPartitioning) {
 
-  override def compute(s: Partition, context: TaskContext): Iterator[V] = {
+  override def compute(s: Partition, context: TaskContext,isRDDCache: Boolean): Iterator[V] = {
     val partitions = s.asInstanceOf[ZippedPartitionsPartition].partitions
-    f(rdd1.iterator(partitions(0), context),
-      rdd2.iterator(partitions(1), context),
-      rdd3.iterator(partitions(2), context),
-      rdd4.iterator(partitions(3), context))
+    if(isRDDCache) {
+      f(rdd1.iterator(partitions(0), context),
+        rdd2.iterator(partitions(1), context),
+        rdd3.iterator(partitions(2), context),
+        rdd4.iterator(partitions(3), context))
+    }else{
+      f(rdd1.iteratorK(partitions(0), context),
+        rdd2.iteratorK(partitions(1), context),
+        rdd3.iteratorK(partitions(2), context),
+        rdd4.iteratorK(partitions(3), context))
+    }
   }
 
   override def clearDependencies() {

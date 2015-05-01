@@ -29,6 +29,10 @@ class FlatMappedRDD[U: ClassTag, T: ClassTag](
 
   override def getPartitions: Array[Partition] = firstParent[T].partitions
 
-  override def compute(split: Partition, context: TaskContext) =
+  override def compute(split: Partition, context: TaskContext,isRDDCache: Boolean) =
+  if(isRDDCache) {
     firstParent[T].iterator(split, context).flatMap(f)
+  }else{
+    firstParent[T].iteratorK(split, context).flatMap(f)
+  }
 }

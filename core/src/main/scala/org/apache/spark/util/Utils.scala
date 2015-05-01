@@ -756,6 +756,27 @@ private[spark] object Utils extends Logging {
     }
   }
 
+
+  /**
+   * add by kzx
+   * @param str
+   * @return
+   */
+  def memoryStringToMb2(str: String): Double = {
+    val upper = str.toUpperCase
+    if (upper.endsWith("KB")) {
+      upper.substring(0, upper.length-3).toDouble / 1024
+    } else if (upper.endsWith("MB")) {
+      upper.substring(0, upper.length-3).toDouble
+    } else if (upper.endsWith("GB")) {
+      upper.substring(0, upper.length-3).toDouble * 1024
+    } else if (upper.endsWith("TB")) {
+      upper.substring(0, upper.length-3).toDouble * 1024 * 1024
+    } else {// no suffix, so it's just a number in bytes
+      (upper.toDouble / 1024 / 1024)
+    }
+  }
+
   /**
    * Convert a quantity in bytes to a human-readable string such as "4.0 MB".
    */
@@ -780,6 +801,28 @@ private[spark] object Utils extends Logging {
     }
     "%.1f %s".formatLocal(Locale.US, value, unit)
   }
+
+
+  def mbToString(size: Long): String = {
+    val TB = 1L << 20
+    val GB = 1L << 10
+    val MB = 1L
+    val KB = 1L >> 10
+
+    val (value, unit) = {
+      if (size >= 2*TB) {
+        (size.asInstanceOf[Double] / TB, "TB")
+      } else if (size >= 2*MB) {
+        (size.asInstanceOf[Double] / MB, "MB")
+      } else if (size >= 2*KB) {
+        (size.asInstanceOf[Double] / KB, "KB")
+      } else {
+        (size.asInstanceOf[Double], "B")
+      }
+    }
+    "%.1f %s".formatLocal(Locale.US, value, unit)
+  }
+
 
   /**
    * Returns a human-readable string representing a duration such as "35ms"

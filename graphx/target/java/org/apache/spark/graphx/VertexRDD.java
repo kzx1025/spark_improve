@@ -99,7 +99,7 @@ public  class VertexRDD<VD extends java.lang.Object> extends org.apache.spark.rd
   /**
    * Provides the <code>RDD[(VertexId, VD)]</code> equivalent output.
    */
-  public  scala.collection.Iterator<scala.Tuple2<java.lang.Object, VD>> compute (org.apache.spark.Partition part, org.apache.spark.TaskContext context) { throw new RuntimeException(); }
+  public  scala.collection.Iterator<scala.Tuple2<java.lang.Object, VD>> compute (org.apache.spark.Partition part, org.apache.spark.TaskContext context, boolean isRDDCache) { throw new RuntimeException(); }
   /**
    * Applies a function to each <code>VertexPartition</code> of this RDD and returns a new VertexRDD.
    */

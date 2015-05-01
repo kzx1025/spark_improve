@@ -92,10 +92,16 @@ class PartitionerAwareUnionRDD[T: ClassTag](
     location.toSeq
   }
 
-  override def compute(s: Partition, context: TaskContext): Iterator[T] = {
+  override def compute(s: Partition, context: TaskContext,isRDDCache: Boolean): Iterator[T] = {
     val parentPartitions = s.asInstanceOf[PartitionerAwareUnionRDDPartition].parents
-    rdds.zip(parentPartitions).iterator.flatMap {
-      case (rdd, p) => rdd.iterator(p, context)
+    if(isRDDCache) {
+      rdds.zip(parentPartitions).iterator.flatMap {
+        case (rdd, p) => rdd.iterator(p, context)
+      }
+    }else{
+      rdds.zip(parentPartitions).iterator.flatMap {
+        case (rdd, p) => rdd.iteratorK(p, context)
+      }
     }
   }
 

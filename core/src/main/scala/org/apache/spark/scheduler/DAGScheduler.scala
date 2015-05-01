@@ -21,7 +21,7 @@ import java.io.NotSerializableException
 import java.util.Properties
 import java.util.concurrent.atomic.AtomicInteger
 
-import scala.collection.mutable.{ArrayBuffer, HashMap, HashSet, Map, Stack}
+import scala.collection.mutable.{ArrayBuffer, HashMap, HashSet, Map, Stack,Queue}
 import scala.concurrent.Await
 import scala.concurrent.duration._
 import scala.language.postfixOps
@@ -100,6 +100,18 @@ class DAGScheduler(
   private[scheduler] val failedStages = new HashSet[Stage]
 
   private[scheduler] val activeJobs = new HashSet[ActiveJob]
+
+  //add by kzx
+  private[scheduler] val finishStages = new HashSet[Stage]
+
+  /**
+   * the former stages cached rdds
+   */
+  private[scheduler] val allCacheRDDs = new HashSet[RDD[_]]
+
+ // private[scheduler] val cacheStages= new Queue[Stage]
+
+
 
   // Contains the locations that each RDD's partitions are cached on
   private val cacheLocs = new HashMap[Int, Array[Seq[TaskLocation]]]
@@ -357,12 +369,17 @@ class DAGScheduler(
     parents
   }
 
+  /**
+   * add a handle for stage
+   * @param stage
+   * @return
+   */
   private def getMissingParentStages(stage: Stage): List[Stage] = {
     val missing = new HashSet[Stage]
     val visited = new HashSet[RDD[_]]
+
     // We are manually maintaining a stack here to prevent StackOverflowError
     // caused by recursively visiting
-   // var existShufDep = false;
     val waitingForVisit = new Stack[RDD[_]]
     def visit(rdd: RDD[_]) {
       if (!visited(rdd)) {
@@ -372,11 +389,22 @@ class DAGScheduler(
             dep match {
               case shufDep: ShuffleDependency[_, _, _] =>
                 val mapStage = getShuffleMapStage(shufDep, stage.jobId)
+                if(getRDDFirstPersist(dep.rdd)){
+                 // stage.cachedRDD+=dep.rdd
+                 // stage.setCacheInRDDs(true)
+                }
                 if (!mapStage.isAvailable) {
                   missing += mapStage
                 }
-             //   existShufDep = true;
+
               case narrowDep: NarrowDependency[_] =>
+                //logInfo("new narrowDependcy_RDD")
+                if(getRDDFirstPersist(dep.rdd)){
+                 // logInfo(stage+"is in cache")
+                  stage.cacheRDDs += dep.rdd
+                  stage.setCacheInRDDs(true)
+
+                }
                 waitingForVisit.push(narrowDep.rdd)
             }
           }
@@ -390,6 +418,32 @@ class DAGScheduler(
     missing.toList
   }
 
+  /**
+   * Judge the rdd is the first time to cache in memory or not
+   * add by kzx
+   * @param rdd
+   * @return
+   */
+  private def getRDDFirstPersist(rdd:RDD[_]):Boolean={
+   // logInfo("rdd's description is "+rdd.getStorageLevel.description)
+      rdd.getStorageLevel.useMemory
+    //rdd.getHasPersist()
+  }
+
+
+
+  private def describeRDDInfo():Unit={
+    var remainMem = Runtime.getRuntime.maxMemory()
+    if(sc.getRDDStorageInfo.length != 0){
+      for(tempRDDInfo <- sc.getRDDStorageInfo){
+        val cacheMem = Utils.memoryStringToMb2(Utils.bytesToString(tempRDDInfo.memSize))
+        remainMem = remainMem/(1024*1024) - cacheMem.toLong
+      }
+    }else{
+     // logInfo("no rdd persist")
+    }
+    logInfo("totalMemory is"+sc.executorMemory.toDouble*1024+" "+Runtime.getRuntime.maxMemory/(1024*1024) +"Remain Mem:"+remainMem.toInt)
+  }
   /**
    * Registers the given jobId among the jobs that need the given stage and
    * all of that stage's ancestors.
@@ -633,6 +687,7 @@ class DAGScheduler(
       val taskContext =
         new TaskContext(job.finalStage.id, job.partitions(0), 0, runningLocally = true)
       try {
+        //genggai by kzx
         val result = job.func(taskContext, rdd.iterator(split, taskContext))
         job.listener.taskSucceeded(0, result)
       } finally {
@@ -767,13 +822,16 @@ class DAGScheduler(
         val missing = getMissingParentStages(stage).sortBy(_.id)
         logDebug("missing: " + missing)
         if (missing == Nil) {
-          logInfo("Submitting " + stage + " (" + stage.rdd + "), which has no missing parents")
+          logInfo("++++++++Submitting " + stage + " (" + stage.rdd + "), which has no missing parents,cacheRDD size is "+  stage.cacheRDDs.size)
+          describeRDDInfo()
           submitMissingTasks(stage, jobId.get)
         } else {
           for (parent <- missing) {
+            //logInfo("+++++++++++++++++this is stage"+parent.id)
             submitStage(parent)
           }
           waitingStages += stage
+         // logInfo("+++++++++++++++++this is stage"+stage.id)
         }
       }
     } else {
@@ -845,7 +903,10 @@ class DAGScheduler(
       partitionsToCompute.map { id =>
         val locs = getPreferredLocs(stage.rdd, id)
         val part = stage.rdd.partitions(id)
-        new ShuffleMapTask(stage.id, taskBinary, part, locs)
+        logInfo("stage's cache is"+stage.getCacheInRDDs.toString)
+        //new ShuffleMapTask(stage.id, taskBinary, part, locs)
+        //add by kzx
+        new ShuffleMapTask(stage.id,taskBinary,part,stage.getCacheInRDDs,locs)
       }
     } else {
       val job = stage.resultOfJob.get
@@ -853,7 +914,10 @@ class DAGScheduler(
         val p: Int = job.partitions(id)
         val part = stage.rdd.partitions(p)
         val locs = getPreferredLocs(stage.rdd, p)
-        new ResultTask(stage.id, taskBinary, part, locs, id)
+        logInfo("stage's cache is"+stage.getCacheInRDDs.toString)
+        //new ResultTask(stage.id, taskBinary, part, locs, id)
+        //add by kzx
+        new ResultTask(stage.id,taskBinary,part,stage.getCacheInRDDs,locs,id)
       }
     }
 
@@ -895,6 +959,24 @@ class DAGScheduler(
   }
 
   /**
+   * add by kzx
+   * judge a set is subset of another set or not
+   * @param cacheRDDs
+   * @param allCacheRDDs
+   * @return
+   */
+  private[scheduler] def isSubSetOf(cacheRDDs: HashSet[RDD[_]],allCacheRDDs: HashSet[RDD[_]]):Boolean={
+    val cacheRDDsList = cacheRDDs.toList
+    var result = true
+    for(tempCacheRDD <- cacheRDDsList){
+      if(!allCacheRDDs.contains(tempCacheRDD)){
+        result = false
+      }
+    }
+    result
+  }
+
+  /**
    * Responds to a task finishing. This is called inside the event loop so it assumes that it can
    * modify the scheduler's internal state. Use taskEnded() to post a task end event from outside.
    */
@@ -931,6 +1013,9 @@ class DAGScheduler(
       }
       listenerBus.post(SparkListenerStageCompleted(stage.latestInfo))
       runningStages -= stage
+      finishStages +=stage
+      allCacheRDDs ++=stage.cacheRDDs
+      logInfo("stage:"+stage+" add into finishStages")
     }
     event.reason match {
       case Success =>
@@ -1035,7 +1120,19 @@ class DAGScheduler(
                   stage <- newlyRunnable.sortBy(_.id)
                   jobId <- activeJobForStage(stage)
                 } {
-                  logInfo("Submitting " + stage + " (" + stage.rdd + "), which is now runnable")
+                 if(isSubSetOf(stage.cacheRDDs,allCacheRDDs)) {
+                   val isTempCache = stage.getCacheInRDDs
+                   for (tempStage <- finishStages.toList) {
+                     if (stage.id > tempStage.id) {
+                       stage.setCacheInRDDs(false)
+                       logInfo("stage:" + stage + " do not have to be cache")
+                     }else{
+                       stage.setCacheInRDDs(isTempCache)
+                     }
+                   }
+                 }
+                  describeRDDInfo()
+                  logInfo("Submitting " + stage + " (" + stage.rdd + "), which is now runnable   "+stage.cacheRDDs.size)
                   submitMissingTasks(stage, jobId)
                 }
               }

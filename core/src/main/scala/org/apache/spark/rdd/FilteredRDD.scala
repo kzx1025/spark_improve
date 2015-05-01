@@ -30,6 +30,11 @@ private[spark] class FilteredRDD[T: ClassTag](
 
   override val partitioner = prev.partitioner    // Since filter cannot change a partition's keys
 
-  override def compute(split: Partition, context: TaskContext) =
+  override def compute(split: Partition, context: TaskContext,isRDDCache: Boolean) =
+  if(isRDDCache) {
     firstParent[T].iterator(split, context).filter(f)
+  }else{
+    firstParent[T].iteratorK(split, context).filter(f)
+  }
+
 }

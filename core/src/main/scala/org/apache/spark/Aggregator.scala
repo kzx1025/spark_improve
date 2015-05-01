@@ -38,10 +38,10 @@ case class Aggregator[K, V, C] (
 
   @deprecated("use combineValuesByKey with TaskContext argument", "0.9.0")
   def combineValuesByKey(iter: Iterator[_ <: Product2[K, V]]): Iterator[(K, C)] =
-    combineValuesByKey(iter, null)
+    combineValuesByKey(iter, null,true)
 
   def combineValuesByKey(iter: Iterator[_ <: Product2[K, V]],
-                         context: TaskContext): Iterator[(K, C)] = {
+                         context: TaskContext,isRDDCache:Boolean): Iterator[(K, C)] = {
     if (!externalSorting) {
       val combiners = new AppendOnlyMap[K,C]
       var kv: Product2[K, V] = null
@@ -55,6 +55,7 @@ case class Aggregator[K, V, C] (
       combiners.iterator
     } else {
       val combiners = new ExternalAppendOnlyMap[K, V, C](createCombiner, mergeValue, mergeCombiners)
+      combiners.setRDDCache(isRDDCache)
       combiners.insertAll(iter)
       // Update task metrics if context is not null
       // TODO: Make context non optional in a future release
@@ -68,9 +69,9 @@ case class Aggregator[K, V, C] (
 
   @deprecated("use combineCombinersByKey with TaskContext argument", "0.9.0")
   def combineCombinersByKey(iter: Iterator[_ <: Product2[K, C]]) : Iterator[(K, C)] =
-    combineCombinersByKey(iter, null)
+    combineCombinersByKey(iter, null,true)
 
-  def combineCombinersByKey(iter: Iterator[_ <: Product2[K, C]], context: TaskContext)
+  def combineCombinersByKey(iter: Iterator[_ <: Product2[K, C]], context: TaskContext,isRDDCache: Boolean)
       : Iterator[(K, C)] =
   {
     if (!externalSorting) {
@@ -86,6 +87,7 @@ case class Aggregator[K, V, C] (
       combiners.iterator
     } else {
       val combiners = new ExternalAppendOnlyMap[K, C, C](identity, mergeCombiners, mergeCombiners)
+      combiners.setRDDCache(isRDDCache)
       while (iter.hasNext) {
         val pair = iter.next()
         combiners.insert(pair._1, pair._2)

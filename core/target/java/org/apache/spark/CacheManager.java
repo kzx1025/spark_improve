@@ -8,7 +8,7 @@ private  class CacheManager implements org.apache.spark.Logging {
   /** Keys of RDD partitions that are being computed/loaded. */
   private  scala.collection.mutable.HashSet<org.apache.spark.storage.RDDBlockId> loading () { throw new RuntimeException(); }
   /** Gets or computes an RDD partition. Used by RDD.iterator() when an RDD is cached. */
-  public <T extends java.lang.Object> scala.collection.Iterator<T> getOrCompute (org.apache.spark.rdd.RDD<T> rdd, org.apache.spark.Partition partition, org.apache.spark.TaskContext context, org.apache.spark.storage.StorageLevel storageLevel) { throw new RuntimeException(); }
+  public <T extends java.lang.Object> scala.collection.Iterator<T> getOrCompute (org.apache.spark.rdd.RDD<T> rdd, org.apache.spark.Partition partition, org.apache.spark.TaskContext context, org.apache.spark.storage.StorageLevel storageLevel, boolean isRDDCache) { throw new RuntimeException(); }
   /**
    * Acquire a loading lock for the partition identified by the given block ID.
    * <p>

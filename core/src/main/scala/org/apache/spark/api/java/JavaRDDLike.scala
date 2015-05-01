@@ -319,7 +319,7 @@ trait JavaRDDLike[T, This <: JavaRDDLike[T, This]] extends Serializable {
 
   /**
    * Return an array that contains all of the elements in this RDD.
-   * @deprecated As of Spark 1.0.0, toArray() is deprecated, use {@link #collect()} instead
+   * @deprecated As of Spark 1.0.0, toArray() is deprecated, use { #collect()} instead
    */
   @Deprecated
   def toArray(): JList[T] = collect()

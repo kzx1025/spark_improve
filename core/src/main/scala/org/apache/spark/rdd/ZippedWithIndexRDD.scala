@@ -60,10 +60,15 @@ class ZippedWithIndexRDD[T: ClassTag](@transient prev: RDD[T]) extends RDD[(T, L
   override def getPreferredLocations(split: Partition): Seq[String] =
     firstParent[T].preferredLocations(split.asInstanceOf[ZippedWithIndexRDDPartition].prev)
 
-  override def compute(splitIn: Partition, context: TaskContext): Iterator[(T, Long)] = {
+  override def compute(splitIn: Partition, context: TaskContext,isRDDCache: Boolean): Iterator[(T, Long)] = {
     val split = splitIn.asInstanceOf[ZippedWithIndexRDDPartition]
+    if(isRDDCache){
     firstParent[T].iterator(split.prev, context).zipWithIndex.map { x =>
       (x._1, split.startIndex + x._2)
+    }}else{
+        firstParent[T].iterator(split.prev, context).zipWithIndex.map { x =>
+          (x._1, split.startIndex + x._2)
+      }
     }
   }
 }

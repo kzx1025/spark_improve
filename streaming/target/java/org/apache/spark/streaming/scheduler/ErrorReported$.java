@@ -1,5 +1,6 @@
 package org.apache.spark.streaming.scheduler;
 // no position
+// not preceding
 private  class ErrorReported$ extends scala.runtime.AbstractFunction2<java.lang.String, java.lang.Throwable, org.apache.spark.streaming.scheduler.ErrorReported> implements scala.Serializable {
   /**
    * Static reference to the singleton instance of this Scala object.

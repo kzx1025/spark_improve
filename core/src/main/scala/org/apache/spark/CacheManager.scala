@@ -37,7 +37,8 @@ private[spark] class CacheManager(blockManager: BlockManager) extends Logging {
       rdd: RDD[T],
       partition: Partition,
       context: TaskContext,
-      storageLevel: StorageLevel): Iterator[T] = {
+      storageLevel: StorageLevel,
+      isRDDCache: Boolean): Iterator[T] = {
 
     val key = RDDBlockId(rdd.id, partition.index)
     logDebug(s"Looking for partition $key")
@@ -58,7 +59,7 @@ private[spark] class CacheManager(blockManager: BlockManager) extends Logging {
         // Otherwise, we have to load the partition ourselves
         try {
           logInfo(s"Partition $key not found, computing it")
-          val computedValues = rdd.computeOrReadCheckpoint(partition, context)
+          val computedValues = rdd.computeOrReadCheckpoint(partition, context,isRDDCache)
 
           // If the task is running locally, do not persist the result
           if (context.runningLocally) {

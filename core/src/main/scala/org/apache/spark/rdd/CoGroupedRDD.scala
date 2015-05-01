@@ -115,7 +115,7 @@ class CoGroupedRDD[K](@transient var rdds: Seq[RDD[_ <: Product2[K, _]]], part: 
 
   override val partitioner: Some[Partitioner] = Some(part)
 
-  override def compute(s: Partition, context: TaskContext): Iterator[(K, Array[Iterable[_]])] = {
+  override def compute(s: Partition, context: TaskContext,isRDDCache: Boolean): Iterator[(K, Array[Iterable[_]])] = {
     val sparkConf = SparkEnv.get.conf
     val externalSorting = sparkConf.getBoolean("spark.shuffle.spill", true)
     val split = s.asInstanceOf[CoGroupPartition]
@@ -126,13 +126,15 @@ class CoGroupedRDD[K](@transient var rdds: Seq[RDD[_ <: Product2[K, _]]], part: 
     for ((dep, depNum) <- split.deps.zipWithIndex) dep match {
       case NarrowCoGroupSplitDep(rdd, _, itsSplit) =>
         // Read them from the parent
-        val it = rdd.iterator(itsSplit, context).asInstanceOf[Iterator[Product2[K, Any]]]
+        val it =
+          if(isRDDCache)rdd.iterator(itsSplit, context).asInstanceOf[Iterator[Product2[K, Any]]]
+        else rdd.iteratorK(itsSplit, context).asInstanceOf[Iterator[Product2[K, Any]]]
         rddIterators += ((it, depNum))
 
       case ShuffleCoGroupSplitDep(handle) =>
         // Read map outputs of shuffle
         val it = SparkEnv.get.shuffleManager
-          .getReader(handle, split.index, split.index + 1, context)
+          .getReader(handle, split.index, split.index + 1, context,isRDDCache)
           .read()
         rddIterators += ((it, depNum))
     }
@@ -154,7 +156,7 @@ class CoGroupedRDD[K](@transient var rdds: Seq[RDD[_ <: Product2[K, _]]], part: 
       new InterruptibleIterator(context,
         map.iterator.asInstanceOf[Iterator[(K, Array[Iterable[_]])]])
     } else {
-      val map = createExternalMap(numRdds)
+      val map = createExternalMap(numRdds,isRDDCache)
       for ((it, depNum) <- rddIterators) {
         map.insertAll(it.map(pair => (pair._1, new CoGroupValue(pair._2, depNum))))
       }
@@ -165,7 +167,7 @@ class CoGroupedRDD[K](@transient var rdds: Seq[RDD[_ <: Product2[K, _]]], part: 
     }
   }
 
-  private def createExternalMap(numRdds: Int)
+  private def createExternalMap(numRdds: Int, isRDDCache: Boolean)
     : ExternalAppendOnlyMap[K, CoGroupValue, CoGroupCombiner] = {
 
     val createCombiner: (CoGroupValue => CoGroupCombiner) = value => {
@@ -187,8 +189,11 @@ class CoGroupedRDD[K](@transient var rdds: Seq[RDD[_ <: Product2[K, _]]], part: 
         }
         combiner1
       }
-    new ExternalAppendOnlyMap[K, CoGroupValue, CoGroupCombiner](
-      createCombiner, mergeValue, mergeCombiners)
+    //improve by kzx
+    val result = new ExternalAppendOnlyMap[K, CoGroupValue, CoGroupCombiner](
+      createCombiner=createCombiner, mergeValue = mergeValue, mergeCombiners = mergeCombiners)
+    result.setRDDCache(isRDDCache)
+    result
   }
 
   override def clearDependencies() {

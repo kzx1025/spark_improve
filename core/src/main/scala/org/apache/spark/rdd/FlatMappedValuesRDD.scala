@@ -27,9 +27,15 @@ class FlatMappedValuesRDD[K, V, U](prev: RDD[_ <: Product2[K, V]], f: V => Trave
 
   override val partitioner = firstParent[Product2[K, V]].partitioner
 
-  override def compute(split: Partition, context: TaskContext) = {
-    firstParent[Product2[K, V]].iterator(split, context).flatMap { case Product2(k, v) =>
+  override def compute(split: Partition, context: TaskContext,isRDDCache: Boolean) = {
+    if (isRDDCache) {
+      firstParent[Product2[K, V]].iterator(split, context).flatMap { case Product2(k, v) =>
+        f(v).map(x => (k, x))
+      }
+  }else{
+    firstParent[Product2[K, V]].iteratorK(split, context).flatMap { case Product2(k, v) =>
       f(v).map(x => (k, x))
     }
+  }
   }
 }

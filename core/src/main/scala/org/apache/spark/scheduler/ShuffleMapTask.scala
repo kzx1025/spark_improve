@@ -45,6 +45,20 @@ private[spark] class ShuffleMapTask(
     @transient private var locs: Seq[TaskLocation])
   extends Task[MapStatus](stageId, partition.index) with Logging {
 
+  /**
+   * add by kzx
+   */
+  def this(stageIdK: Int,
+           taskBinaryK: Broadcast[Array[Byte]],
+           partitionK: Partition,
+           rddCacheInStageK: Boolean,
+           @transient locsK: Seq[TaskLocation]){
+
+    this(stageIdK,taskBinaryK,partitionK,locsK)
+    this.isRDDCache = rddCacheInStageK;
+
+  }
+
   /** A constructor used only in test suites. This does not require passing in an RDD. */
   def this(partitionId: Int) {
     this(0, null, new Partition { override def index = 0 }, null)
@@ -64,8 +78,17 @@ private[spark] class ShuffleMapTask(
     var writer: ShuffleWriter[Any, Any] = null
     try {
       val manager = SparkEnv.get.shuffleManager
-      writer = manager.getWriter[Any, Any](dep.shuffleHandle, partitionId, context)
-      writer.write(rdd.iterator(partition, context).asInstanceOf[Iterator[_ <: Product2[Any, Any]]])
+      writer = manager.getWriter[Any, Any](dep.shuffleHandle, partitionId, context,isRDDCache)
+      //add by kzx
+      if(isRDDCache) {
+        //normal process
+        logInfo("shuffleMapTask->runTask: in cache")
+        writer.write(rdd.iterator(partition, context).asInstanceOf[Iterator[_ <: Product2[Any, Any]]])
+      }else{
+        //no cache, specific process
+        logInfo("shuffleMapTask->runTask: not in cache")
+        writer.write(rdd.iteratorK(partition, context).asInstanceOf[Iterator[_ <: Product2[Any, Any]]])
+      }
       return writer.stop(success = true).get
     } catch {
       case e: Exception =>

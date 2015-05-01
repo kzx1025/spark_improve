@@ -61,10 +61,14 @@ private[spark] class PartitionwiseSampledRDD[T: ClassTag, U: ClassTag](
   override def getPreferredLocations(split: Partition): Seq[String] =
     firstParent[T].preferredLocations(split.asInstanceOf[PartitionwiseSampledRDDPartition].prev)
 
-  override def compute(splitIn: Partition, context: TaskContext): Iterator[U] = {
+  override def compute(splitIn: Partition, context: TaskContext,isRDDCache: Boolean): Iterator[U] = {
     val split = splitIn.asInstanceOf[PartitionwiseSampledRDDPartition]
     val thisSampler = sampler.clone
     thisSampler.setSeed(split.seed)
-    thisSampler.sample(firstParent[T].iterator(split.prev, context))
+    if(isRDDCache) {
+      thisSampler.sample(firstParent[T].iterator(split.prev, context))
+    }else{
+      thisSampler.sample(firstParent[T].iteratorK(split.prev, context))
+    }
   }
 }

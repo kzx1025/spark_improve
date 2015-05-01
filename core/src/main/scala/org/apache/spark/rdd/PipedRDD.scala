@@ -63,7 +63,7 @@ private[spark] class PipedRDD[T: ClassTag](
 
   /**
    * A FilenameFilter that accepts anything that isn't equal to the name passed in.
-   * @param name of file or directory to leave out
+   * @param filterName of file or directory to leave out
    */
   class NotEqualsFileNameFilter(filterName: String) extends FilenameFilter {
     def accept(dir: File, name: String): Boolean = {
@@ -71,7 +71,7 @@ private[spark] class PipedRDD[T: ClassTag](
     }
   }
 
-  override def compute(split: Partition, context: TaskContext): Iterator[String] = {
+  override def compute(split: Partition, context: TaskContext,isRDDCache: Boolean): Iterator[String] = {
     val pb = new ProcessBuilder(command)
     // Add the environmental variables to the process.
     val currentEnvVars = pb.environment()
@@ -138,11 +138,21 @@ private[spark] class PipedRDD[T: ClassTag](
         if (printPipeContext != null) {
           printPipeContext(out.println(_))
         }
+        if(isRDDCache){
         for (elem <- firstParent[T].iterator(split, context)) {
           if (printRDDElement != null) {
             printRDDElement(elem, out.println(_))
           } else {
             out.println(elem)
+          }
+        }}
+        else{
+          for (elem <- firstParent[T].iteratorK(split, context)) {
+            if (printRDDElement != null) {
+              printRDDElement(elem, out.println(_))
+            } else {
+              out.println(elem)
+            }
           }
         }
         out.close()

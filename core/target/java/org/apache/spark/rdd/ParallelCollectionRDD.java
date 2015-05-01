@@ -10,6 +10,6 @@ private  class ParallelCollectionRDD<T extends java.lang.Object> extends org.apa
   // TypeTree().setOriginal(TypeBoundsTree(TypeTree().setOriginal(Select(Select(Ident(_root_), scala), scala.Nothing)), TypeTree().setOriginal(Select(Select(Ident(_root_), scala), scala.Any))))
   public   ParallelCollectionRDD (org.apache.spark.SparkContext sc, scala.collection.Seq<T> data, int numSlices, scala.collection.Map<java.lang.Object, scala.collection.Seq<java.lang.String>> locationPrefs, scala.reflect.ClassTag<T> evidence$2) { throw new RuntimeException(); }
   public  org.apache.spark.Partition[] getPartitions () { throw new RuntimeException(); }
-  public  org.apache.spark.InterruptibleIterator<T> compute (org.apache.spark.Partition s, org.apache.spark.TaskContext context) { throw new RuntimeException(); }
+  public  org.apache.spark.InterruptibleIterator<T> compute (org.apache.spark.Partition s, org.apache.spark.TaskContext context, boolean isRDDCache) { throw new RuntimeException(); }
   public  scala.collection.Seq<java.lang.String> getPreferredLocations (org.apache.spark.Partition s) { throw new RuntimeException(); }
 }

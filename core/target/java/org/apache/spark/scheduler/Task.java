@@ -30,6 +30,20 @@ private abstract class Task<T extends java.lang.Object> implements scala.Seriali
   // not preceding
   public   Task (int stageId, int partitionId) { throw new RuntimeException(); }
   public final  T run (long attemptId) { throw new RuntimeException(); }
+  /**
+   * add by kzx
+   */
+  public  boolean isRDDCache () { throw new RuntimeException(); }
+  /**
+   * add by kzx
+   * @param flag
+   */
+  public  void setRDDCache (boolean flag) { throw new RuntimeException(); }
+  /**
+   * add by kzx
+   * @return
+   */
+  public  boolean getRDDCache () { throw new RuntimeException(); }
   public abstract  T runTask (org.apache.spark.TaskContext context) ;
   public  scala.collection.Seq<org.apache.spark.scheduler.TaskLocation> preferredLocations () { throw new RuntimeException(); }
   public  long epoch () { throw new RuntimeException(); }

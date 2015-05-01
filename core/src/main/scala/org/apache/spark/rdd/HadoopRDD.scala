@@ -184,7 +184,7 @@ class HadoopRDD[K, V](
     array
   }
 
-  override def compute(theSplit: Partition, context: TaskContext): InterruptibleIterator[(K, V)] = {
+  override def compute(theSplit: Partition, context: TaskContext,isRDDCache: Boolean): InterruptibleIterator[(K, V)] = {
     val iter = new NextIterator[(K, V)] {
 
       val split = theSplit.asInstanceOf[HadoopPartition]
@@ -298,10 +298,14 @@ private[spark] object HadoopRDD {
 
     override def getPartitions: Array[Partition] = firstParent[T].partitions
 
-    override def compute(split: Partition, context: TaskContext) = {
+    override def compute(split: Partition, context: TaskContext,isRDDCache: Boolean) = {
       val partition = split.asInstanceOf[HadoopPartition]
       val inputSplit = partition.inputSplit.value
-      f(inputSplit, firstParent[T].iterator(split, context))
+      if(isRDDCache) {
+        f(inputSplit, firstParent[T].iterator(split, context))
+      }else{
+        f(inputSplit, firstParent[T].iteratorK(split, context))
+      }
     }
   }
 }

@@ -18,7 +18,7 @@ private  class SlidingRDD<T extends java.lang.Object> extends org.apache.spark.r
   public  int windowSize () { throw new RuntimeException(); }
   // not preceding
   public   SlidingRDD (org.apache.spark.rdd.RDD<T> parent, int windowSize, scala.reflect.ClassTag<T> evidence$1) { throw new RuntimeException(); }
-  public  scala.collection.Iterator<scala.collection.Seq<T>> compute (org.apache.spark.Partition split, org.apache.spark.TaskContext context) { throw new RuntimeException(); }
+  public  scala.collection.Iterator<scala.collection.Seq<T>> compute (org.apache.spark.Partition split, org.apache.spark.TaskContext context, boolean isRDDCache) { throw new RuntimeException(); }
   public  scala.collection.Seq<java.lang.String> getPreferredLocations (org.apache.spark.Partition split) { throw new RuntimeException(); }
   public  org.apache.spark.Partition[] getPartitions () { throw new RuntimeException(); }
 }

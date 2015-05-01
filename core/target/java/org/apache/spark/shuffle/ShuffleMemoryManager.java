@@ -14,15 +14,14 @@ package org.apache.spark.shuffle;
  * wait() and notifyAll() to signal changes.
  */
 private  class ShuffleMemoryManager implements org.apache.spark.Logging {
-  /**
-   * Figure out the shuffle memory limit from a SparkConf. We currently have both a fraction
-   * of the memory pool and a safety factor since collections can sometimes grow bigger than
-   * the size we target before we estimate their sizes again.
-   */
-  static public  long getMaxMemory (org.apache.spark.SparkConf conf) { throw new RuntimeException(); }
-  public   ShuffleMemoryManager (long maxMemory) { throw new RuntimeException(); }
+  static public  long getMaxMemoryWithNoCache (org.apache.spark.SparkConf conf, boolean isRDDCache) { throw new RuntimeException(); }
+  public   ShuffleMemoryManager (long initMaxMemory) { throw new RuntimeException(); }
   private  scala.collection.mutable.HashMap<java.lang.Object, java.lang.Object> threadMemory () { throw new RuntimeException(); }
+  private  long maxMemory () { throw new RuntimeException(); }
+  public  void setMaxMemory (long maxMemory) { throw new RuntimeException(); }
+  public  long getMaxMemory () { throw new RuntimeException(); }
   public   ShuffleMemoryManager (org.apache.spark.SparkConf conf) { throw new RuntimeException(); }
+  public   ShuffleMemoryManager (org.apache.spark.SparkConf conf, boolean isRDDCache) { throw new RuntimeException(); }
   /**
    * Try to acquire up to numBytes memory for the current thread, and return the number of bytes
    * obtained, or 0 if none can be allocated. This call may block until there is enough free memory

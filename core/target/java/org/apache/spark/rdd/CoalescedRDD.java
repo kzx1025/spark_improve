@@ -14,7 +14,7 @@ private  class CoalescedRDD<T extends java.lang.Object> extends org.apache.spark
   // not preceding
   public   CoalescedRDD (org.apache.spark.rdd.RDD<T> prev, int maxPartitions, double balanceSlack, scala.reflect.ClassTag<T> evidence$1) { throw new RuntimeException(); }
   public  org.apache.spark.Partition[] getPartitions () { throw new RuntimeException(); }
-  public  scala.collection.Iterator<T> compute (org.apache.spark.Partition partition, org.apache.spark.TaskContext context) { throw new RuntimeException(); }
+  public  scala.collection.Iterator<T> compute (org.apache.spark.Partition partition, org.apache.spark.TaskContext context, boolean isRDDCache) { throw new RuntimeException(); }
   public  scala.collection.Seq<org.apache.spark.Dependency<?>> getDependencies () { throw new RuntimeException(); }
   public  void clearDependencies () { throw new RuntimeException(); }
   /**

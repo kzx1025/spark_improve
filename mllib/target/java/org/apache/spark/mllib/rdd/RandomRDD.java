@@ -5,6 +5,6 @@ private  class RandomRDD<T extends java.lang.Object> extends org.apache.spark.rd
   // not preceding
   // TypeTree().setOriginal(TypeBoundsTree(TypeTree().setOriginal(Select(Select(Ident(_root_), scala), scala.Nothing)), TypeTree().setOriginal(Select(Select(Ident(_root_), scala), scala.Any))))
   public   RandomRDD (org.apache.spark.SparkContext sc, long size, int numPartitions, org.apache.spark.mllib.random.RandomDataGenerator<T> rng, long seed, scala.reflect.ClassTag<T> evidence$1) { throw new RuntimeException(); }
-  public  scala.collection.Iterator<T> compute (org.apache.spark.Partition splitIn, org.apache.spark.TaskContext context) { throw new RuntimeException(); }
+  public  scala.collection.Iterator<T> compute (org.apache.spark.Partition splitIn, org.apache.spark.TaskContext context, boolean isRDDCache) { throw new RuntimeException(); }
   public  org.apache.spark.Partition[] getPartitions () { throw new RuntimeException(); }
 }

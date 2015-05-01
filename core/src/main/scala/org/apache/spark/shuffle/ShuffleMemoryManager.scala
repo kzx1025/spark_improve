@@ -35,10 +35,30 @@ import org.apache.spark.{Logging, SparkException, SparkConf}
  * this set changes. This is all done by synchronizing access on "this" to mutate state and using
  * wait() and notifyAll() to signal changes.
  */
-private[spark] class ShuffleMemoryManager(maxMemory: Long) extends Logging {
+private[spark] class ShuffleMemoryManager(initMaxMemory: Long) extends Logging {
   private val threadMemory = new mutable.HashMap[Long, Long]()  // threadId -> memory bytes
 
-  def this(conf: SparkConf) = this(ShuffleMemoryManager.getMaxMemory(conf))
+  private var maxMemory = initMaxMemory
+
+  def setMaxMemory(maxMemory: Long): Unit ={
+    this.maxMemory = maxMemory
+  }
+
+  def getMaxMemory(): Long={
+    this.maxMemory
+  }
+
+  def this(conf: SparkConf) = {
+    this(ShuffleMemoryManager.getMaxMemory(conf))
+    logInfo("use shuffleMemoryManager:"+maxMemory)
+    logInfo("total Mem:"+Runtime.getRuntime.maxMemory())
+  }
+
+  //add by kzx
+  def this(conf: SparkConf, isRDDCache: Boolean) = {
+    this(ShuffleMemoryManager.getMaxMemoryWithNoCache(conf, isRDDCache))
+    logInfo("use specificShuffleMemoryManager:"+maxMemory)
+  }
 
   /**
    * Try to acquire up to numBytes memory for the current thread, and return the number of bytes
@@ -119,6 +139,16 @@ private object ShuffleMemoryManager {
    */
   def getMaxMemory(conf: SparkConf): Long = {
     val memoryFraction = conf.getDouble("spark.shuffle.memoryFraction", 0.2)
+    val safetyFraction = conf.getDouble("spark.shuffle.safetyFraction", 0.8)
+    (Runtime.getRuntime.maxMemory * memoryFraction * safetyFraction).toLong
+  }
+
+  def getMaxMemoryWithNoCache(conf: SparkConf,isRDDCache: Boolean): Long = {
+    //if rdd not cache , shuffle memoryFraction will be 0.6
+    val memoryFraction =
+    if(isRDDCache == false) 0.6
+    else conf.getDouble("spark.shuffle.memoryFraction", 0.2)
+
     val safetyFraction = conf.getDouble("spark.shuffle.safetyFraction", 0.8)
     (Runtime.getRuntime.maxMemory * memoryFraction * safetyFraction).toLong
   }

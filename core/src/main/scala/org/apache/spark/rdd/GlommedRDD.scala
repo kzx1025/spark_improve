@@ -26,6 +26,10 @@ private[spark] class GlommedRDD[T: ClassTag](prev: RDD[T])
 
   override def getPartitions: Array[Partition] = firstParent[T].partitions
 
-  override def compute(split: Partition, context: TaskContext) =
+  override def compute(split: Partition, context: TaskContext,isRDDCache: Boolean) =
+  if(isRDDCache) {
     Array(firstParent[T].iterator(split, context).toArray).iterator
+  }else{
+    Array(firstParent[T].iteratorK(split, context).toArray).iterator
+  }
 }

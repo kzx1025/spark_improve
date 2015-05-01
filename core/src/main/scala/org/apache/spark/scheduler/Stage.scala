@@ -57,6 +57,13 @@ private[spark] class Stage(
     val callSite: CallSite)
   extends Logging {
 
+  /** add a flag to identify the stage is in cache or not
+    * by kzx
+    */
+  var isCacheInRDDs = false;
+
+  val cacheRDDs = new HashSet[RDD[_]]
+
   val isShuffleMap = shuffleDep.isDefined
   val numPartitions = rdd.partitions.size
   val outputLocs = Array.fill[List[MapStatus]](numPartitions)(Nil)
@@ -76,6 +83,22 @@ private[spark] class Stage(
 
   /** Pointer to the latest [StageInfo] object, set by DAGScheduler. */
   var latestInfo: StageInfo = StageInfo.fromStage(this)
+
+  /**
+   * add by kzx
+   * @param flag
+   */
+  def setCacheInRDDs(flag:Boolean):Unit={
+    isCacheInRDDs = flag;
+  }
+
+  /**
+   * add by kzx
+   * @return
+   */
+  def getCacheInRDDs:Boolean={
+    isCacheInRDDs;
+  }
 
   def isAvailable: Boolean = {
     if (!isShuffleMap) {

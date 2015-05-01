@@ -1,5 +1,6 @@
 package org.apache.spark.streaming.scheduler;
 // no position
+// not preceding
 private  class GenerateJobs$ extends scala.runtime.AbstractFunction1<org.apache.spark.streaming.Time, org.apache.spark.streaming.scheduler.GenerateJobs> implements scala.Serializable {
   /**
    * Static reference to the singleton instance of this Scala object.

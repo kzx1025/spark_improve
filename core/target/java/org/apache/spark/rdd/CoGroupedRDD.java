@@ -20,7 +20,7 @@ public  class CoGroupedRDD<K extends java.lang.Object> extends org.apache.spark.
   public  scala.collection.Seq<org.apache.spark.Dependency<?>> getDependencies () { throw new RuntimeException(); }
   public  org.apache.spark.Partition[] getPartitions () { throw new RuntimeException(); }
   public  scala.Some<org.apache.spark.Partitioner> partitioner () { throw new RuntimeException(); }
-  public  scala.collection.Iterator<scala.Tuple2<K, scala.collection.Iterable<java.lang.Object>[]>> compute (org.apache.spark.Partition s, org.apache.spark.TaskContext context) { throw new RuntimeException(); }
-  private  org.apache.spark.util.collection.ExternalAppendOnlyMap<K, scala.Tuple2<java.lang.Object, java.lang.Object>, org.apache.spark.util.collection.CompactBuffer<java.lang.Object>[]> createExternalMap (int numRdds) { throw new RuntimeException(); }
+  public  scala.collection.Iterator<scala.Tuple2<K, scala.collection.Iterable<java.lang.Object>[]>> compute (org.apache.spark.Partition s, org.apache.spark.TaskContext context, boolean isRDDCache) { throw new RuntimeException(); }
+  private  org.apache.spark.util.collection.ExternalAppendOnlyMap<K, scala.Tuple2<java.lang.Object, java.lang.Object>, org.apache.spark.util.collection.CompactBuffer<java.lang.Object>[]> createExternalMap (int numRdds, boolean isRDDCache) { throw new RuntimeException(); }
   public  void clearDependencies () { throw new RuntimeException(); }
 }
