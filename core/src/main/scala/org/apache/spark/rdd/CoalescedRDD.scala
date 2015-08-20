@@ -19,6 +19,8 @@ package org.apache.spark.rdd
 
 import java.io.{IOException, ObjectOutputStream}
 
+import org.apache.spark.scheduler.ShuffleMemorySignal
+
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 import scala.language.existentials
@@ -87,14 +89,14 @@ private[spark] class CoalescedRDD[T: ClassTag](
     }
   }
 
-  override def compute(partition: Partition, context: TaskContext,isRDDCache: Boolean): Iterator[T] = {
-    if(isRDDCache){
+  override def compute(partition: Partition, context: TaskContext,shuffleMemorySignal :ShuffleMemorySignal): Iterator[T] = {
+    if(shuffleMemorySignal.getIsCache){
     partition.asInstanceOf[CoalescedRDDPartition].parents.iterator.flatMap { parentPartition =>
-      firstParent[T].iterator(parentPartition, context)
+      firstParent[T].iteratorK(parentPartition, context,shuffleMemorySignal)
     }}
     else{
       partition.asInstanceOf[CoalescedRDDPartition].parents.iterator.flatMap { parentPartition =>
-        firstParent[T].iteratorK(parentPartition, context)}
+        firstParent[T].iteratorK(parentPartition, context,shuffleMemorySignal)}
     }
   }
 

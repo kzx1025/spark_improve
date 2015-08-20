@@ -17,6 +17,8 @@
 
 package org.apache.spark.graphx
 
+import org.apache.spark.scheduler.ShuffleMemorySignal
+
 import scala.reflect.{classTag, ClassTag}
 
 import org.apache.spark._
@@ -49,12 +51,12 @@ class EdgeRDD[@specialized ED: ClassTag, VD: ClassTag](
   override val partitioner =
     partitionsRDD.partitioner.orElse(Some(new HashPartitioner(partitionsRDD.partitions.size)))
 
-  override def compute(part: Partition, context: TaskContext,isRDDCache:Boolean): Iterator[Edge[ED]] = {
+  override def compute(part: Partition, context: TaskContext,shuffleMemorySignal :ShuffleMemorySignal): Iterator[Edge[ED]] = {
     //add by kzx
-    val p = if(isRDDCache)
-      firstParent[(PartitionID, EdgePartition[ED, VD])].iterator(part, context)
+    val p = if(shuffleMemorySignal.getIsCache)
+      firstParent[(PartitionID, EdgePartition[ED, VD])].iteratorK(part, context,shuffleMemorySignal)
     else
-      firstParent[(PartitionID, EdgePartition[ED, VD])].iteratorK(part, context)
+      firstParent[(PartitionID, EdgePartition[ED, VD])].iteratorK(part, context,shuffleMemorySignal)
     if (p.hasNext) {
       p.next._2.iterator.map(_.copy())
     } else {

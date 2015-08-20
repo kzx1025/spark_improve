@@ -23,6 +23,8 @@ import java.io.IOException
 import java.io.PrintWriter
 import java.util.StringTokenizer
 
+import org.apache.spark.scheduler.ShuffleMemorySignal
+
 import scala.collection.JavaConversions._
 import scala.collection.Map
 import scala.collection.mutable.ArrayBuffer
@@ -71,7 +73,7 @@ private[spark] class PipedRDD[T: ClassTag](
     }
   }
 
-  override def compute(split: Partition, context: TaskContext,isRDDCache: Boolean): Iterator[String] = {
+  override def compute(split: Partition, context: TaskContext,shuffleMemorySignal :ShuffleMemorySignal): Iterator[String] = {
     val pb = new ProcessBuilder(command)
     // Add the environmental variables to the process.
     val currentEnvVars = pb.environment()
@@ -138,8 +140,8 @@ private[spark] class PipedRDD[T: ClassTag](
         if (printPipeContext != null) {
           printPipeContext(out.println(_))
         }
-        if(isRDDCache){
-        for (elem <- firstParent[T].iterator(split, context)) {
+        if(shuffleMemorySignal.getIsCache){
+        for (elem <- firstParent[T].iteratorK(split, context,shuffleMemorySignal)) {
           if (printRDDElement != null) {
             printRDDElement(elem, out.println(_))
           } else {
@@ -147,7 +149,7 @@ private[spark] class PipedRDD[T: ClassTag](
           }
         }}
         else{
-          for (elem <- firstParent[T].iteratorK(split, context)) {
+          for (elem <- firstParent[T].iteratorK(split, context,shuffleMemorySignal)) {
             if (printRDDElement != null) {
               printRDDElement(elem, out.println(_))
             } else {

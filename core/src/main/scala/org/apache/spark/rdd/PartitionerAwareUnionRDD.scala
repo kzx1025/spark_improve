@@ -19,6 +19,8 @@ package org.apache.spark.rdd
 
 import java.io.{IOException, ObjectOutputStream}
 
+import org.apache.spark.scheduler.ShuffleMemorySignal
+
 import scala.reflect.ClassTag
 
 import org.apache.spark.{OneToOneDependency, Partition, SparkContext, TaskContext}
@@ -92,15 +94,15 @@ class PartitionerAwareUnionRDD[T: ClassTag](
     location.toSeq
   }
 
-  override def compute(s: Partition, context: TaskContext,isRDDCache: Boolean): Iterator[T] = {
+  override def compute(s: Partition, context: TaskContext,shuffleMemorySignal :ShuffleMemorySignal): Iterator[T] = {
     val parentPartitions = s.asInstanceOf[PartitionerAwareUnionRDDPartition].parents
-    if(isRDDCache) {
+    if(shuffleMemorySignal.getIsCache) {
       rdds.zip(parentPartitions).iterator.flatMap {
-        case (rdd, p) => rdd.iterator(p, context)
+        case (rdd, p) => rdd.iteratorK(p, context,shuffleMemorySignal)
       }
     }else{
       rdds.zip(parentPartitions).iterator.flatMap {
-        case (rdd, p) => rdd.iteratorK(p, context)
+        case (rdd, p) => rdd.iteratorK(p, context,shuffleMemorySignal)
       }
     }
   }

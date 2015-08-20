@@ -19,6 +19,8 @@ package org.apache.spark.rdd
 
 import java.io._
 
+import org.apache.spark.scheduler.ShuffleMemorySignal
+
 import scala.Serializable
 import scala.collection.Map
 import scala.collection.immutable.NumericRange
@@ -98,7 +100,7 @@ private[spark] class ParallelCollectionRDD[T: ClassTag](
     slices.indices.map(i => new ParallelCollectionPartition(id, i, slices(i))).toArray
   }
 
-  override def compute(s: Partition, context: TaskContext,isRDDCache: Boolean) = {
+  override def compute(s: Partition, context: TaskContext,shuffleMemorySignal :ShuffleMemorySignal) = {
     new InterruptibleIterator(context, s.asInstanceOf[ParallelCollectionPartition[T]].iterator)
   }
 

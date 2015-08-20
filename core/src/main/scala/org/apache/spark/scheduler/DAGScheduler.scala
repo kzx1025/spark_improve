@@ -109,6 +109,8 @@ class DAGScheduler(
    */
   private[scheduler] val allCacheRDDs = new HashSet[RDD[_]]
 
+  private[scheduler] var pastCacheMem = 0L
+
  // private[scheduler] val cacheStages= new Queue[Stage]
 
 
@@ -399,11 +401,13 @@ class DAGScheduler(
 
               case narrowDep: NarrowDependency[_] =>
                 //logInfo("new narrowDependcy_RDD")
+                //if the rdd is persisted in memory
                 if(getRDDFirstPersist(dep.rdd)){
                  // logInfo(stage+"is in cache")
+                  //add the cached RDD to the set
                   stage.cacheRDDs += dep.rdd
-                  stage.setCacheInRDDs(true)
-
+                  //mark this stage is in cache
+                  stage.shuffleMemorySignal.setIsCache(true)
                 }
                 waitingForVisit.push(narrowDep.rdd)
             }
@@ -431,6 +435,52 @@ class DAGScheduler(
   }
 
 
+  /**
+   * get cache Memory of System
+   * @return
+   */
+  private def getCacheMem(): Long={
+
+    var totalCacheMem = 0L
+    if(sc.getRDDStorageInfo.length != 0){
+      for(tempRDDInfo <- sc.getRDDStorageInfo){
+        totalCacheMem += tempRDDInfo.memSize
+      }
+      totalCacheMem
+    }else{
+      0L
+    }
+  }
+
+  /**
+   * return a map that include each executor have how much cacheMem
+   * add by kzx
+   */
+  private def getCacheMap(cacheRdds : HashSet[RDD[_]]):HashMap[String,Long]={
+    //getCacheLocs().apply(1).
+    //sc.getExecutorStorageStatus.apply(1).memUsed
+    val cacheMap = new HashMap[String, Long]
+    val a= sc.ui.storageStatusListener
+    val rddList = cacheRdds.toList
+    for(rdd<-rddList) {
+      val rddId = rdd.id
+      val workers = a.storageStatusList.map((rddId, _))
+      for (worker <- workers) {
+        val (tempRddId, status) = worker
+        logInfo("executorId:" + status.blockManagerId.host +
+          "===========mem used:" + Utils.bytesToString(status.memUsedByRdd(tempRddId)))
+        if(cacheMap.contains(status.blockManagerId.host)) {
+          cacheMap(status.blockManagerId.host) = cacheMap(status.blockManagerId.host)
+          + status.memUsedByRdd(tempRddId)
+        }else{
+          cacheMap(status.blockManagerId.host) = 0+status.memUsedByRdd(tempRddId)
+        }
+      }
+    }
+
+    cacheMap
+
+  }
 
   private def describeRDDInfo():Unit={
     var remainMem = Runtime.getRuntime.maxMemory()
@@ -823,7 +873,8 @@ class DAGScheduler(
         logDebug("missing: " + missing)
         if (missing == Nil) {
           logInfo("++++++++Submitting " + stage + " (" + stage.rdd + "), which has no missing parents,cacheRDD size is "+  stage.cacheRDDs.size)
-          describeRDDInfo()
+          stage.shuffleMemorySignal.setCacheMemory(0L)
+          stage.shuffleMemorySignal.setStageId(stage.id)
           submitMissingTasks(stage, jobId.get)
         } else {
           for (parent <- missing) {
@@ -903,10 +954,10 @@ class DAGScheduler(
       partitionsToCompute.map { id =>
         val locs = getPreferredLocs(stage.rdd, id)
         val part = stage.rdd.partitions(id)
-        logInfo("stage's cache is"+stage.getCacheInRDDs.toString)
+        logInfo("stage's cache is"+stage.shuffleMemorySignal.getIsCache.toString())
         //new ShuffleMapTask(stage.id, taskBinary, part, locs)
         //add by kzx
-        new ShuffleMapTask(stage.id,taskBinary,part,stage.getCacheInRDDs,locs)
+        new ShuffleMapTask(stage.id,taskBinary,part,stage.shuffleMemorySignal,locs)
       }
     } else {
       val job = stage.resultOfJob.get
@@ -914,10 +965,10 @@ class DAGScheduler(
         val p: Int = job.partitions(id)
         val part = stage.rdd.partitions(p)
         val locs = getPreferredLocs(stage.rdd, p)
-        logInfo("stage's cache is"+stage.getCacheInRDDs.toString)
+        logInfo("stage's cache is"+stage.shuffleMemorySignal.getIsCache.toString())
         //new ResultTask(stage.id, taskBinary, part, locs, id)
         //add by kzx
-        new ResultTask(stage.id,taskBinary,part,stage.getCacheInRDDs,locs,id)
+        new ResultTask(stage.id,taskBinary,part,stage.shuffleMemorySignal,locs,id)
       }
     }
 
@@ -1120,19 +1171,37 @@ class DAGScheduler(
                   stage <- newlyRunnable.sortBy(_.id)
                   jobId <- activeJobForStage(stage)
                 } {
-                 if(isSubSetOf(stage.cacheRDDs,allCacheRDDs)) {
-                   val isTempCache = stage.getCacheInRDDs
-                   for (tempStage <- finishStages.toList) {
-                     if (stage.id > tempStage.id) {
-                       stage.setCacheInRDDs(false)
-                       logInfo("stage:" + stage + " do not have to be cache")
-                     }else{
-                       stage.setCacheInRDDs(isTempCache)
+
+                  //add by kzx
+                 if(isSubSetOf(stage.cacheRDDs,allCacheRDDs)&&(!failedStages.contains(stage))) {
+                   stage.shuffleMemorySignal.setIsCache(false)
+                   logInfo("stage:" + stage + " do not have to be cache")
+
+                  // val isTempCache = stage.shuffleMemorySignal.getIsCache
+                  /** val finishStagesList = finishStages.toList
+                   var i = 0
+                   var flag = true
+                   while((i < finishStagesList.length)&&flag){
+                     val tempStage = finishStagesList.apply(i)
+                     if(stage.id <= tempStage.id && stage.id != 0){
+                       flag = false
                      }
+                     i=i+1
                    }
+                   if(flag){
+                     stage.shuffleMemorySignal.setIsCache(false)
+                     logInfo("stage:" + stage + " do not have to be cache")
+                   }**/
+
                  }
-                  describeRDDInfo()
-                  logInfo("Submitting " + stage + " (" + stage.rdd + "), which is now runnable   "+stage.cacheRDDs.size)
+                  stage.shuffleMemorySignal.cacheRDDMap ++= getCacheMap(allCacheRDDs)
+                  val needCacheMem = getCacheMem()-pastCacheMem
+                  stage.shuffleMemorySignal.setCacheMemory(getCacheMem())
+                  pastCacheMem += needCacheMem
+                  stage.shuffleMemorySignal.setStageId(stage.id)
+                  logInfo("======cache Mem is"+getCacheMem())
+                  logInfo("Submitting " + stage + " (" + stage.rdd + "), " +
+                    "which is now runnable   "+stage.cacheRDDs.size)
                   submitMissingTasks(stage, jobId)
                 }
               }

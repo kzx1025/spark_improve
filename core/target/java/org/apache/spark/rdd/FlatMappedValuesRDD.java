@@ -7,5 +7,5 @@ private  class FlatMappedValuesRDD<K extends java.lang.Object, V extends java.la
   public   FlatMappedValuesRDD (org.apache.spark.rdd.RDD<? extends scala.Product2<K, V>> prev, scala.Function1<V, scala.collection.TraversableOnce<U>> f) { throw new RuntimeException(); }
   public  org.apache.spark.Partition[] getPartitions () { throw new RuntimeException(); }
   public  scala.Option<org.apache.spark.Partitioner> partitioner () { throw new RuntimeException(); }
-  public  scala.collection.Iterator<scala.Tuple2<K, U>> compute (org.apache.spark.Partition split, org.apache.spark.TaskContext context, boolean isRDDCache) { throw new RuntimeException(); }
+  public  scala.collection.Iterator<scala.Tuple2<K, U>> compute (org.apache.spark.Partition split, org.apache.spark.TaskContext context, org.apache.spark.scheduler.ShuffleMemorySignal shuffleMemorySignal) { throw new RuntimeException(); }
 }

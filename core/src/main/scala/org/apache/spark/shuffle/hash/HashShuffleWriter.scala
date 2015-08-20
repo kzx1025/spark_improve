@@ -54,7 +54,7 @@ private[spark] class HashShuffleWriter[K, V](
   override def write(records: Iterator[_ <: Product2[K, V]]): Unit = {
     val iter = if (dep.aggregator.isDefined) {
       if (dep.mapSideCombine) {
-        dep.aggregator.get.combineValuesByKey(records, context,isRDDCache)
+        dep.aggregator.get.combineValuesByKey(records, context,shuffleMemorySignal)
       } else {
         records
       }

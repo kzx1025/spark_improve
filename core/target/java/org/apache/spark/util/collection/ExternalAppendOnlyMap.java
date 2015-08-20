@@ -129,9 +129,9 @@ public  class ExternalAppendOnlyMap<K extends java.lang.Object, V extends java.l
   // TypeTree().setOriginal(TypeBoundsTree(TypeTree().setOriginal(Select(Select(Ident(_root_), scala), scala.Nothing)), TypeTree().setOriginal(Select(Select(Ident(_root_), scala), scala.Any))))
   // TypeTree().setOriginal(TypeBoundsTree(TypeTree().setOriginal(Select(Select(Ident(_root_), scala), scala.Nothing)), TypeTree().setOriginal(Select(Select(Ident(_root_), scala), scala.Any))))
   public   ExternalAppendOnlyMap (scala.Function1<V, C> createCombiner, scala.Function2<C, V, C> mergeValue, scala.Function2<C, C, C> mergeCombiners, org.apache.spark.serializer.Serializer serializer, org.apache.spark.storage.BlockManager blockManager) { throw new RuntimeException(); }
-  public  boolean isRDDCache () { throw new RuntimeException(); }
-  public  void setRDDCache (boolean flag) { throw new RuntimeException(); }
-  public  boolean getRDDCache () { throw new RuntimeException(); }
+  public  org.apache.spark.scheduler.ShuffleMemorySignal shuffleMemorySignal () { throw new RuntimeException(); }
+  public  void setShuffleMemorySignal (org.apache.spark.scheduler.ShuffleMemorySignal shuffleMemorySignal) { throw new RuntimeException(); }
+  public  org.apache.spark.scheduler.ShuffleMemorySignal getShuffleMemorySignal () { throw new RuntimeException(); }
   private  org.apache.spark.util.collection.SizeTrackingAppendOnlyMap<K, C> currentMap () { throw new RuntimeException(); }
   private  scala.collection.mutable.ArrayBuffer<org.apache.spark.util.collection.ExternalAppendOnlyMap<K, V, C>.DiskMapIterator> spilledMaps () { throw new RuntimeException(); }
   private  org.apache.spark.SparkConf sparkConf () { throw new RuntimeException(); }

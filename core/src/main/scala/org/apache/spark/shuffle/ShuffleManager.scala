@@ -17,6 +17,7 @@
 
 package org.apache.spark.shuffle
 
+import org.apache.spark.scheduler.ShuffleMemorySignal
 import org.apache.spark.{TaskContext, ShuffleDependency}
 
 /**
@@ -39,7 +40,7 @@ private[spark] trait ShuffleManager {
   /** Get a writer for a given partition. Called on executors by map tasks. */
   //def getWriter[K, V](handle: ShuffleHandle, mapId: Int, context: TaskContext): ShuffleWriter[K, V]
   //add by kzx
-  def getWriter[K, V](handle: ShuffleHandle, mapId: Int, context: TaskContext, isRDDCache: Boolean): ShuffleWriter[K, V]
+  def getWriter[K, V](handle: ShuffleHandle, mapId: Int, context: TaskContext, shuffleMemorySignal :ShuffleMemorySignal): ShuffleWriter[K, V]
 
   /**
    * Get a reader for a range of reduce partitions (startPartition to endPartition-1, inclusive).
@@ -50,7 +51,7 @@ private[spark] trait ShuffleManager {
       startPartition: Int,
       endPartition: Int,
       context: TaskContext,
-      isRDDCache: Boolean): ShuffleReader[K, C]
+      shuffleMemorySignal :ShuffleMemorySignal): ShuffleReader[K, C]
 
 
   /** Remove a shuffle's metadata from the ShuffleManager. */

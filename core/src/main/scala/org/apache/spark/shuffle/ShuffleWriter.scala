@@ -17,20 +17,20 @@
 
 package org.apache.spark.shuffle
 
-import org.apache.spark.scheduler.MapStatus
+import org.apache.spark.scheduler.{ShuffleMemorySignal, MapStatus}
 
 /**
  * Obtained inside a map task to write out records to the shuffle system.
  */
 private[spark] trait ShuffleWriter[K, V] {
 
-  var isRDDCache = true;
-  def setRDDCache(isRDDCache: Boolean):Unit ={
-    this.isRDDCache = isRDDCache
+  var shuffleMemorySignal :ShuffleMemorySignal = null
+  def setShuffleMemorySignal(shuffleMemorySignal :ShuffleMemorySignal):Unit ={
+    this.shuffleMemorySignal = shuffleMemorySignal
   }
 
-  def getRDDCaChe():Boolean ={
-    this.isRDDCache
+  def getShuffleMemorySignal():ShuffleMemorySignal ={
+    this.shuffleMemorySignal
   }
 
   /** Write a bunch of records to this task's output */

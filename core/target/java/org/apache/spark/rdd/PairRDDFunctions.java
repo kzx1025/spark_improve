@@ -314,21 +314,11 @@ public  class PairRDDFunctions<K extends java.lang.Object, V extends java.lang.O
    * for that key in <code>this</code>, <code>other1</code>, <code>other2</code> and <code>other3</code>.
    */
   public <W1 extends java.lang.Object, W2 extends java.lang.Object, W3 extends java.lang.Object> org.apache.spark.rdd.RDD<scala.Tuple2<K, scala.Tuple4<scala.collection.Iterable<V>, scala.collection.Iterable<W1>, scala.collection.Iterable<W2>, scala.collection.Iterable<W3>>>> cogroup (org.apache.spark.rdd.RDD<scala.Tuple2<K, W1>> other1, org.apache.spark.rdd.RDD<scala.Tuple2<K, W2>> other2, org.apache.spark.rdd.RDD<scala.Tuple2<K, W3>> other3, org.apache.spark.Partitioner partitioner) { throw new RuntimeException(); }
-  /**
-   * For each key k in <code>this</code> or <code>other</code>, return a resulting RDD that contains a tuple with the
-   * list of values for that key in <code>this</code> as well as <code>other</code>.
-   */
+  // not preceding
   public <W extends java.lang.Object> org.apache.spark.rdd.RDD<scala.Tuple2<K, scala.Tuple2<scala.collection.Iterable<V>, scala.collection.Iterable<W>>>> cogroup (org.apache.spark.rdd.RDD<scala.Tuple2<K, W>> other, org.apache.spark.Partitioner partitioner) { throw new RuntimeException(); }
-  /**
-   * For each key k in <code>this</code> or <code>other1</code> or <code>other2</code>, return a resulting RDD that contains a
-   * tuple with the list of values for that key in <code>this</code>, <code>other1</code> and <code>other2</code>.
-   */
+  // not preceding
   public <W1 extends java.lang.Object, W2 extends java.lang.Object> org.apache.spark.rdd.RDD<scala.Tuple2<K, scala.Tuple3<scala.collection.Iterable<V>, scala.collection.Iterable<W1>, scala.collection.Iterable<W2>>>> cogroup (org.apache.spark.rdd.RDD<scala.Tuple2<K, W1>> other1, org.apache.spark.rdd.RDD<scala.Tuple2<K, W2>> other2, org.apache.spark.Partitioner partitioner) { throw new RuntimeException(); }
-  /**
-   * For each key k in <code>this</code> or <code>other1</code> or <code>other2</code> or <code>other3</code>,
-   * return a resulting RDD that contains a tuple with the list of values
-   * for that key in <code>this</code>, <code>other1</code>, <code>other2</code> and <code>other3</code>.
-   */
+  // not preceding
   public <W1 extends java.lang.Object, W2 extends java.lang.Object, W3 extends java.lang.Object> org.apache.spark.rdd.RDD<scala.Tuple2<K, scala.Tuple4<scala.collection.Iterable<V>, scala.collection.Iterable<W1>, scala.collection.Iterable<W2>, scala.collection.Iterable<W3>>>> cogroup (org.apache.spark.rdd.RDD<scala.Tuple2<K, W1>> other1, org.apache.spark.rdd.RDD<scala.Tuple2<K, W2>> other2, org.apache.spark.rdd.RDD<scala.Tuple2<K, W3>> other3) { throw new RuntimeException(); }
   /**
    * For each key k in <code>this</code> or <code>other</code>, return a resulting RDD that contains a tuple with the

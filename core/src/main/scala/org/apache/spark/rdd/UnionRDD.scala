@@ -19,6 +19,8 @@ package org.apache.spark.rdd
 
 import java.io.{IOException, ObjectOutputStream}
 
+import org.apache.spark.scheduler.ShuffleMemorySignal
+
 import scala.collection.mutable.ArrayBuffer
 import scala.reflect.ClassTag
 
@@ -81,13 +83,13 @@ class UnionRDD[T: ClassTag](
     deps
   }
 
-  override def compute(s: Partition, context: TaskContext,isRDDCache: Boolean): Iterator[T] = {
+  override def compute(s: Partition, context: TaskContext,shuffleMemorySignal :ShuffleMemorySignal): Iterator[T] = {
     val part = s.asInstanceOf[UnionPartition[T]]
     val parentRdd = dependencies(part.parentRddIndex).rdd.asInstanceOf[RDD[T]]
-    if(isRDDCache) {
-      parentRdd.iterator(part.parentPartition, context)
+    if(shuffleMemorySignal.getIsCache) {
+      parentRdd.iteratorK(part.parentPartition, context,shuffleMemorySignal)
     }else{
-      parentRdd.iteratorK(part.parentPartition, context)
+      parentRdd.iteratorK(part.parentPartition, context,shuffleMemorySignal)
     }
   }
 

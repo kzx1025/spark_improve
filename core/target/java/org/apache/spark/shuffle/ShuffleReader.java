@@ -4,9 +4,9 @@ package org.apache.spark.shuffle;
  */
 private abstract interface ShuffleReader<K extends java.lang.Object, C extends java.lang.Object> {
   /** Read the combined key-values for this reduce task */
-  public  boolean isRDDCache () ;
-  public  void setRDDCache (boolean isRDDCache) ;
-  public  boolean getRDDCaChe () ;
+  public  org.apache.spark.scheduler.ShuffleMemorySignal shuffleMemorySignal () ;
+  public  void setShuffleMemorySignal (org.apache.spark.scheduler.ShuffleMemorySignal shuffleMemorySignal) ;
+  public  org.apache.spark.scheduler.ShuffleMemorySignal getShuffleMemorySignal () ;
   public abstract  scala.collection.Iterator<scala.Product2<K, C>> read () ;
   /** Close this reader */
   public abstract  void stop () ;

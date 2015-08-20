@@ -25,7 +25,7 @@ public  class NewHadoopRDD<K extends java.lang.Object, V extends java.lang.Objec
     public   NewHadoopMapPartitionsWithSplitRDD (org.apache.spark.rdd.RDD<T> prev, scala.Function2<org.apache.hadoop.mapreduce.InputSplit, scala.collection.Iterator<T>, scala.collection.Iterator<U>> f, boolean preservesPartitioning, scala.reflect.ClassTag<U> evidence$2, scala.reflect.ClassTag<T> evidence$3) { throw new RuntimeException(); }
     public  scala.Option<org.apache.spark.Partitioner> partitioner () { throw new RuntimeException(); }
     public  org.apache.spark.Partition[] getPartitions () { throw new RuntimeException(); }
-    public  scala.collection.Iterator<U> compute (org.apache.spark.Partition split, org.apache.spark.TaskContext context, boolean isRDDCache) { throw new RuntimeException(); }
+    public  scala.collection.Iterator<U> compute (org.apache.spark.Partition split, org.apache.spark.TaskContext context, org.apache.spark.scheduler.ShuffleMemorySignal shuffleMemorySignal) { throw new RuntimeException(); }
   }
   // no position
   // not preceding
@@ -40,7 +40,7 @@ public  class NewHadoopRDD<K extends java.lang.Object, V extends java.lang.Objec
   private  java.lang.String jobTrackerId () { throw new RuntimeException(); }
   protected  org.apache.hadoop.mapreduce.JobID jobId () { throw new RuntimeException(); }
   public  org.apache.spark.Partition[] getPartitions () { throw new RuntimeException(); }
-  public  org.apache.spark.InterruptibleIterator<scala.Tuple2<K, V>> compute (org.apache.spark.Partition theSplit, org.apache.spark.TaskContext context, boolean isRDDCache) { throw new RuntimeException(); }
+  public  org.apache.spark.InterruptibleIterator<scala.Tuple2<K, V>> compute (org.apache.spark.Partition theSplit, org.apache.spark.TaskContext context, org.apache.spark.scheduler.ShuffleMemorySignal shuffleMemorySignal) { throw new RuntimeException(); }
   /** Maps over a partition, providing the InputSplit that was used as the base of the partition. */
   public <U extends java.lang.Object> org.apache.spark.rdd.RDD<U> mapPartitionsWithInputSplit (scala.Function2<org.apache.hadoop.mapreduce.InputSplit, scala.collection.Iterator<scala.Tuple2<K, V>>, scala.collection.Iterator<U>> f, boolean preservesPartitioning, scala.reflect.ClassTag<U> evidence$1) { throw new RuntimeException(); }
   public  scala.collection.Seq<java.lang.String> getPreferredLocations (org.apache.spark.Partition split) { throw new RuntimeException(); }

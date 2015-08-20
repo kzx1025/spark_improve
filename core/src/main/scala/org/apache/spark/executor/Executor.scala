@@ -174,6 +174,12 @@ private[spark] class Executor(
 
         // Run the actual task and measure its runtime.
         taskStart = System.currentTimeMillis()
+
+        //add by kzx
+        task.shuffleMemorySignal.setExecutorName(slaveHostname)
+        if (task.shuffleMemorySignal.cacheRDDMap.contains(slaveHostname)) {
+        task.shuffleMemorySignal.setCacheMemory(task.shuffleMemorySignal.cacheRDDMap(slaveHostname))
+      }
         val value = task.run(taskId.toInt)
         val taskFinish = System.currentTimeMillis()
 

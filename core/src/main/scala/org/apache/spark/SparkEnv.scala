@@ -66,7 +66,7 @@ class SparkEnv (
     val sparkFilesDir: String,
     val metricsSystem: MetricsSystem,
     val shuffleMemoryManager: ShuffleMemoryManager,
-    val specificShuffleMemoryManager: ShuffleMemoryManager,
+   // val specificShuffleMemoryManager: ShuffleMemoryManager,
     val conf: SparkConf) extends Logging {
 
   private val pythonWorkers = mutable.HashMap[(String, Map[String, String]), PythonWorkerFactory]()
@@ -226,7 +226,7 @@ object SparkEnv extends Logging {
 
     val shuffleMemoryManager = new ShuffleMemoryManager(conf)
     //add by kzx , the shuffleMemoryManager is for no rdd cache situation
-    val specificShuffleMemoryManager = new ShuffleMemoryManager(conf,false)
+    //val specificShuffleMemoryManager = new ShuffleMemoryManager(conf,false)
 
     val blockManagerMaster = new BlockManagerMaster(registerOrLookup(
       "BlockManagerMaster",
@@ -290,7 +290,7 @@ object SparkEnv extends Logging {
       sparkFilesDir,
       metricsSystem,
       shuffleMemoryManager,
-      specificShuffleMemoryManager,
+     // specificShuffleMemoryManager,
       conf)
   }
 

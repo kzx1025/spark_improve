@@ -17,6 +17,8 @@
 
 package org.apache.spark.rdd
 
+import org.apache.spark.scheduler.ShuffleMemorySignal
+
 import scala.reflect.ClassTag
 
 import org.apache.spark.{Partition, TaskContext}
@@ -60,13 +62,13 @@ class ZippedWithIndexRDD[T: ClassTag](@transient prev: RDD[T]) extends RDD[(T, L
   override def getPreferredLocations(split: Partition): Seq[String] =
     firstParent[T].preferredLocations(split.asInstanceOf[ZippedWithIndexRDDPartition].prev)
 
-  override def compute(splitIn: Partition, context: TaskContext,isRDDCache: Boolean): Iterator[(T, Long)] = {
+  override def compute(splitIn: Partition, context: TaskContext,shuffleMemorySignal :ShuffleMemorySignal): Iterator[(T, Long)] = {
     val split = splitIn.asInstanceOf[ZippedWithIndexRDDPartition]
-    if(isRDDCache){
-    firstParent[T].iterator(split.prev, context).zipWithIndex.map { x =>
+    if(shuffleMemorySignal.getIsCache){
+    firstParent[T].iteratorK(split.prev, context,shuffleMemorySignal).zipWithIndex.map { x =>
       (x._1, split.startIndex + x._2)
     }}else{
-        firstParent[T].iterator(split.prev, context).zipWithIndex.map { x =>
+        firstParent[T].iteratorK(split.prev, context,shuffleMemorySignal).zipWithIndex.map { x =>
           (x._1, split.startIndex + x._2)
       }
     }

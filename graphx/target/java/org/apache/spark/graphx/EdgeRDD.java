@@ -31,7 +31,7 @@ public  class EdgeRDD<ED extends java.lang.Object, VD extends java.lang.Object> 
    * partitioner that allows co-partitioning with <code>partitionsRDD</code>.
    */
   public  scala.Option<org.apache.spark.Partitioner> partitioner () { throw new RuntimeException(); }
-  public  scala.collection.Iterator<org.apache.spark.graphx.Edge<ED>> compute (org.apache.spark.Partition part, org.apache.spark.TaskContext context, boolean isRDDCache) { throw new RuntimeException(); }
+  public  scala.collection.Iterator<org.apache.spark.graphx.Edge<ED>> compute (org.apache.spark.Partition part, org.apache.spark.TaskContext context, org.apache.spark.scheduler.ShuffleMemorySignal shuffleMemorySignal) { throw new RuntimeException(); }
   public  org.apache.spark.graphx.Edge<ED>[] collect () { throw new RuntimeException(); }
   /**
    * Persists the edge partitions at the specified storage level, ignoring any existing target

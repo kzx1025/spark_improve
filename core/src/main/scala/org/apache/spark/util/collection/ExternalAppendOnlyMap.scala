@@ -20,6 +20,9 @@ package org.apache.spark.util.collection
 import java.io._
 import java.util.Comparator
 
+import org.apache.spark.scheduler.ShuffleMemorySignal
+import org.apache.spark.shuffle.ShuffleMemoryManager
+
 import scala.collection.BufferedIterator
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
@@ -71,25 +74,41 @@ class ExternalAppendOnlyMap[K, V, C](
 
 //add by kzx
   //@DeveloperApi
-
-//  def this(createCombinerK: V => C,
-//           mergeValueK: (C, V) => C,
-//           mergeCombinersK: (C, C) => C,
-//           serializerK: Serializer = SparkEnv.get.serializer,
-//           blockManagerK: BlockManager = SparkEnv.get.blockManager,
-//           isRDDCache: Boolean)={
-//    this(createCombinerK,mergeValueK,mergeCombinersK,serializerK,blockManagerK)
-//    this.isRDDCache = isRDDCache
+ var shuffleMemorySignal :ShuffleMemorySignal = null
+//  def this(createCombiner: V => C,
+//           mergeValue: (C, V) => C,
+//           mergeCombiners: (C, C) => C,
+//           shuffleMemorySignal: ShuffleMemorySignal,
+//           serializer: Serializer = SparkEnv.get.serializer,
+//          blockManager: BlockManager = SparkEnv.get.blockManager
+//          )={
+//   this(createCombiner,mergeValue,mergeCombiners,serializer,blockManager)
+//   this.shuffleMemorySignal = shuffleMemorySignal
 //
 //  }
-  var isRDDCache = false;
 
-  def setRDDCache(flag:Boolean):Unit={
-    isRDDCache = flag;
+
+  def setShuffleMemorySignal(shuffleMemorySignal :ShuffleMemorySignal):Unit ={
+    this.shuffleMemorySignal = shuffleMemorySignal
+    if(this.shuffleMemorySignal.getIsCache) {
+      new Throwable().printStackTrace()
+      logInfo("AppendOnlyMap get shuffleMemoryManager")
+      //shuffleMemoryManager.setNormalMaxMemory()
+     shuffleMemoryManager.updateMaxMemory(shuffleMemoryManager.getNormalMemory())
+    }
+    else {
+      new Throwable().printStackTrace()
+      logInfo("AppendOnlyMap get specificShuffleMemoryManager,cacheMem is "+
+        shuffleMemorySignal.getCacheMemory+" run in executor:"+shuffleMemorySignal.getExecutorName())
+     // shuffleMemoryManager.setSpecificMaxMemory()
+      shuffleMemoryManager.updateMaxMemory(shuffleMemoryManager.getSpecificMemory()-(shuffleMemorySignal.getCacheMemory*0.8).toLong)
+
+    //  shuffleMemoryManager.updateMaxMemory(shuffleMemorySignal.getCacheMemory,shuffleMemorySignal.getStageId)
+    }
   }
 
-  def getRDDCache:Boolean={
-    isRDDCache;
+  def getShuffleMemorySignal():ShuffleMemorySignal ={
+    this.shuffleMemorySignal
   }
 
 
@@ -97,18 +116,9 @@ class ExternalAppendOnlyMap[K, V, C](
   private val spilledMaps = new ArrayBuffer[DiskMapIterator]
   private val sparkConf = SparkEnv.get.conf
   private val diskBlockManager = blockManager.diskBlockManager
-  private val shuffleMemoryManager =
-    if(isRDDCache) {
-      new Throwable().printStackTrace()
-      logInfo("AppendOnlyMap get shuffleMemoryManager")
-      SparkEnv.get.shuffleMemoryManager
-    }
-  else {
-      new Throwable().printStackTrace()
-      logInfo("AppendOnlyMap get specificShuffleMemoryManager")
-      SparkEnv.get.specificShuffleMemoryManager
-    }
+ private val shuffleMemoryManager = SparkEnv.get.shuffleMemoryManager
 
+ // private var shuffleMemoryManager: ShuffleMemoryManager = null
   // Number of pairs inserted since last spill; note that we count them even if a value is merged
   // with a previous key in case we're doing something like groupBy where the result grows
   private var elementsRead = 0L
@@ -209,8 +219,8 @@ class ExternalAppendOnlyMap[K, V, C](
   private def spill(mapSize: Long): Unit = {
     spillCount += 1
     val threadId = Thread.currentThread().getId
-    logInfo("Thread %d spilling in-memory map of %d MB to disk (%d time%s so far)"
-      .format(threadId, mapSize / (1024 * 1024), spillCount, if (spillCount > 1) "s" else ""))
+   // logInfo("Thread %d spilling in-memory map of %d MB to disk (%d time%s so far)"
+   //   .format(threadId, mapSize / (1024 * 1024), spillCount, if (spillCount > 1) "s" else ""))
     val (blockId, file) = diskBlockManager.createTempBlock()
     curWriteMetrics = new ShuffleWriteMetrics()
     var writer = blockManager.getDiskWriter(blockId, file, serializer, fileBufferSize,

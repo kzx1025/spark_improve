@@ -54,12 +54,12 @@ private[spark] class ResultTask[T, U](
   def this(stageIdK: Int,
            taskBinaryK: Broadcast[Array[Byte]],
            partitionK: Partition,
-           rddCacheInStageK: Boolean,
+           shuffleMemorySignalK: ShuffleMemorySignal,
            @transient locsK: Seq[TaskLocation],
            outputIdK: Int){
 
     this(stageIdK,taskBinaryK,partitionK,locsK,outputIdK)
-    this.isRDDCache = rddCacheInStageK;
+    this.shuffleMemorySignal = shuffleMemorySignalK;
 
   }
 
@@ -75,12 +75,12 @@ private[spark] class ResultTask[T, U](
 
     metrics = Some(context.taskMetrics)
     try {
-      if(isRDDCache) {
+      if(shuffleMemorySignal.getIsCache) {
         //logInfo("shuffleMapTask->runTask: in cache")
-        func(context, rdd.iterator(partition, context))
+        func(context, rdd.iteratorK(partition, context,shuffleMemorySignal))
       }else{
         //logInfo("shuffleMapTask->runTask: in cache")
-        func(context, rdd.iteratorK(partition, context))
+        func(context, rdd.iteratorK(partition, context,shuffleMemorySignal))
       }
     } finally {
       context.markTaskCompleted()

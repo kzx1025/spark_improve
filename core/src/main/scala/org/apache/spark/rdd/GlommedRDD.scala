@@ -17,6 +17,8 @@
 
 package org.apache.spark.rdd
 
+import org.apache.spark.scheduler.ShuffleMemorySignal
+
 import scala.reflect.ClassTag
 
 import org.apache.spark.{Partition, TaskContext}
@@ -26,10 +28,10 @@ private[spark] class GlommedRDD[T: ClassTag](prev: RDD[T])
 
   override def getPartitions: Array[Partition] = firstParent[T].partitions
 
-  override def compute(split: Partition, context: TaskContext,isRDDCache: Boolean) =
-  if(isRDDCache) {
-    Array(firstParent[T].iterator(split, context).toArray).iterator
+  override def compute(split: Partition, context: TaskContext,shuffleMemorySignal :ShuffleMemorySignal) =
+  if(shuffleMemorySignal.getIsCache) {
+    Array(firstParent[T].iteratorK(split, context,shuffleMemorySignal).toArray).iterator
   }else{
-    Array(firstParent[T].iteratorK(split, context).toArray).iterator
+    Array(firstParent[T].iteratorK(split, context,shuffleMemorySignal).toArray).iterator
   }
 }

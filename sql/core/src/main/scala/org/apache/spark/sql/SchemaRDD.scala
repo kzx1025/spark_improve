@@ -19,6 +19,8 @@ package org.apache.spark.sql
 
 import java.util.{Map => JMap, List => JList}
 
+import org.apache.spark.scheduler.ShuffleMemorySignal
+
 import scala.collection.JavaConversions._
 import scala.collection.JavaConverters._
 
@@ -111,8 +113,8 @@ class SchemaRDD(
   // RDD functions: Copy the internal row representation so we present immutable data to users.
   // =========================================================================================
 
-  override def compute(split: Partition, context: TaskContext, isRDDCache:Boolean): Iterator[Row] =
-    firstParent[Row].compute(split, context,isRDDCache).map(_.copy())
+  override def compute(split: Partition, context: TaskContext, shuffleMemorySignal :ShuffleMemorySignal): Iterator[Row] =
+    firstParent[Row].compute(split, context,shuffleMemorySignal).map(_.copy())
 
   override def getPartitions: Array[Partition] = firstParent[Row].partitions
 

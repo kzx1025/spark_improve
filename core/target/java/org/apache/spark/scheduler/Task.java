@@ -33,17 +33,7 @@ private abstract class Task<T extends java.lang.Object> implements scala.Seriali
   /**
    * add by kzx
    */
-  public  boolean isRDDCache () { throw new RuntimeException(); }
-  /**
-   * add by kzx
-   * @param flag
-   */
-  public  void setRDDCache (boolean flag) { throw new RuntimeException(); }
-  /**
-   * add by kzx
-   * @return
-   */
-  public  boolean getRDDCache () { throw new RuntimeException(); }
+  public  org.apache.spark.scheduler.ShuffleMemorySignal shuffleMemorySignal () { throw new RuntimeException(); }
   public abstract  T runTask (org.apache.spark.TaskContext context) ;
   public  scala.collection.Seq<org.apache.spark.scheduler.TaskLocation> preferredLocations () { throw new RuntimeException(); }
   public  long epoch () { throw new RuntimeException(); }

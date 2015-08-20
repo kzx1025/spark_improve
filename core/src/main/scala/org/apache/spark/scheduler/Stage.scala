@@ -60,7 +60,8 @@ private[spark] class Stage(
   /** add a flag to identify the stage is in cache or not
     * by kzx
     */
-  var isCacheInRDDs = false;
+   var shuffleMemorySignal = new ShuffleMemorySignal(false, 0L)
+
 
   val cacheRDDs = new HashSet[RDD[_]]
 
@@ -84,21 +85,6 @@ private[spark] class Stage(
   /** Pointer to the latest [StageInfo] object, set by DAGScheduler. */
   var latestInfo: StageInfo = StageInfo.fromStage(this)
 
-  /**
-   * add by kzx
-   * @param flag
-   */
-  def setCacheInRDDs(flag:Boolean):Unit={
-    isCacheInRDDs = flag;
-  }
-
-  /**
-   * add by kzx
-   * @return
-   */
-  def getCacheInRDDs:Boolean={
-    isCacheInRDDs;
-  }
 
   def isAvailable: Boolean = {
     if (!isShuffleMap) {

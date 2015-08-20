@@ -19,6 +19,7 @@ package org.apache.spark.shuffle.sort
 
 import java.io.{DataInputStream, FileInputStream}
 
+import org.apache.spark.scheduler.ShuffleMemorySignal
 import org.apache.spark.shuffle._
 import org.apache.spark.{TaskContext, ShuffleDependency}
 import org.apache.spark.shuffle.hash.HashShuffleReader
@@ -44,19 +45,19 @@ private[spark] class SortShuffleManager extends ShuffleManager {
       startPartition: Int,
       endPartition: Int,
       context: TaskContext,
-      isRDDCache: Boolean): ShuffleReader[K, C] = {
+      shuffleMemorySignal :ShuffleMemorySignal): ShuffleReader[K, C] = {
     // We currently use the same block store shuffle fetcher as the hash-based shuffle.
     val hashReader = new HashShuffleReader(
       handle.asInstanceOf[BaseShuffleHandle[K, _, C]], startPartition, endPartition, context)
-    hashReader.setRDDCache(isRDDCache)
+    hashReader.setShuffleMemorySignal(shuffleMemorySignal)
     hashReader
   }
 
   /** Get a writer for a given partition. Called on executors by map tasks. */
-  override def getWriter[K, V](handle: ShuffleHandle, mapId: Int, context: TaskContext,isRDDCache: Boolean)
+  override def getWriter[K, V](handle: ShuffleHandle, mapId: Int, context: TaskContext,shuffleMemorySignal :ShuffleMemorySignal)
       : ShuffleWriter[K, V] = {
    val sortWriter =  new SortShuffleWriter(handle.asInstanceOf[BaseShuffleHandle[K, V, _]], mapId, context)
-    sortWriter.setRDDCache(isRDDCache)
+    sortWriter.setShuffleMemorySignal(shuffleMemorySignal)
     sortWriter
   }
 

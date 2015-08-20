@@ -110,9 +110,9 @@ private  class ExternalSorter<K extends java.lang.Object, V extends java.lang.Ob
   /**
    * add by kzx
    */
-  public  boolean isRDDCache () { throw new RuntimeException(); }
-  public  void setRDDCache (boolean flag) { throw new RuntimeException(); }
-  public  boolean getRDDCache () { throw new RuntimeException(); }
+  public  org.apache.spark.scheduler.ShuffleMemorySignal shuffleMemorySignal () { throw new RuntimeException(); }
+  public  void setShuffleMemorySignal (org.apache.spark.scheduler.ShuffleMemorySignal shuffleMemorySignal) { throw new RuntimeException(); }
+  public  org.apache.spark.scheduler.ShuffleMemorySignal getShuffleMemorySignal () { throw new RuntimeException(); }
   private  int numPartitions () { throw new RuntimeException(); }
   private  boolean shouldPartition () { throw new RuntimeException(); }
   private  org.apache.spark.storage.BlockManager blockManager () { throw new RuntimeException(); }

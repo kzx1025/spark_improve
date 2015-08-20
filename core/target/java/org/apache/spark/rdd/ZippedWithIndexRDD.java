@@ -13,5 +13,5 @@ private  class ZippedWithIndexRDD<T extends java.lang.Object> extends org.apache
   public   ZippedWithIndexRDD (org.apache.spark.rdd.RDD<T> prev, scala.reflect.ClassTag<T> evidence$1) { throw new RuntimeException(); }
   public  org.apache.spark.Partition[] getPartitions () { throw new RuntimeException(); }
   public  scala.collection.Seq<java.lang.String> getPreferredLocations (org.apache.spark.Partition split) { throw new RuntimeException(); }
-  public  scala.collection.Iterator<scala.Tuple2<T, java.lang.Object>> compute (org.apache.spark.Partition splitIn, org.apache.spark.TaskContext context, boolean isRDDCache) { throw new RuntimeException(); }
+  public  scala.collection.Iterator<scala.Tuple2<T, java.lang.Object>> compute (org.apache.spark.Partition splitIn, org.apache.spark.TaskContext context, org.apache.spark.scheduler.ShuffleMemorySignal shuffleMemorySignal) { throw new RuntimeException(); }
 }

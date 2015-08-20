@@ -17,6 +17,8 @@
 
 package org.apache.spark.rdd
 
+import org.apache.spark.scheduler.ShuffleMemorySignal
+
 import scala.reflect.ClassTag
 
 import org.apache.spark.{Partition, TaskContext}
@@ -30,11 +32,11 @@ private[spark] class FilteredRDD[T: ClassTag](
 
   override val partitioner = prev.partitioner    // Since filter cannot change a partition's keys
 
-  override def compute(split: Partition, context: TaskContext,isRDDCache: Boolean) =
-  if(isRDDCache) {
-    firstParent[T].iterator(split, context).filter(f)
+  override def compute(split: Partition, context: TaskContext,shuffleMemorySignal :ShuffleMemorySignal) =
+  if(shuffleMemorySignal.getIsCache) {
+    firstParent[T].iteratorK(split, context,shuffleMemorySignal).filter(f)
   }else{
-    firstParent[T].iteratorK(split, context).filter(f)
+    firstParent[T].iteratorK(split, context,shuffleMemorySignal).filter(f)
   }
 
 }

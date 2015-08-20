@@ -22,6 +22,8 @@ import java.net._
 import java.nio.charset.Charset
 import java.util.{List => JList, ArrayList => JArrayList, Map => JMap, Collections}
 
+import org.apache.spark.scheduler.ShuffleMemorySignal
+
 import scala.collection.JavaConversions._
 import scala.language.existentials
 import scala.reflect.ClassTag
@@ -57,7 +59,7 @@ private[spark] class PythonRDD(
 
   override val partitioner = if (preservePartitoning) parent.partitioner else None
 
-  override def compute(split: Partition, context: TaskContext,isRDDCache: Boolean): Iterator[Array[Byte]] = {
+  override def compute(split: Partition, context: TaskContext,shuffleMemorySignal :ShuffleMemorySignal): Iterator[Array[Byte]] = {
     val startTime = System.currentTimeMillis
     val env = SparkEnv.get
     val localdir = env.blockManager.diskBlockManager.localDirs.map(
@@ -261,8 +263,8 @@ private class PythonException(msg: String, cause: Exception) extends RuntimeExce
 private class PairwiseRDD(prev: RDD[Array[Byte]]) extends
   RDD[(Long, Array[Byte])](prev) {
   override def getPartitions = prev.partitions
-  override def compute(split: Partition, context: TaskContext,isRDDCache: Boolean) =
-    prev.iterator(split, context).grouped(2).map {
+  override def compute(split: Partition, context: TaskContext,shuffleMemorySignal :ShuffleMemorySignal) =
+    prev.iteratorK(split, context,shuffleMemorySignal).grouped(2).map {
       case Seq(a, b) => (Utils.deserializeLongValue(a), b)
       case x => throw new SparkException("PairwiseRDD: unexpected value: " + x)
     }

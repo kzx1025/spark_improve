@@ -73,7 +73,7 @@ private[spark] class SortShuffleWriter[K, V, C](
       }
       sorter = new ExternalSorter[K, V, C](
         dep.aggregator, Some(dep.partitioner), dep.keyOrdering, dep.serializer)
-      sorter.setRDDCache(isRDDCache)
+      sorter.setShuffleMemorySignal(shuffleMemorySignal)
       sorter.insertAll(records)
     } else {
       // In this case we pass neither an aggregator nor an ordering to the sorter, because we don't
@@ -81,7 +81,7 @@ private[spark] class SortShuffleWriter[K, V, C](
       // if the operation being run is sortByKey.
       sorter = new ExternalSorter[K, V, V](
         None, Some(dep.partitioner), None, dep.serializer)
-      sorter.setRDDCache(isRDDCache)
+      sorter.setShuffleMemorySignal(shuffleMemorySignal)
       sorter.insertAll(records)
     }
 

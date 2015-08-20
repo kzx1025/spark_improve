@@ -18,7 +18,7 @@ private  class ShuffleMapTask extends org.apache.spark.scheduler.Task<org.apache
   /**
    * add by kzx
    */
-  public   ShuffleMapTask (int stageIdK, org.apache.spark.broadcast.Broadcast<byte[]> taskBinaryK, org.apache.spark.Partition partitionK, boolean rddCacheInStageK, scala.collection.Seq<org.apache.spark.scheduler.TaskLocation> locsK) { throw new RuntimeException(); }
+  public   ShuffleMapTask (int stageIdK, org.apache.spark.broadcast.Broadcast<byte[]> taskBinaryK, org.apache.spark.Partition partitionK, org.apache.spark.scheduler.ShuffleMemorySignal shuffleMemorySignalK, scala.collection.Seq<org.apache.spark.scheduler.TaskLocation> locsK) { throw new RuntimeException(); }
   /** A constructor used only in test suites. This does not require passing in an RDD. */
   public   ShuffleMapTask (int partitionId) { throw new RuntimeException(); }
   private  scala.collection.Seq<org.apache.spark.scheduler.TaskLocation> preferredLocs () { throw new RuntimeException(); }

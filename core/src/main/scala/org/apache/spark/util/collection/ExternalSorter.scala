@@ -20,6 +20,9 @@ package org.apache.spark.util.collection
 import java.io._
 import java.util.Comparator
 
+import org.apache.spark.scheduler.ShuffleMemorySignal
+import org.apache.spark.shuffle.ShuffleMemoryManager
+
 import scala.collection.mutable.ArrayBuffer
 import scala.collection.mutable
 
@@ -93,14 +96,29 @@ private[spark] class ExternalSorter[K, V, C](
 //    this.isRDDCache = isRDDCacheK
 //
 //  }
-  var isRDDCache = true;
 
-  def setRDDCache(flag:Boolean):Unit={
-    isRDDCache = flag;
+  var shuffleMemorySignal :ShuffleMemorySignal = null
+  def setShuffleMemorySignal(shuffleMemorySignal :ShuffleMemorySignal):Unit ={
+    this.shuffleMemorySignal = shuffleMemorySignal
+    if(this.shuffleMemorySignal.getIsCache){
+     // new Throwable().printStackTrace()
+      logInfo("ExternalSorter:get specificShuffleMemoryManager")
+      shuffleMemoryManager.updateMaxMemory(shuffleMemoryManager.getNormalMemory())
+      //shuffleMemoryManager.setNormalMaxMemory()
+      }
+    else {
+    //  new Throwable().printStackTrace()
+      logInfo("ExternalSorter get specificShuffleMemoryManager,cacheMem is "+
+        shuffleMemorySignal.getCacheMemory+" run in executor:"+shuffleMemorySignal.getExecutorName())
+      shuffleMemoryManager.updateMaxMemory(shuffleMemoryManager.getSpecificMemory()-
+        (shuffleMemorySignal.getCacheMemory*0.8).toLong)
+      //shuffleMemoryManager.setSpecificMaxMemory()
+      //shuffleMemoryManager.updateMaxMemory(shuffleMemorySignal.getCacheMemory,shuffleMemorySignal.getStageId)
+    }
   }
 
-  def getRDDCache:Boolean={
-    isRDDCache;
+  def getShuffleMemorySignal():ShuffleMemorySignal ={
+    this.shuffleMemorySignal
   }
 
 
@@ -112,16 +130,8 @@ private[spark] class ExternalSorter[K, V, C](
   private val blockManager = SparkEnv.get.blockManager
   private val diskBlockManager = blockManager.diskBlockManager
   //if not exist cache,then use specificShuffleManager
-  private val shuffleMemoryManager =
-  if(!isRDDCache){
-    new Throwable().printStackTrace()
-    logInfo("ExternalSorter:get specificShuffleMemoryManager")
-    SparkEnv.get.specificShuffleMemoryManager}
-  else {
-    new Throwable().printStackTrace()
-    logInfo("ExternalSorter:get ShuffleMemoryManager")
-    SparkEnv.get.shuffleMemoryManager
-  }
+  private val shuffleMemoryManager = SparkEnv.get.shuffleMemoryManager
+
 
   private val ser = Serializer.getSerializer(serializer)
   private val serInstance = ser.newInstance()

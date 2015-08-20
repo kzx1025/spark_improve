@@ -112,6 +112,7 @@ private[ui] class RDDPage(parent: StorageTab) extends WebUIPage("rdd") {
 
   /** Render an HTML row representing a worker */
   private def workerRow(worker: (Int, StorageStatus)): Seq[Node] = {
+   // new Throwable().printStackTrace()
     val (rddId, status) = worker
     <tr>
       <td>{status.blockManagerId.host + ":" + status.blockManagerId.port}</td>

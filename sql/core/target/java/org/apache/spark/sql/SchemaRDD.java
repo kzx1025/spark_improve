@@ -69,7 +69,7 @@ public  class SchemaRDD extends org.apache.spark.rdd.RDD<org.apache.spark.sql.ca
   // not preceding
   public   SchemaRDD (org.apache.spark.sql.SQLContext sqlContext, org.apache.spark.sql.catalyst.plans.logical.LogicalPlan baseLogicalPlan) { throw new RuntimeException(); }
   public  org.apache.spark.sql.SchemaRDD baseSchemaRDD () { throw new RuntimeException(); }
-  public  scala.collection.Iterator<org.apache.spark.sql.catalyst.expressions.Row> compute (org.apache.spark.Partition split, org.apache.spark.TaskContext context, boolean isRDDCache) { throw new RuntimeException(); }
+  public  scala.collection.Iterator<org.apache.spark.sql.catalyst.expressions.Row> compute (org.apache.spark.Partition split, org.apache.spark.TaskContext context, org.apache.spark.scheduler.ShuffleMemorySignal shuffleMemorySignal) { throw new RuntimeException(); }
   public  org.apache.spark.Partition[] getPartitions () { throw new RuntimeException(); }
   protected  scala.collection.Seq<org.apache.spark.Dependency<?>> getDependencies () { throw new RuntimeException(); }
   /** Returns the schema of this SchemaRDD (represented by a {@link StructType}).

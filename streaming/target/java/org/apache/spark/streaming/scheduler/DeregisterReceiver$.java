@@ -1,5 +1,6 @@
 package org.apache.spark.streaming.scheduler;
 // no position
+// not preceding
 private  class DeregisterReceiver$ extends scala.runtime.AbstractFunction3<java.lang.Object, java.lang.String, java.lang.String, org.apache.spark.streaming.scheduler.DeregisterReceiver> implements scala.Serializable {
   /**
    * Static reference to the singleton instance of this Scala object.

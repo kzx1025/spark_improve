@@ -38,6 +38,7 @@ private  class DAGScheduler implements org.apache.spark.Logging {
    * the former stages cached rdds
    */
   public  scala.collection.mutable.HashSet<org.apache.spark.rdd.RDD<?>> allCacheRDDs () { throw new RuntimeException(); }
+  public  long pastCacheMem () { throw new RuntimeException(); }
   private  scala.collection.mutable.HashMap<java.lang.Object, scala.collection.Seq<org.apache.spark.scheduler.TaskLocation>[]> cacheLocs () { throw new RuntimeException(); }
   private  scala.collection.mutable.HashMap<java.lang.String, java.lang.Object> failedEpoch () { throw new RuntimeException(); }
   private  akka.actor.ActorRef dagSchedulerActorSupervisor () { throw new RuntimeException(); }
@@ -100,6 +101,16 @@ private  class DAGScheduler implements org.apache.spark.Logging {
    * @return
    */
   private  boolean getRDDFirstPersist (org.apache.spark.rdd.RDD<?> rdd) { throw new RuntimeException(); }
+  /**
+   * get cache Memory of System
+   * @return
+   */
+  private  long getCacheMem () { throw new RuntimeException(); }
+  /**
+   * return a map that include each executor have how much cacheMem
+   * add by kzx
+   */
+  private  scala.collection.mutable.HashMap<java.lang.String, java.lang.Object> getCacheMap (scala.collection.mutable.HashSet<org.apache.spark.rdd.RDD<?>> cacheRdds) { throw new RuntimeException(); }
   private  void describeRDDInfo () { throw new RuntimeException(); }
   /**
    * Registers the given jobId among the jobs that need the given stage and

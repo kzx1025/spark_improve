@@ -220,7 +220,8 @@ class SparkContext(config: SparkConf) extends Logging {
     new MetadataCleaner(MetadataCleanerType.SPARK_CONTEXT, this.cleanup, conf)
 
   // Initialize the Spark UI, registering all associated listeners
-  private[spark] val ui = new SparkUI(this)
+  //private[spark] val ui = new SparkUI(this)
+  val ui = new SparkUI(this)
   ui.bind()
 
   /** A default Hadoop Configuration for the Hadoop code (e.g. file systems) that we reuse. */
@@ -866,6 +867,10 @@ class SparkContext(config: SparkConf) extends Logging {
     StorageUtils.updateRddInfo(rddInfos, getExecutorStorageStatus)
     rddInfos.filter(_.isCached)
   }
+
+  /**
+   * add by kzx
+   */
 
   /**
    * Returns an immutable map of RDDs that have marked themselves as persistent via cache() call.

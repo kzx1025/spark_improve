@@ -21,6 +21,8 @@ import java.nio.ByteBuffer
 import java.text.SimpleDateFormat
 import java.util.{Date, HashMap => JHashMap}
 
+import org.apache.spark.scheduler.ShuffleMemorySignal
+
 import scala.collection.{Map, mutable}
 import scala.collection.JavaConversions._
 import scala.collection.mutable.ArrayBuffer
@@ -86,8 +88,9 @@ class PairRDDFunctions[K, V](self: RDD[(K, V)])
     }
     val aggregator = new Aggregator[K, V, C](createCombiner, mergeValue, mergeCombiners)
     if (self.partitioner == Some(partitioner)) {
+      logInfo("new shuffleMemorymanager")
       self.mapPartitionsWithContext((context, iter) => {
-        new InterruptibleIterator(context, aggregator.combineValuesByKey(iter, context,true))
+        new InterruptibleIterator(context, aggregator.combineValuesByKey(iter, context,new ShuffleMemorySignal(true,0L)))
       }, preservesPartitioning = true)
     } else {
       new ShuffledRDD[K, V, C](self, partitioner)

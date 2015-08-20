@@ -5,7 +5,7 @@ public  class UnionRDD<T extends java.lang.Object> extends org.apache.spark.rdd.
   public   UnionRDD (org.apache.spark.SparkContext sc, scala.collection.Seq<org.apache.spark.rdd.RDD<T>> rdds, scala.reflect.ClassTag<T> evidence$2) { throw new RuntimeException(); }
   public  org.apache.spark.Partition[] getPartitions () { throw new RuntimeException(); }
   public  scala.collection.Seq<org.apache.spark.Dependency<?>> getDependencies () { throw new RuntimeException(); }
-  public  scala.collection.Iterator<T> compute (org.apache.spark.Partition s, org.apache.spark.TaskContext context, boolean isRDDCache) { throw new RuntimeException(); }
+  public  scala.collection.Iterator<T> compute (org.apache.spark.Partition s, org.apache.spark.TaskContext context, org.apache.spark.scheduler.ShuffleMemorySignal shuffleMemorySignal) { throw new RuntimeException(); }
   public  scala.collection.Seq<java.lang.String> getPreferredLocations (org.apache.spark.Partition s) { throw new RuntimeException(); }
   public  void clearDependencies () { throw new RuntimeException(); }
 }

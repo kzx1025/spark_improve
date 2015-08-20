@@ -57,23 +57,7 @@ private[spark] abstract class Task[T](val stageId: Int, var partitionId: Int) ex
   /**
    * add by kzx
    */
-  var isRDDCache = false;
-
-  /**
-   * add by kzx
-   * @param flag
-   */
-  def setRDDCache(flag:Boolean):Unit={
-    isRDDCache = flag;
-  }
-
-  /**
-   * add by kzx
-   * @return
-   */
-  def getRDDCache:Boolean={
-    isRDDCache;
-  }
+  var shuffleMemorySignal :ShuffleMemorySignal = null
 
   def runTask(context: TaskContext): T
 

@@ -17,6 +17,8 @@
 
 package org.apache.spark.mllib.rdd
 
+import org.apache.spark.scheduler.ShuffleMemorySignal
+
 import scala.collection.mutable
 import scala.reflect.ClassTag
 
@@ -49,14 +51,14 @@ class SlidingRDD[T: ClassTag](@transient val parent: RDD[T], val windowSize: Int
 
   require(windowSize > 1, s"Window size must be greater than 1, but got $windowSize.")
 
-  override def compute(split: Partition, context: TaskContext,isRDDCache: Boolean): Iterator[Seq[T]] = {
+  override def compute(split: Partition, context: TaskContext,shuffleMemorySignal :ShuffleMemorySignal): Iterator[Seq[T]] = {
     val part = split.asInstanceOf[SlidingRDDPartition[T]]
-    if(isRDDCache)
-    (firstParent[T].iterator(part.prev, context) ++ part.tail)
+    if(shuffleMemorySignal.getIsCache)
+    (firstParent[T].iteratorK(part.prev, context,shuffleMemorySignal) ++ part.tail)
       .sliding(windowSize)
       .withPartial(false)
     else
-    (firstParent[T].iteratorK(part.prev, context) ++ part.tail)
+    (firstParent[T].iteratorK(part.prev, context,shuffleMemorySignal) ++ part.tail)
       .sliding(windowSize)
       .withPartial(false)
   }

@@ -17,6 +17,8 @@
 
 package org.apache.spark.rdd
 
+import org.apache.spark.scheduler.ShuffleMemorySignal
+
 import scala.reflect.ClassTag
 
 import org.apache.spark._
@@ -86,9 +88,9 @@ class ShuffledRDD[K, V, C](
     Array.tabulate[Partition](part.numPartitions)(i => new ShuffledRDDPartition(i))
   }
 
-  override def compute(split: Partition, context: TaskContext,isRDDCache: Boolean): Iterator[(K, C)] = {
+  override def compute(split: Partition, context: TaskContext,shuffleMemorySignal :ShuffleMemorySignal): Iterator[(K, C)] = {
     val dep = dependencies.head.asInstanceOf[ShuffleDependency[K, V, C]]
-    SparkEnv.get.shuffleManager.getReader(dep.shuffleHandle, split.index, split.index + 1, context,isRDDCache)
+    SparkEnv.get.shuffleManager.getReader(dep.shuffleHandle, split.index, split.index + 1, context,shuffleMemorySignal)
       .read()
       .asInstanceOf[Iterator[(K, C)]]
   }

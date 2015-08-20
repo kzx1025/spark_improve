@@ -17,6 +17,8 @@
 
 package org.apache.spark.rdd
 
+import org.apache.spark.scheduler.ShuffleMemorySignal
+
 import scala.reflect.ClassTag
 
 import org.apache.spark._
@@ -41,7 +43,7 @@ class BlockRDD[T: ClassTag](@transient sc: SparkContext, @transient val blockIds
     }).toArray
   }
 
-  override def compute(split: Partition, context: TaskContext,isRDDCache: Boolean): Iterator[T] = {
+  override def compute(split: Partition, context: TaskContext,shuffleMemorySignal :ShuffleMemorySignal): Iterator[T] = {
     assertValid()
     val blockManager = SparkEnv.get.blockManager
     val blockId = split.asInstanceOf[BlockRDDPartition].blockId

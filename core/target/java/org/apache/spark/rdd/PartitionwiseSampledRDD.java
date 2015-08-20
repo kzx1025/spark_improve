@@ -20,5 +20,5 @@ private  class PartitionwiseSampledRDD<T extends java.lang.Object, U extends jav
   public  scala.Option<org.apache.spark.Partitioner> partitioner () { throw new RuntimeException(); }
   public  org.apache.spark.Partition[] getPartitions () { throw new RuntimeException(); }
   public  scala.collection.Seq<java.lang.String> getPreferredLocations (org.apache.spark.Partition split) { throw new RuntimeException(); }
-  public  scala.collection.Iterator<U> compute (org.apache.spark.Partition splitIn, org.apache.spark.TaskContext context, boolean isRDDCache) { throw new RuntimeException(); }
+  public  scala.collection.Iterator<U> compute (org.apache.spark.Partition splitIn, org.apache.spark.TaskContext context, org.apache.spark.scheduler.ShuffleMemorySignal shuffleMemorySignal) { throw new RuntimeException(); }
 }

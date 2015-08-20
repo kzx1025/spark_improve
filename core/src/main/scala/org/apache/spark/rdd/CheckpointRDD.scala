@@ -19,6 +19,8 @@ package org.apache.spark.rdd
 
 import java.io.IOException
 
+import org.apache.spark.scheduler.ShuffleMemorySignal
+
 import scala.reflect.ClassTag
 
 import org.apache.hadoop.conf.Configuration
@@ -69,7 +71,7 @@ class CheckpointRDD[T: ClassTag](sc: SparkContext, val checkpointPath: String)
     locations.headOption.toList.flatMap(_.getHosts).filter(_ != "localhost")
   }
 
-  override def compute(split: Partition, context: TaskContext,isRDDCache: Boolean): Iterator[T] = {
+  override def compute(split: Partition, context: TaskContext,shuffleMemorySignal :ShuffleMemorySignal): Iterator[T] = {
     val file = new Path(checkpointPath, CheckpointRDD.splitIdToFile(split.index))
     CheckpointRDD.readFromFile(file, broadcastedConf, context)
   }

@@ -17,6 +17,8 @@
 
 package org.apache.spark.rdd
 
+import org.apache.spark.scheduler.ShuffleMemorySignal
+
 import scala.reflect.ClassTag
 
 import org.apache.spark.{NarrowDependency, Partition, TaskContext}
@@ -59,8 +61,8 @@ class PartitionPruningRDD[T: ClassTag](
     @transient partitionFilterFunc: Int => Boolean)
   extends RDD[T](prev.context, List(new PruneDependency(prev, partitionFilterFunc))) {
 
-  override def compute(split: Partition, context: TaskContext,isRDDCache: Boolean) = firstParent[T].iterator(
-    split.asInstanceOf[PartitionPruningRDDPartition].parentSplit, context)
+  override def compute(split: Partition, context: TaskContext,shuffleMemorySignal :ShuffleMemorySignal) = firstParent[T].iteratorK(
+    split.asInstanceOf[PartitionPruningRDDPartition].parentSplit, context,shuffleMemorySignal)
 
   override protected def getPartitions: Array[Partition] =
     getDependencies.head.asInstanceOf[PruneDependency[T]].partitions

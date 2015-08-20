@@ -19,6 +19,8 @@ package org.apache.spark.rdd
 
 import java.io.{IOException, ObjectOutputStream}
 
+import org.apache.spark.scheduler.ShuffleMemorySignal
+
 import scala.reflect.ClassTag
 
 import org.apache.spark.{OneToOneDependency, Partition, SparkContext, TaskContext}
@@ -82,12 +84,12 @@ private[spark] class ZippedPartitionsRDD2[A: ClassTag, B: ClassTag, V: ClassTag]
     preservesPartitioning: Boolean = false)
   extends ZippedPartitionsBaseRDD[V](sc, List(rdd1, rdd2), preservesPartitioning) {
 
-  override def compute(s: Partition, context: TaskContext,isRDDCache: Boolean): Iterator[V] = {
+  override def compute(s: Partition, context: TaskContext,shuffleMemorySignal :ShuffleMemorySignal): Iterator[V] = {
     val partitions = s.asInstanceOf[ZippedPartitionsPartition].partitions
-    if(isRDDCache) {
-      f(rdd1.iterator(partitions(0), context), rdd2.iterator(partitions(1), context))
+    if(shuffleMemorySignal.getIsCache) {
+      f(rdd1.iteratorK(partitions(0), context,shuffleMemorySignal), rdd2.iteratorK(partitions(1), context,shuffleMemorySignal))
     }else{
-      f(rdd1.iteratorK(partitions(0), context), rdd2.iteratorK(partitions(1), context))
+      f(rdd1.iteratorK(partitions(0), context,shuffleMemorySignal), rdd2.iteratorK(partitions(1), context,shuffleMemorySignal))
     }
   }
 
@@ -108,16 +110,16 @@ private[spark] class ZippedPartitionsRDD3
     preservesPartitioning: Boolean = false)
   extends ZippedPartitionsBaseRDD[V](sc, List(rdd1, rdd2, rdd3), preservesPartitioning) {
 
-  override def compute(s: Partition, context: TaskContext,isRDDCache: Boolean): Iterator[V] = {
+  override def compute(s: Partition, context: TaskContext,shuffleMemorySignal :ShuffleMemorySignal): Iterator[V] = {
     val partitions = s.asInstanceOf[ZippedPartitionsPartition].partitions
-    if(isRDDCache) {
-      f(rdd1.iterator(partitions(0), context),
-        rdd2.iterator(partitions(1), context),
-        rdd3.iterator(partitions(2), context))
+    if(shuffleMemorySignal.getIsCache) {
+      f(rdd1.iteratorK(partitions(0), context,shuffleMemorySignal),
+        rdd2.iteratorK(partitions(1), context,shuffleMemorySignal),
+        rdd3.iteratorK(partitions(2), context,shuffleMemorySignal))
     }else{
-      f(rdd1.iteratorK(partitions(0), context),
-        rdd2.iteratorK(partitions(1), context),
-        rdd3.iteratorK(partitions(2), context))
+      f(rdd1.iteratorK(partitions(0), context,shuffleMemorySignal),
+        rdd2.iteratorK(partitions(1), context,shuffleMemorySignal),
+        rdd3.iteratorK(partitions(2), context,shuffleMemorySignal))
     }
   }
 
@@ -140,18 +142,18 @@ private[spark] class ZippedPartitionsRDD4
     preservesPartitioning: Boolean = false)
   extends ZippedPartitionsBaseRDD[V](sc, List(rdd1, rdd2, rdd3, rdd4), preservesPartitioning) {
 
-  override def compute(s: Partition, context: TaskContext,isRDDCache: Boolean): Iterator[V] = {
+  override def compute(s: Partition, context: TaskContext,shuffleMemorySignal :ShuffleMemorySignal): Iterator[V] = {
     val partitions = s.asInstanceOf[ZippedPartitionsPartition].partitions
-    if(isRDDCache) {
-      f(rdd1.iterator(partitions(0), context),
-        rdd2.iterator(partitions(1), context),
-        rdd3.iterator(partitions(2), context),
-        rdd4.iterator(partitions(3), context))
+    if(shuffleMemorySignal.getIsCache) {
+      f(rdd1.iteratorK(partitions(0), context,shuffleMemorySignal),
+        rdd2.iteratorK(partitions(1), context,shuffleMemorySignal),
+        rdd3.iteratorK(partitions(2), context,shuffleMemorySignal),
+        rdd4.iteratorK(partitions(3), context,shuffleMemorySignal))
     }else{
-      f(rdd1.iteratorK(partitions(0), context),
-        rdd2.iteratorK(partitions(1), context),
-        rdd3.iteratorK(partitions(2), context),
-        rdd4.iteratorK(partitions(3), context))
+      f(rdd1.iteratorK(partitions(0), context,shuffleMemorySignal),
+        rdd2.iteratorK(partitions(1), context,shuffleMemorySignal),
+        rdd3.iteratorK(partitions(2), context,shuffleMemorySignal),
+        rdd4.iteratorK(partitions(3), context,shuffleMemorySignal))
     }
   }
 

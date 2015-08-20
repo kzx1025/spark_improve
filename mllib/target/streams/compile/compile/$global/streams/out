@@ -1,31 +1,108 @@
 [0m[[0mdebug[0m] [0mThe org.apache.spark.rdd.PartitionwiseSampledRDD source file has the following regular definitions changed:[0m
-[0m[[0mdebug[0m] [0m	setHasPersist, iteratorK, compute, getHasPersist, hasPersist, computeOrReadCheckpoint.[0m
+[0m[[0mdebug[0m] [0m	defaultShuffleSignal, setHasPersist, iteratorK, compute, getHasPersist, hasPersist, computeOrReadCheckpoint.[0m
 [0m[[0mdebug[0m] [0mAll member reference dependencies will be considered within this context.[0m
 [0m[[0mdebug[0m] [0mFiles invalidated by inheriting from (external) org.apache.spark.rdd.PartitionwiseSampledRDD: Set(); now invalidating by inheritance (internally).[0m
 [0m[[0mdebug[0m] [0mGetting direct dependencies of all sources transitively invalidated by inheritance.[0m
 [0m[[0mdebug[0m] [0mGetting sources that directly depend on (external) org.apache.spark.rdd.PartitionwiseSampledRDD.[0m
 [0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/util/MLUtils.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mThe org.apache.spark.api.java.JavaSparkContext source file has the following regular definitions changed:[0m
+[0m[[0mdebug[0m] [0m	union.[0m
+[0m[[0mdebug[0m] [0mAll member reference dependencies will be considered within this context.[0m
+[0m[[0mdebug[0m] [0mFiles invalidated by inheriting from (external) org.apache.spark.api.java.JavaSparkContext: Set(); now invalidating by inheritance (internally).[0m
+[0m[[0mdebug[0m] [0mGetting direct dependencies of all sources transitively invalidated by inheritance.[0m
+[0m[[0mdebug[0m] [0mGetting sources that directly depend on (external) org.apache.spark.api.java.JavaSparkContext.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/api/python/PythonMLLibAPI.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/random/RandomRDDs.scala. This dependency is not being considered for invalidation.[0m
 [0m[[0mdebug[0m] [0mThe org.apache.spark.rdd.PartitionwiseSampledRDD$ source file has the following regular definitions changed:[0m
-[0m[[0mdebug[0m] [0m	setHasPersist, iteratorK, compute, getHasPersist, hasPersist, computeOrReadCheckpoint.[0m
+[0m[[0mdebug[0m] [0m	defaultShuffleSignal, setHasPersist, iteratorK, compute, getHasPersist, hasPersist, computeOrReadCheckpoint.[0m
 [0m[[0mdebug[0m] [0mAll member reference dependencies will be considered within this context.[0m
 [0m[[0mdebug[0m] [0mFiles invalidated by inheriting from (external) org.apache.spark.rdd.PartitionwiseSampledRDD$: Set(); now invalidating by inheritance (internally).[0m
 [0m[[0mdebug[0m] [0mGetting direct dependencies of all sources transitively invalidated by inheritance.[0m
 [0m[[0mdebug[0m] [0mGetting sources that directly depend on (external) org.apache.spark.rdd.PartitionwiseSampledRDD$.[0m
 [0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/util/MLUtils.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mThe org.apache.spark.SparkContext source file has the following regular definitions changed:[0m
+[0m[[0mdebug[0m] [0m	ui.[0m
+[0m[[0mdebug[0m] [0mAll member reference dependencies will be considered within this context.[0m
+[0m[[0mdebug[0m] [0mFiles invalidated by inheriting from (external) org.apache.spark.SparkContext: Set(); now invalidating by inheritance (internally).[0m
+[0m[[0mdebug[0m] [0mGetting direct dependencies of all sources transitively invalidated by inheritance.[0m
+[0m[[0mdebug[0m] [0mGetting sources that directly depend on (external) org.apache.spark.SparkContext.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/util/LinearDataGenerator.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/linalg/distributed/RowMatrix.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/util/SVMDataGenerator.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/util/KMeansDataGenerator.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/api/python/PythonMLLibAPI.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/rdd/SlidingRDD.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/classification/NaiveBayes.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/util/LogisticRegressionDataGenerator.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/util/MLUtils.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/regression/GeneralizedLinearAlgorithm.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/recommendation/ALS.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/optimization/GradientDescent.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/optimization/LBFGS.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/rdd/RDDFunctions.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/util/MFDataGenerator.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/random/RandomRDDs.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/feature/Word2Vec.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/evaluation/BinaryClassificationMetrics.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/clustering/KMeansModel.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/feature/IDF.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/rdd/RandomRDD.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/clustering/KMeans.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mThe org.apache.spark.api.java.JavaSparkContext$ source file has the following regular definitions changed:[0m
+[0m[[0mdebug[0m] [0m	union.[0m
+[0m[[0mdebug[0m] [0mAll member reference dependencies will be considered within this context.[0m
+[0m[[0mdebug[0m] [0mFiles invalidated by inheriting from (external) org.apache.spark.api.java.JavaSparkContext$: Set(); now invalidating by inheritance (internally).[0m
+[0m[[0mdebug[0m] [0mGetting direct dependencies of all sources transitively invalidated by inheritance.[0m
+[0m[[0mdebug[0m] [0mGetting sources that directly depend on (external) org.apache.spark.api.java.JavaSparkContext$.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/api/python/PythonMLLibAPI.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/random/RandomRDDs.scala. This dependency is not being considered for invalidation.[0m
 [0m[[0mdebug[0m] [0mThe org.apache.spark.rdd.UnionRDD source file has the following regular definitions changed:[0m
-[0m[[0mdebug[0m] [0m	setHasPersist, iteratorK, compute, getHasPersist, hasPersist, computeOrReadCheckpoint.[0m
+[0m[[0mdebug[0m] [0m	defaultShuffleSignal, setHasPersist, iteratorK, compute, getHasPersist, hasPersist, computeOrReadCheckpoint.[0m
 [0m[[0mdebug[0m] [0mAll member reference dependencies will be considered within this context.[0m
 [0m[[0mdebug[0m] [0mFiles invalidated by inheriting from (external) org.apache.spark.rdd.UnionRDD: Set(); now invalidating by inheritance (internally).[0m
 [0m[[0mdebug[0m] [0mGetting direct dependencies of all sources transitively invalidated by inheritance.[0m
 [0m[[0mdebug[0m] [0mGetting sources that directly depend on (external) org.apache.spark.rdd.UnionRDD.[0m
 [0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/evaluation/BinaryClassificationMetrics.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mThe org.apache.spark.scheduler.ShuffleMemorySignal source file has the following regular definitions changed:[0m
+[0m[[0mdebug[0m] [0m	setExecutorName, stageId, cacheRDDMap, getExecutorName, executorName, setStageId, getStageId.[0m
+[0m[[0mdebug[0m] [0mAll member reference dependencies will be considered within this context.[0m
+[0m[[0mdebug[0m] [0mFiles invalidated by inheriting from (external) org.apache.spark.scheduler.ShuffleMemorySignal: Set(); now invalidating by inheritance (internally).[0m
+[0m[[0mdebug[0m] [0mGetting direct dependencies of all sources transitively invalidated by inheritance.[0m
+[0m[[0mdebug[0m] [0mGetting sources that directly depend on (external) org.apache.spark.scheduler.ShuffleMemorySignal.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/rdd/SlidingRDD.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/rdd/RandomRDD.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mThe org.apache.spark.SparkContext$ source file has the following regular definitions changed:[0m
+[0m[[0mdebug[0m] [0m	ui.[0m
+[0m[[0mdebug[0m] [0mAll member reference dependencies will be considered within this context.[0m
+[0m[[0mdebug[0m] [0mFiles invalidated by inheriting from (external) org.apache.spark.SparkContext$: Set(); now invalidating by inheritance (internally).[0m
+[0m[[0mdebug[0m] [0mGetting direct dependencies of all sources transitively invalidated by inheritance.[0m
+[0m[[0mdebug[0m] [0mGetting sources that directly depend on (external) org.apache.spark.SparkContext$.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/util/LinearDataGenerator.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/util/SVMDataGenerator.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/util/KMeansDataGenerator.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/linalg/distributed/CoordinateMatrix.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/classification/NaiveBayes.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/util/LogisticRegressionDataGenerator.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/util/MLUtils.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/recommendation/ALS.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/recommendation/MatrixFactorizationModel.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/evaluation/MulticlassMetrics.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/rdd/RDDFunctions.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/util/MFDataGenerator.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/random/RandomRDDs.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/feature/Word2Vec.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/evaluation/BinaryClassificationMetrics.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/clustering/KMeansModel.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/stat/correlation/SpearmanCorrelation.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/rdd/RandomRDD.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/mllib/src/main/scala/org/apache/spark/mllib/clustering/KMeans.scala. This dependency is not being considered for invalidation.[0m
 [0m[[0mdebug[0m] [0m[0m
 [0m[[0mdebug[0m] [0mInitial source changes: [0m
 [0m[[0mdebug[0m] [0m	removed:Set()[0m
 [0m[[0mdebug[0m] [0m	added: Set()[0m
 [0m[[0mdebug[0m] [0m	modified: Set()[0m
 [0m[[0mdebug[0m] [0mRemoved products: Set()[0m
-[0m[[0mdebug[0m] [0mExternal API changes: API Changes: Set(NamesChange(org.apache.spark.rdd.PartitionwiseSampledRDD,ModifiedNames(regularNames = setHasPersist, iteratorK, compute, getHasPersist, hasPersist, computeOrReadCheckpoint, implicitNames = )), NamesChange(org.apache.spark.rdd.PartitionwiseSampledRDD$,ModifiedNames(regularNames = setHasPersist, iteratorK, compute, getHasPersist, hasPersist, computeOrReadCheckpoint, implicitNames = )), NamesChange(org.apache.spark.rdd.UnionRDD,ModifiedNames(regularNames = setHasPersist, iteratorK, compute, getHasPersist, hasPersist, computeOrReadCheckpoint, implicitNames = )))[0m
+[0m[[0mdebug[0m] [0mExternal API changes: API Changes: Set(NamesChange(org.apache.spark.rdd.PartitionwiseSampledRDD,ModifiedNames(regularNames = defaultShuffleSignal, setHasPersist, iteratorK, compute, getHasPersist, hasPersist, computeOrReadCheckpoint, implicitNames = )), NamesChange(org.apache.spark.api.java.JavaSparkContext,ModifiedNames(regularNames = union, implicitNames = )), NamesChange(org.apache.spark.rdd.PartitionwiseSampledRDD$,ModifiedNames(regularNames = defaultShuffleSignal, setHasPersist, iteratorK, compute, getHasPersist, hasPersist, computeOrReadCheckpoint, implicitNames = )), NamesChange(org.apache.spark.SparkContext,ModifiedNames(regularNames = ui, implicitNames = )), NamesChange(org.apache.spark.api.java.JavaSparkContext$,ModifiedNames(regularNames = union, implicitNames = )), NamesChange(org.apache.spark.rdd.UnionRDD,ModifiedNames(regularNames = defaultShuffleSignal, setHasPersist, iteratorK, compute, getHasPersist, hasPersist, computeOrReadCheckpoint, implicitNames = )), NamesChange(org.apache.spark.scheduler.ShuffleMemorySignal,ModifiedNames(regularNames = setExecutorName, stageId, cacheRDDMap, getExecutorName, executorName, setStageId, getStageId, implicitNames = )), NamesChange(org.apache.spark.SparkContext$,ModifiedNames(regularNames = ui, implicitNames = )))[0m
 [0m[[0mdebug[0m] [0mModified binary dependencies: Set()[0m
 [0m[[0mdebug[0m] [0mInitial directly invalidated sources: Set()[0m
 [0m[[0mdebug[0m] [0m[0m

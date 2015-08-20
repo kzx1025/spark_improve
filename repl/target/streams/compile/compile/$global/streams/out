@@ -1,28 +1,24 @@
-[0m[[0mdebug[0m] [0mThe org.apache.spark.util.Utils source file has the following regular definitions changed:[0m
-[0m[[0mdebug[0m] [0m	mbToString, memoryStringToMb2.[0m
+[0m[[0mdebug[0m] [0mThe org.apache.spark.SparkContext$ source file has the following regular definitions changed:[0m
+[0m[[0mdebug[0m] [0m	ui.[0m
 [0m[[0mdebug[0m] [0mAll member reference dependencies will be considered within this context.[0m
-[0m[[0mdebug[0m] [0mFiles invalidated by inheriting from (external) org.apache.spark.util.Utils: Set(); now invalidating by inheritance (internally).[0m
+[0m[[0mdebug[0m] [0mFiles invalidated by inheriting from (external) org.apache.spark.SparkContext$: Set(); now invalidating by inheritance (internally).[0m
 [0m[[0mdebug[0m] [0mGetting direct dependencies of all sources transitively invalidated by inheritance.[0m
-[0m[[0mdebug[0m] [0mGetting sources that directly depend on (external) org.apache.spark.util.Utils.[0m
-[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/repl/src/main/scala/org/apache/spark/repl/SparkIMain.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mGetting sources that directly depend on (external) org.apache.spark.SparkContext$.[0m
 [0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/repl/src/main/scala/org/apache/spark/repl/SparkILoop.scala. This dependency is not being considered for invalidation.[0m
-[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/repl/src/main/scala/org/apache/spark/repl/ExecutorClassLoader.scala. This dependency is not being considered for invalidation.[0m
-[0m[[0mdebug[0m] [0mThe org.apache.spark.util.Utils$ source file has the following regular definitions changed:[0m
-[0m[[0mdebug[0m] [0m	mbToString, memoryStringToMb2.[0m
+[0m[[0mdebug[0m] [0mThe org.apache.spark.SparkContext source file has the following regular definitions changed:[0m
+[0m[[0mdebug[0m] [0m	ui.[0m
 [0m[[0mdebug[0m] [0mAll member reference dependencies will be considered within this context.[0m
-[0m[[0mdebug[0m] [0mFiles invalidated by inheriting from (external) org.apache.spark.util.Utils$: Set(); now invalidating by inheritance (internally).[0m
+[0m[[0mdebug[0m] [0mFiles invalidated by inheriting from (external) org.apache.spark.SparkContext: Set(); now invalidating by inheritance (internally).[0m
 [0m[[0mdebug[0m] [0mGetting direct dependencies of all sources transitively invalidated by inheritance.[0m
-[0m[[0mdebug[0m] [0mGetting sources that directly depend on (external) org.apache.spark.util.Utils$.[0m
-[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/repl/src/main/scala/org/apache/spark/repl/SparkIMain.scala. This dependency is not being considered for invalidation.[0m
+[0m[[0mdebug[0m] [0mGetting sources that directly depend on (external) org.apache.spark.SparkContext.[0m
 [0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/repl/src/main/scala/org/apache/spark/repl/SparkILoop.scala. This dependency is not being considered for invalidation.[0m
-[0m[[0mdebug[0m] [0mNone of the modified names appears in /Users/iceke/projects/spark/repl/src/main/scala/org/apache/spark/repl/ExecutorClassLoader.scala. This dependency is not being considered for invalidation.[0m
 [0m[[0mdebug[0m] [0m[0m
 [0m[[0mdebug[0m] [0mInitial source changes: [0m
 [0m[[0mdebug[0m] [0m	removed:Set()[0m
 [0m[[0mdebug[0m] [0m	added: Set()[0m
 [0m[[0mdebug[0m] [0m	modified: Set()[0m
 [0m[[0mdebug[0m] [0mRemoved products: Set()[0m
-[0m[[0mdebug[0m] [0mExternal API changes: API Changes: Set(NamesChange(org.apache.spark.util.Utils,ModifiedNames(regularNames = mbToString, memoryStringToMb2, implicitNames = )), NamesChange(org.apache.spark.util.Utils$,ModifiedNames(regularNames = mbToString, memoryStringToMb2, implicitNames = )))[0m
+[0m[[0mdebug[0m] [0mExternal API changes: API Changes: Set(NamesChange(org.apache.spark.SparkContext$,ModifiedNames(regularNames = ui, implicitNames = )), NamesChange(org.apache.spark.SparkContext,ModifiedNames(regularNames = ui, implicitNames = )))[0m
 [0m[[0mdebug[0m] [0mModified binary dependencies: Set()[0m
 [0m[[0mdebug[0m] [0mInitial directly invalidated sources: Set()[0m
 [0m[[0mdebug[0m] [0m[0m

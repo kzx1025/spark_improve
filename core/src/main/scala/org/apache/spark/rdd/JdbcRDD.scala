@@ -19,6 +19,8 @@ package org.apache.spark.rdd
 
 import java.sql.{Connection, ResultSet}
 
+import org.apache.spark.scheduler.ShuffleMemorySignal
+
 import scala.reflect.ClassTag
 
 import org.apache.spark.{Logging, Partition, SparkContext, TaskContext}
@@ -67,7 +69,7 @@ class JdbcRDD[T: ClassTag](
     }).toArray
   }
 
-  override def compute(thePart: Partition, context: TaskContext,isRDDCache: Boolean) = new NextIterator[T] {
+  override def compute(thePart: Partition, context: TaskContext,shuffleMemorySignal :ShuffleMemorySignal) = new NextIterator[T] {
     context.addTaskCompletionListener{ context => closeIfNeeded() }
     val part = thePart.asInstanceOf[JdbcPartition]
     val conn = getConnection()

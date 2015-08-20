@@ -14,12 +14,22 @@ package org.apache.spark.shuffle;
  * wait() and notifyAll() to signal changes.
  */
 private  class ShuffleMemoryManager implements org.apache.spark.Logging {
-  static public  long getMaxMemoryWithNoCache (org.apache.spark.SparkConf conf, boolean isRDDCache) { throw new RuntimeException(); }
+  /**
+   * Figure out the shuffle memory limit from a SparkConf. We currently have both a fraction
+   * of the memory pool and a safety factor since collections can sometimes grow bigger than
+   * the size we target before we estimate their sizes again.
+   */
+  static public  long getMaxMemory (org.apache.spark.SparkConf conf) { throw new RuntimeException(); }
+  static public  long getMaxMemoryWithCache (org.apache.spark.SparkConf conf, boolean isRDDCache) { throw new RuntimeException(); }
   public   ShuffleMemoryManager (long initMaxMemory) { throw new RuntimeException(); }
   private  scala.collection.mutable.HashMap<java.lang.Object, java.lang.Object> threadMemory () { throw new RuntimeException(); }
   private  long maxMemory () { throw new RuntimeException(); }
-  public  void setMaxMemory (long maxMemory) { throw new RuntimeException(); }
-  public  long getMaxMemory () { throw new RuntimeException(); }
+  private  scala.collection.mutable.HashSet<java.lang.Object> stageFlag () { throw new RuntimeException(); }
+  private  long specificMaxMemory () { throw new RuntimeException(); }
+  private  long normalMaxMemory () { throw new RuntimeException(); }
+  public  void updateMaxMemory (long remainMemory) { throw new RuntimeException(); }
+  public  long getSpecificMemory () { throw new RuntimeException(); }
+  public  long getNormalMemory () { throw new RuntimeException(); }
   public   ShuffleMemoryManager (org.apache.spark.SparkConf conf) { throw new RuntimeException(); }
   public   ShuffleMemoryManager (org.apache.spark.SparkConf conf, boolean isRDDCache) { throw new RuntimeException(); }
   /**

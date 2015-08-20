@@ -17,6 +17,8 @@
 
 package org.apache.spark.graphx
 
+import org.apache.spark.scheduler.ShuffleMemorySignal
+
 import scala.reflect.ClassTag
 
 import org.apache.spark._
@@ -114,8 +116,8 @@ class VertexRDD[@specialized VD: ClassTag](
   /**
    * Provides the `RDD[(VertexId, VD)]` equivalent output.
    */
-  override def compute(part: Partition, context: TaskContext,isRDDCache:Boolean): Iterator[(VertexId, VD)] = {
-    firstParent[ShippableVertexPartition[VD]].iterator(part, context).next.iterator
+  override def compute(part: Partition, context: TaskContext,shuffleMemorySignal :ShuffleMemorySignal): Iterator[(VertexId, VD)] = {
+    firstParent[ShippableVertexPartition[VD]].iteratorK(part, context,shuffleMemorySignal).next.iterator
   }
 
   /**

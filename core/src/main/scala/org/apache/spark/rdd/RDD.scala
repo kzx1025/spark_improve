@@ -19,6 +19,8 @@ package org.apache.spark.rdd
 
 import java.util.Random
 
+import org.apache.spark.scheduler.ShuffleMemorySignal
+
 import scala.collection.{mutable, Map}
 import scala.collection.mutable.ArrayBuffer
 import scala.reflect.{classTag, ClassTag}
@@ -94,7 +96,7 @@ abstract class RDD[T: ClassTag](
 
   //def compute(split: Partition, context: TaskContext): Iterator[T]
   @DeveloperApi
-  def compute(split: Partition, context: TaskContext,isRDDCache: Boolean): Iterator[T]
+  def compute(split: Partition, context: TaskContext,shuffleMemorySignal :ShuffleMemorySignal): Iterator[T]
 
 
   /**
@@ -129,6 +131,8 @@ abstract class RDD[T: ClassTag](
 
   /** A friendly name for this RDD */
   @transient var name: String = null
+
+  private val defaultShuffleSignal:ShuffleMemorySignal = new ShuffleMemorySignal(true,0L)
 
   /**
    * this rdd has persist or not
@@ -241,9 +245,9 @@ abstract class RDD[T: ClassTag](
    */
   final def iterator(split: Partition, context: TaskContext): Iterator[T] = {
     if (storageLevel != StorageLevel.NONE) {
-      SparkEnv.get.cacheManager.getOrCompute(this, split, context, storageLevel,true)
+      SparkEnv.get.cacheManager.getOrCompute(this, split, context, storageLevel,new ShuffleMemorySignal(true,0L))
    } else {
-      computeOrReadCheckpoint(split, context,true)
+      computeOrReadCheckpoint(split, context,new ShuffleMemorySignal(true,0L))
    }
   }
 
@@ -254,11 +258,11 @@ abstract class RDD[T: ClassTag](
    * @param context
    * @return
    */
-  final def iteratorK(split: Partition, context: TaskContext): Iterator[T] = {
+  final def iteratorK(split: Partition, context: TaskContext,shuffleMemorySignal :ShuffleMemorySignal): Iterator[T] = {
     if (storageLevel != StorageLevel.NONE) {
-      SparkEnv.get.cacheManager.getOrCompute(this, split, context, storageLevel,false)
+      SparkEnv.get.cacheManager.getOrCompute(this, split, context, storageLevel,shuffleMemorySignal)
     } else {
-      computeOrReadCheckpoint(split, context,false)
+      computeOrReadCheckpoint(split, context,shuffleMemorySignal)
     }
   }
 
@@ -289,16 +293,16 @@ abstract class RDD[T: ClassTag](
   /**
    * Compute an RDD partition or read it from a checkpoint if the RDD is checkpointing.
    */
-  private[spark] def computeOrReadCheckpoint(split: Partition, context: TaskContext,isRDDCache: Boolean): Iterator[T] = {
+  private[spark] def computeOrReadCheckpoint(split: Partition, context: TaskContext,shuffleMemorySignal :ShuffleMemorySignal): Iterator[T] = {
     if (isCheckpointed) {
-    if (isRDDCache) {
-      firstParent[T].iterator(split, context)
+    if (shuffleMemorySignal.getIsCache) {
+      firstParent[T].iteratorK(split, context,shuffleMemorySignal)
     }
     else {
-      firstParent[T].iteratorK(split, context)
+      firstParent[T].iteratorK(split, context,shuffleMemorySignal)
     }
   }
-    else compute(split, context,isRDDCache)
+    else compute(split, context,shuffleMemorySignal)
 
   }
 

@@ -51,11 +51,11 @@ private[spark] class ShuffleMapTask(
   def this(stageIdK: Int,
            taskBinaryK: Broadcast[Array[Byte]],
            partitionK: Partition,
-           rddCacheInStageK: Boolean,
+           shuffleMemorySignalK: ShuffleMemorySignal,
            @transient locsK: Seq[TaskLocation]){
 
     this(stageIdK,taskBinaryK,partitionK,locsK)
-    this.isRDDCache = rddCacheInStageK;
+     shuffleMemorySignal = shuffleMemorySignalK
 
   }
 
@@ -78,16 +78,16 @@ private[spark] class ShuffleMapTask(
     var writer: ShuffleWriter[Any, Any] = null
     try {
       val manager = SparkEnv.get.shuffleManager
-      writer = manager.getWriter[Any, Any](dep.shuffleHandle, partitionId, context,isRDDCache)
+      writer = manager.getWriter[Any, Any](dep.shuffleHandle, partitionId, context,shuffleMemorySignal)
       //add by kzx
-      if(isRDDCache) {
+      if(shuffleMemorySignal.getIsCache) {
         //normal process
         logInfo("shuffleMapTask->runTask: in cache")
-        writer.write(rdd.iterator(partition, context).asInstanceOf[Iterator[_ <: Product2[Any, Any]]])
+        writer.write(rdd.iteratorK(partition, context,shuffleMemorySignal).asInstanceOf[Iterator[_ <: Product2[Any, Any]]])
       }else{
         //no cache, specific process
         logInfo("shuffleMapTask->runTask: not in cache")
-        writer.write(rdd.iteratorK(partition, context).asInstanceOf[Iterator[_ <: Product2[Any, Any]]])
+        writer.write(rdd.iteratorK(partition, context,shuffleMemorySignal).asInstanceOf[Iterator[_ <: Product2[Any, Any]]])
       }
       return writer.stop(success = true).get
     } catch {

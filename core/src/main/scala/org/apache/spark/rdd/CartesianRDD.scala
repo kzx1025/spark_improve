@@ -19,6 +19,8 @@ package org.apache.spark.rdd
 
 import java.io.{IOException, ObjectOutputStream}
 
+import org.apache.spark.scheduler.ShuffleMemorySignal
+
 import scala.reflect.ClassTag
 
 import org.apache.spark._
@@ -69,14 +71,14 @@ class CartesianRDD[T: ClassTag, U: ClassTag](
     (rdd1.preferredLocations(currSplit.s1) ++ rdd2.preferredLocations(currSplit.s2)).distinct
   }
 
-  override def compute(split: Partition, context: TaskContext,isRDDCache: Boolean) = {
+  override def compute(split: Partition, context: TaskContext,shuffleMemorySignal :ShuffleMemorySignal) = {
     val currSplit = split.asInstanceOf[CartesianPartition]
-    if(isRDDCache) {
-      for (x <- rdd1.iterator(currSplit.s1, context);
-           y <- rdd2.iterator(currSplit.s2, context)) yield (x, y)
+    if(shuffleMemorySignal.getIsCache) {
+      for (x <- rdd1.iteratorK(currSplit.s1, context,shuffleMemorySignal);
+           y <- rdd2.iteratorK(currSplit.s2, context,shuffleMemorySignal)) yield (x, y)
     }else{
-      for (x <- rdd1.iteratorK(currSplit.s1, context);
-           y <- rdd2.iteratorK(currSplit.s2, context)) yield (x, y)
+      for (x <- rdd1.iteratorK(currSplit.s1, context,shuffleMemorySignal);
+           y <- rdd2.iteratorK(currSplit.s2, context,shuffleMemorySignal)) yield (x, y)
     }
   }
 

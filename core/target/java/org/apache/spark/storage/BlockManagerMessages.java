@@ -7,6 +7,7 @@ private  class BlockManagerMessages {
     public   RemoveBlock (org.apache.spark.storage.BlockId blockId) { throw new RuntimeException(); }
   }
   // no position
+  // not preceding
   static public  class RemoveBlock$ extends scala.runtime.AbstractFunction1<org.apache.spark.storage.BlockId, org.apache.spark.storage.BlockManagerMessages.RemoveBlock> implements scala.Serializable {
     public   RemoveBlock$ () { throw new RuntimeException(); }
   }

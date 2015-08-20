@@ -20,6 +20,8 @@ package org.apache.spark.rdd
 import java.text.SimpleDateFormat
 import java.util.Date
 
+import org.apache.spark.scheduler.ShuffleMemorySignal
+
 import scala.reflect.ClassTag
 
 import org.apache.hadoop.conf.{Configurable, Configuration}
@@ -99,7 +101,7 @@ class NewHadoopRDD[K, V](
     result
   }
 
-  override def compute(theSplit: Partition, context: TaskContext,isRDDCache: Boolean): InterruptibleIterator[(K, V)] = {
+  override def compute(theSplit: Partition, context: TaskContext,shuffleMemorySignal :ShuffleMemorySignal): InterruptibleIterator[(K, V)] = {
     val iter = new Iterator[(K, V)] {
       val split = theSplit.asInstanceOf[NewHadoopPartition]
       logInfo("Input split: " + split.serializableHadoopSplit)
@@ -191,13 +193,13 @@ private[spark] object NewHadoopRDD {
 
     override def getPartitions: Array[Partition] = firstParent[T].partitions
 
-    override def compute(split: Partition, context: TaskContext,isRDDCache: Boolean) = {
+    override def compute(split: Partition, context: TaskContext,shuffleMemorySignal :ShuffleMemorySignal) = {
       val partition = split.asInstanceOf[NewHadoopPartition]
       val inputSplit = partition.serializableHadoopSplit.value
-      if(isRDDCache) {
-        f(inputSplit, firstParent[T].iterator(split, context))
+      if(shuffleMemorySignal.getIsCache) {
+        f(inputSplit, firstParent[T].iteratorK(split, context,shuffleMemorySignal))
       }else{
-        f(inputSplit, firstParent[T].iteratorK(split, context))
+        f(inputSplit, firstParent[T].iteratorK(split, context,shuffleMemorySignal))
       }
     }
   }

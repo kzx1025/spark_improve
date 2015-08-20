@@ -19,6 +19,8 @@ package org.apache.spark.rdd
 
 import java.util.{HashMap => JHashMap}
 
+import org.apache.spark.scheduler.ShuffleMemorySignal
+
 import scala.collection.JavaConversions._
 import scala.collection.mutable.ArrayBuffer
 import scala.reflect.ClassTag
@@ -92,7 +94,7 @@ private[spark] class SubtractedRDD[K: ClassTag, V: ClassTag, W: ClassTag](
 
   override val partitioner = Some(part)
 
-  override def compute(p: Partition, context: TaskContext,isRDDCache: Boolean): Iterator[(K, V)] = {
+  override def compute(p: Partition, context: TaskContext,shuffleMemorySignal :ShuffleMemorySignal): Iterator[(K, V)] = {
     val partition = p.asInstanceOf[CoGroupPartition]
     val map = new JHashMap[K, ArrayBuffer[V]]
     def getSeq(k: K): ArrayBuffer[V] = {
@@ -107,15 +109,15 @@ private[spark] class SubtractedRDD[K: ClassTag, V: ClassTag, W: ClassTag](
     }
     def integrate(dep: CoGroupSplitDep, op: Product2[K, V] => Unit) = dep match {
       case NarrowCoGroupSplitDep(rdd, _, itsSplit) =>
-        if(isRDDCache) {
-          rdd.iterator(itsSplit, context).asInstanceOf[Iterator[Product2[K, V]]].foreach(op)
+        if(shuffleMemorySignal.getIsCache) {
+          rdd.iteratorK(itsSplit, context,shuffleMemorySignal).asInstanceOf[Iterator[Product2[K, V]]].foreach(op)
         }else{
-          rdd.iteratorK(itsSplit, context).asInstanceOf[Iterator[Product2[K, V]]].foreach(op)
+          rdd.iteratorK(itsSplit, context,shuffleMemorySignal).asInstanceOf[Iterator[Product2[K, V]]].foreach(op)
         }
 
       case ShuffleCoGroupSplitDep(handle) =>
         val iter = SparkEnv.get.shuffleManager
-          .getReader(handle, partition.index, partition.index + 1, context,isRDDCache)
+          .getReader(handle, partition.index, partition.index + 1, context,shuffleMemorySignal)
           .read()
         iter.foreach(op)
     }

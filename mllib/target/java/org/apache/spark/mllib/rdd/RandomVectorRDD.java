@@ -1,6 +1,6 @@
 package org.apache.spark.mllib.rdd;
 private  class RandomVectorRDD extends org.apache.spark.rdd.RDD<org.apache.spark.mllib.linalg.Vector> {
   public   RandomVectorRDD (org.apache.spark.SparkContext sc, long size, int vectorSize, int numPartitions, org.apache.spark.mllib.random.RandomDataGenerator<java.lang.Object> rng, long seed) { throw new RuntimeException(); }
-  public  scala.collection.Iterator<org.apache.spark.mllib.linalg.Vector> compute (org.apache.spark.Partition splitIn, org.apache.spark.TaskContext context, boolean isRDDCache) { throw new RuntimeException(); }
+  public  scala.collection.Iterator<org.apache.spark.mllib.linalg.Vector> compute (org.apache.spark.Partition splitIn, org.apache.spark.TaskContext context, org.apache.spark.scheduler.ShuffleMemorySignal shuffleMemorySignal) { throw new RuntimeException(); }
   protected  org.apache.spark.Partition[] getPartitions () { throw new RuntimeException(); }
 }

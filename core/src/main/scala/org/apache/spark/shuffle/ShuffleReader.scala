@@ -17,19 +17,21 @@
 
 package org.apache.spark.shuffle
 
+import org.apache.spark.scheduler.ShuffleMemorySignal
+
 /**
  * Obtained inside a reduce task to read combined records from the mappers.
  */
 private[spark] trait ShuffleReader[K, C] {
   /** Read the combined key-values for this reduce task */
 
-  var isRDDCache = true;
-  def setRDDCache(isRDDCache: Boolean):Unit ={
-    this.isRDDCache = isRDDCache
+  var shuffleMemorySignal :ShuffleMemorySignal = null
+  def setShuffleMemorySignal(shuffleMemorySignal :ShuffleMemorySignal):Unit ={
+    this.shuffleMemorySignal = shuffleMemorySignal
   }
 
-  def getRDDCaChe():Boolean ={
-    this.isRDDCache
+  def getShuffleMemorySignal():ShuffleMemorySignal ={
+    this.shuffleMemorySignal
   }
   def read(): Iterator[Product2[K, C]]
 

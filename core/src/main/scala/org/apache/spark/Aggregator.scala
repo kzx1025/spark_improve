@@ -18,6 +18,7 @@
 package org.apache.spark
 
 import org.apache.spark.annotation.DeveloperApi
+import org.apache.spark.scheduler.ShuffleMemorySignal
 import org.apache.spark.util.collection.{AppendOnlyMap, ExternalAppendOnlyMap}
 
 /**
@@ -38,10 +39,10 @@ case class Aggregator[K, V, C] (
 
   @deprecated("use combineValuesByKey with TaskContext argument", "0.9.0")
   def combineValuesByKey(iter: Iterator[_ <: Product2[K, V]]): Iterator[(K, C)] =
-    combineValuesByKey(iter, null,true)
+    combineValuesByKey(iter, null,new ShuffleMemorySignal(true,0L))
 
   def combineValuesByKey(iter: Iterator[_ <: Product2[K, V]],
-                         context: TaskContext,isRDDCache:Boolean): Iterator[(K, C)] = {
+                         context: TaskContext,shuffleMemorySignal :ShuffleMemorySignal): Iterator[(K, C)] = {
     if (!externalSorting) {
       val combiners = new AppendOnlyMap[K,C]
       var kv: Product2[K, V] = null
@@ -54,8 +55,8 @@ case class Aggregator[K, V, C] (
       }
       combiners.iterator
     } else {
-      val combiners = new ExternalAppendOnlyMap[K, V, C](createCombiner, mergeValue, mergeCombiners)
-      combiners.setRDDCache(isRDDCache)
+      val combiners = new ExternalAppendOnlyMap[K, V, C](createCombiner,  mergeValue,  mergeCombiners)
+      combiners.setShuffleMemorySignal(shuffleMemorySignal)
       combiners.insertAll(iter)
       // Update task metrics if context is not null
       // TODO: Make context non optional in a future release
@@ -69,9 +70,9 @@ case class Aggregator[K, V, C] (
 
   @deprecated("use combineCombinersByKey with TaskContext argument", "0.9.0")
   def combineCombinersByKey(iter: Iterator[_ <: Product2[K, C]]) : Iterator[(K, C)] =
-    combineCombinersByKey(iter, null,true)
+    combineCombinersByKey(iter, null,new ShuffleMemorySignal(true,0L))
 
-  def combineCombinersByKey(iter: Iterator[_ <: Product2[K, C]], context: TaskContext,isRDDCache: Boolean)
+  def combineCombinersByKey(iter: Iterator[_ <: Product2[K, C]], context: TaskContext,shuffleMemorySignal :ShuffleMemorySignal)
       : Iterator[(K, C)] =
   {
     if (!externalSorting) {
@@ -86,8 +87,8 @@ case class Aggregator[K, V, C] (
       }
       combiners.iterator
     } else {
-      val combiners = new ExternalAppendOnlyMap[K, C, C](identity, mergeCombiners, mergeCombiners)
-      combiners.setRDDCache(isRDDCache)
+      val combiners = new ExternalAppendOnlyMap[K, C, C](identity, mergeCombiners,mergeCombiners)
+      combiners.setShuffleMemorySignal(shuffleMemorySignal)
       while (iter.hasNext) {
         val pair = iter.next()
         combiners.insert(pair._1, pair._2)

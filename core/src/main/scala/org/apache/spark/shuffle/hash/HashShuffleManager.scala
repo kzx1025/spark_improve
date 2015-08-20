@@ -18,6 +18,7 @@
 package org.apache.spark.shuffle.hash
 
 import org.apache.spark._
+import org.apache.spark.scheduler.ShuffleMemorySignal
 import org.apache.spark.shuffle._
 
 /**
@@ -42,18 +43,21 @@ private[spark] class HashShuffleManager(conf: SparkConf) extends ShuffleManager 
       startPartition: Int,
       endPartition: Int,
       context: TaskContext,
-      isRDDCache: Boolean): ShuffleReader[K, C] = {
+      shuffleMemorySignal :ShuffleMemorySignal): ShuffleReader[K, C] = {
     val hashReader = new HashShuffleReader(
       handle.asInstanceOf[BaseShuffleHandle[K, _, C]], startPartition, endPartition, context)
-    hashReader.setRDDCache(isRDDCache)
+    if(shuffleMemorySignal == null){
+      throw new Exception("shuffleSignal is null!!!!")
+    }
+    hashReader.setShuffleMemorySignal(shuffleMemorySignal)
     hashReader
   }
 
   /** Get a writer for a given partition. Called on executors by map tasks. */
-  override def getWriter[K, V](handle: ShuffleHandle, mapId: Int, context: TaskContext, isRDDCache: Boolean)
+  override def getWriter[K, V](handle: ShuffleHandle, mapId: Int, context: TaskContext, shuffleMemorySignal :ShuffleMemorySignal)
       : ShuffleWriter[K, V] = {
     val hashWriter = new HashShuffleWriter(handle.asInstanceOf[BaseShuffleHandle[K, V, _]], mapId, context)
-    hashWriter.setRDDCache(isRDDCache)
+    hashWriter.setShuffleMemorySignal(shuffleMemorySignal)
     hashWriter
   }
 

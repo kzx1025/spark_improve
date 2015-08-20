@@ -5,5 +5,5 @@ private  class FilteredRDD<T extends java.lang.Object> extends org.apache.spark.
   public   FilteredRDD (org.apache.spark.rdd.RDD<T> prev, scala.Function1<T, java.lang.Object> f, scala.reflect.ClassTag<T> evidence$1) { throw new RuntimeException(); }
   public  org.apache.spark.Partition[] getPartitions () { throw new RuntimeException(); }
   public  scala.Option<org.apache.spark.Partitioner> partitioner () { throw new RuntimeException(); }
-  public  scala.collection.Iterator<T> compute (org.apache.spark.Partition split, org.apache.spark.TaskContext context, boolean isRDDCache) { throw new RuntimeException(); }
+  public  scala.collection.Iterator<T> compute (org.apache.spark.Partition split, org.apache.spark.TaskContext context, org.apache.spark.scheduler.ShuffleMemorySignal shuffleMemorySignal) { throw new RuntimeException(); }
 }

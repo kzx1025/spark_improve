@@ -35,7 +35,7 @@ private  class Stage implements org.apache.spark.Logging {
   /** add a flag to identify the stage is in cache or not
    * by kzx
    */
-  public  boolean isCacheInRDDs () { throw new RuntimeException(); }
+  public  org.apache.spark.scheduler.ShuffleMemorySignal shuffleMemorySignal () { throw new RuntimeException(); }
   public  scala.collection.mutable.HashSet<org.apache.spark.rdd.RDD<?>> cacheRDDs () { throw new RuntimeException(); }
   public  boolean isShuffleMap () { throw new RuntimeException(); }
   public  int numPartitions () { throw new RuntimeException(); }
@@ -51,16 +51,6 @@ private  class Stage implements org.apache.spark.Logging {
   public  java.lang.String details () { throw new RuntimeException(); }
   /** Pointer to the latest [StageInfo] object, set by DAGScheduler. */
   public  org.apache.spark.scheduler.StageInfo latestInfo () { throw new RuntimeException(); }
-  /**
-   * add by kzx
-   * @param flag
-   */
-  public  void setCacheInRDDs (boolean flag) { throw new RuntimeException(); }
-  /**
-   * add by kzx
-   * @return
-   */
-  public  boolean getCacheInRDDs () { throw new RuntimeException(); }
   public  boolean isAvailable () { throw new RuntimeException(); }
   public  void addOutputLoc (int partition, org.apache.spark.scheduler.MapStatus status) { throw new RuntimeException(); }
   public  void removeOutputLoc (int partition, org.apache.spark.storage.BlockManagerId bmAddress) { throw new RuntimeException(); }

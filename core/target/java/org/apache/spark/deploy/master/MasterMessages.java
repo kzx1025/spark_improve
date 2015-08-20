@@ -37,6 +37,7 @@ public  interface MasterMessages extends scala.Serializable {
     public   WebUIPortResponse (int webUIBoundPort) { throw new RuntimeException(); }
   }
   // no position
+  // not preceding
   static public  class WebUIPortResponse$ extends scala.runtime.AbstractFunction1<java.lang.Object, org.apache.spark.deploy.master.MasterMessages.WebUIPortResponse> implements scala.Serializable {
     public   WebUIPortResponse$ () { throw new RuntimeException(); }
   }

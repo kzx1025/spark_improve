@@ -55,9 +55,9 @@ private[spark] class HashShuffleReader[K, C](
 
     val aggregatedIter: Iterator[Product2[K, C]] = if (dep.aggregator.isDefined) {
       if (dep.mapSideCombine) {
-        new InterruptibleIterator(context, dep.aggregator.get.combineCombinersByKey(iter, context,isRDDCache))
+        new InterruptibleIterator(context, dep.aggregator.get.combineCombinersByKey(iter, context,shuffleMemorySignal))
       } else {
-        new InterruptibleIterator(context, dep.aggregator.get.combineValuesByKey(iter, context,isRDDCache))
+        new InterruptibleIterator(context, dep.aggregator.get.combineValuesByKey(iter, context,shuffleMemorySignal))
       }
     } else if (dep.aggregator.isEmpty && dep.mapSideCombine) {
       throw new IllegalStateException("Aggregator is empty for map-side combine")
@@ -72,7 +72,7 @@ private[spark] class HashShuffleReader[K, C](
         // Create an ExternalSorter to sort the data. Note that if spark.shuffle.spill is disabled,
         // the ExternalSorter won't spill to disk.
         val sorter = new ExternalSorter[K, C, C](ordering = Some(keyOrd), serializer = Some(ser))
-        sorter.setRDDCache(isRDDCache);
+        sorter.setShuffleMemorySignal(shuffleMemorySignal)
         sorter.insertAll(aggregatedIter)
         context.taskMetrics.memoryBytesSpilled += sorter.memoryBytesSpilled
         context.taskMetrics.diskBytesSpilled += sorter.diskBytesSpilled

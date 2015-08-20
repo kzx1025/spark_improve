@@ -12,5 +12,5 @@ private  class ShuffleMemoryManager$ {
    * the size we target before we estimate their sizes again.
    */
   public  long getMaxMemory (org.apache.spark.SparkConf conf) { throw new RuntimeException(); }
-  public  long getMaxMemoryWithNoCache (org.apache.spark.SparkConf conf, boolean isRDDCache) { throw new RuntimeException(); }
+  public  long getMaxMemoryWithCache (org.apache.spark.SparkConf conf, boolean isRDDCache) { throw new RuntimeException(); }
 }

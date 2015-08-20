@@ -20,7 +20,7 @@ private  class ResultTask<T extends java.lang.Object, U extends java.lang.Object
   /**
    * add by kzx
    */
-  public   ResultTask (int stageIdK, org.apache.spark.broadcast.Broadcast<byte[]> taskBinaryK, org.apache.spark.Partition partitionK, boolean rddCacheInStageK, scala.collection.Seq<org.apache.spark.scheduler.TaskLocation> locsK, int outputIdK) { throw new RuntimeException(); }
+  public   ResultTask (int stageIdK, org.apache.spark.broadcast.Broadcast<byte[]> taskBinaryK, org.apache.spark.Partition partitionK, org.apache.spark.scheduler.ShuffleMemorySignal shuffleMemorySignalK, scala.collection.Seq<org.apache.spark.scheduler.TaskLocation> locsK, int outputIdK) { throw new RuntimeException(); }
   public  U runTask (org.apache.spark.TaskContext context) { throw new RuntimeException(); }
   public  scala.collection.Seq<org.apache.spark.scheduler.TaskLocation> preferredLocations () { throw new RuntimeException(); }
   public  java.lang.String toString () { throw new RuntimeException(); }

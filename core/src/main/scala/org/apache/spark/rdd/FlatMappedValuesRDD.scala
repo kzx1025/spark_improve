@@ -17,6 +17,7 @@
 
 package org.apache.spark.rdd
 
+import org.apache.spark.scheduler.ShuffleMemorySignal
 import org.apache.spark.{Partition, TaskContext}
 
 private[spark]
@@ -27,13 +28,13 @@ class FlatMappedValuesRDD[K, V, U](prev: RDD[_ <: Product2[K, V]], f: V => Trave
 
   override val partitioner = firstParent[Product2[K, V]].partitioner
 
-  override def compute(split: Partition, context: TaskContext,isRDDCache: Boolean) = {
-    if (isRDDCache) {
-      firstParent[Product2[K, V]].iterator(split, context).flatMap { case Product2(k, v) =>
+  override def compute(split: Partition, context: TaskContext,shuffleMemorySignal :ShuffleMemorySignal) = {
+    if (shuffleMemorySignal.getIsCache) {
+      firstParent[Product2[K, V]].iteratorK(split, context,shuffleMemorySignal).flatMap { case Product2(k, v) =>
         f(v).map(x => (k, x))
       }
   }else{
-    firstParent[Product2[K, V]].iteratorK(split, context).flatMap { case Product2(k, v) =>
+    firstParent[Product2[K, V]].iteratorK(split, context,shuffleMemorySignal).flatMap { case Product2(k, v) =>
       f(v).map(x => (k, x))
     }
   }

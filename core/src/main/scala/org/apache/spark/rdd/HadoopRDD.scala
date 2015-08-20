@@ -21,6 +21,8 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.io.EOFException
 
+import org.apache.spark.scheduler.ShuffleMemorySignal
+
 import scala.collection.immutable.Map
 import scala.reflect.ClassTag
 
@@ -184,7 +186,7 @@ class HadoopRDD[K, V](
     array
   }
 
-  override def compute(theSplit: Partition, context: TaskContext,isRDDCache: Boolean): InterruptibleIterator[(K, V)] = {
+  override def compute(theSplit: Partition, context: TaskContext,shuffleMemorySignal :ShuffleMemorySignal): InterruptibleIterator[(K, V)] = {
     val iter = new NextIterator[(K, V)] {
 
       val split = theSplit.asInstanceOf[HadoopPartition]
@@ -298,13 +300,13 @@ private[spark] object HadoopRDD {
 
     override def getPartitions: Array[Partition] = firstParent[T].partitions
 
-    override def compute(split: Partition, context: TaskContext,isRDDCache: Boolean) = {
+    override def compute(split: Partition, context: TaskContext,shuffleMemorySignal :ShuffleMemorySignal) = {
       val partition = split.asInstanceOf[HadoopPartition]
       val inputSplit = partition.inputSplit.value
-      if(isRDDCache) {
-        f(inputSplit, firstParent[T].iterator(split, context))
+      if(shuffleMemorySignal.getIsCache) {
+        f(inputSplit, firstParent[T].iteratorK(split, context,shuffleMemorySignal))
       }else{
-        f(inputSplit, firstParent[T].iteratorK(split, context))
+        f(inputSplit, firstParent[T].iteratorK(split, context,shuffleMemorySignal))
       }
     }
   }

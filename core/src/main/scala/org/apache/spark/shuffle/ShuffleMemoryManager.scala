@@ -17,9 +17,13 @@
 
 package org.apache.spark.shuffle
 
+import org.apache.spark.scheduler.Stage
+
 import scala.collection.mutable
 
 import org.apache.spark.{Logging, SparkException, SparkConf}
+
+import scala.collection.mutable.HashSet
 
 /**
  * Allocates a pool of memory to task threads for use in shuffle operations. Each disk-spilling
@@ -39,24 +43,57 @@ private[spark] class ShuffleMemoryManager(initMaxMemory: Long) extends Logging {
   private val threadMemory = new mutable.HashMap[Long, Long]()  // threadId -> memory bytes
 
   private var maxMemory = initMaxMemory
+  private val stageFlag = new HashSet[Int]
+  private var specificMaxMemory = 0L
+  private var normalMaxMemory = 0L
 
-  def setMaxMemory(maxMemory: Long): Unit ={
-    this.maxMemory = maxMemory
+
+  def updateMaxMemory(remainMemory: Long):Unit={
+    this.maxMemory = remainMemory
+    //logInfo("============max memory is:" + maxMemory)
+
   }
 
-  def getMaxMemory(): Long={
-    this.maxMemory
+  def getSpecificMemory():Long={
+     this.specificMaxMemory
   }
+
+  def getNormalMemory():Long={
+    this.normalMaxMemory
+
+  }
+
+  //  def setSpecificMaxMemory(): Unit ={
+  //    this.maxMemory = specificMaxMemory
+  //  }
+  //  def setNormalMaxMemory():Unit={
+  //    this.maxMemory = normalMaxMemory
+  //
+  //  }
+
+  //  def updateMaxMemory(cacheMemory: Long,stageId: Int): Unit= {
+  //    if (!stageFlag.contains(stageId)) {
+  //      //specificMaxMemory = maxMemory
+  //       //maxMemory -= (cacheMemory * 0.7 / 2).toLong
+  //      logInfo("============max memory is:" + maxMemory)
+  //      stageFlag += stageId
+  //   }
+  //  }
+
 
   def this(conf: SparkConf) = {
+    //only once
     this(ShuffleMemoryManager.getMaxMemory(conf))
+    specificMaxMemory = ShuffleMemoryManager.getMaxMemoryWithCache(conf,false)
+    normalMaxMemory = ShuffleMemoryManager.getMaxMemoryWithCache(conf,true)
+   // maxMemory = ShuffleMemoryManager.getMaxMemoryWithCache(conf,true)
     logInfo("use shuffleMemoryManager:"+maxMemory)
     logInfo("total Mem:"+Runtime.getRuntime.maxMemory())
   }
 
   //add by kzx
   def this(conf: SparkConf, isRDDCache: Boolean) = {
-    this(ShuffleMemoryManager.getMaxMemoryWithNoCache(conf, isRDDCache))
+    this(ShuffleMemoryManager.getMaxMemoryWithCache(conf, isRDDCache))
     logInfo("use specificShuffleMemoryManager:"+maxMemory)
   }
 
@@ -143,10 +180,10 @@ private object ShuffleMemoryManager {
     (Runtime.getRuntime.maxMemory * memoryFraction * safetyFraction).toLong
   }
 
-  def getMaxMemoryWithNoCache(conf: SparkConf,isRDDCache: Boolean): Long = {
+  def getMaxMemoryWithCache(conf: SparkConf,isRDDCache: Boolean): Long = {
     //if rdd not cache , shuffle memoryFraction will be 0.6
     val memoryFraction =
-    if(isRDDCache == false) 0.6
+    if(isRDDCache == false) 0.8
     else conf.getDouble("spark.shuffle.memoryFraction", 0.2)
 
     val safetyFraction = conf.getDouble("spark.shuffle.safetyFraction", 0.8)

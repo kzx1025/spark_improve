@@ -17,6 +17,8 @@
 
 package org.apache.spark.rdd
 
+import org.apache.spark.scheduler.ShuffleMemorySignal
+
 import scala.reflect.ClassTag
 
 import org.apache.spark.{Partition, TaskContext}
@@ -31,10 +33,10 @@ private[spark] class MapPartitionsRDD[U: ClassTag, T: ClassTag](
 
   override def getPartitions: Array[Partition] = firstParent[T].partitions
 
-  override def compute(split: Partition, context: TaskContext,isRDDCache: Boolean) =
-  if(isRDDCache) {
-    f(context, split.index, firstParent[T].iterator(split, context))
+  override def compute(split: Partition, context: TaskContext,shuffleMemorySignal :ShuffleMemorySignal) =
+  if(shuffleMemorySignal.getIsCache) {
+    f(context, split.index, firstParent[T].iteratorK(split, context,shuffleMemorySignal))
   }else{
-    f(context, split.index, firstParent[T].iteratorK(split, context))
+    f(context, split.index, firstParent[T].iteratorK(split, context,shuffleMemorySignal))
   }
 }

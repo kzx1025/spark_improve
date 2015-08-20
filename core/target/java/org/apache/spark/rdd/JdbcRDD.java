@@ -24,5 +24,5 @@ public  class JdbcRDD<T extends java.lang.Object> extends org.apache.spark.rdd.R
   // TypeTree().setOriginal(TypeBoundsTree(TypeTree().setOriginal(Select(Select(Ident(_root_), scala), scala.Nothing)), TypeTree().setOriginal(Select(Select(Ident(_root_), scala), scala.Any))))
   public   JdbcRDD (org.apache.spark.SparkContext sc, scala.Function0<java.sql.Connection> getConnection, java.lang.String sql, long lowerBound, long upperBound, int numPartitions, scala.Function1<java.sql.ResultSet, T> mapRow, scala.reflect.ClassTag<T> evidence$1) { throw new RuntimeException(); }
   public  org.apache.spark.Partition[] getPartitions () { throw new RuntimeException(); }
-  public  org.apache.spark.util.NextIterator<T> compute (org.apache.spark.Partition thePart, org.apache.spark.TaskContext context, boolean isRDDCache) { throw new RuntimeException(); }
+  public  org.apache.spark.util.NextIterator<T> compute (org.apache.spark.Partition thePart, org.apache.spark.TaskContext context, org.apache.spark.scheduler.ShuffleMemorySignal shuffleMemorySignal) { throw new RuntimeException(); }
 }

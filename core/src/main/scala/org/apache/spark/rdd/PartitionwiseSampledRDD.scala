@@ -19,6 +19,8 @@ package org.apache.spark.rdd
 
 import java.util.Random
 
+import org.apache.spark.scheduler.ShuffleMemorySignal
+
 import scala.reflect.ClassTag
 
 import org.apache.spark.{Partition, TaskContext}
@@ -61,14 +63,14 @@ private[spark] class PartitionwiseSampledRDD[T: ClassTag, U: ClassTag](
   override def getPreferredLocations(split: Partition): Seq[String] =
     firstParent[T].preferredLocations(split.asInstanceOf[PartitionwiseSampledRDDPartition].prev)
 
-  override def compute(splitIn: Partition, context: TaskContext,isRDDCache: Boolean): Iterator[U] = {
+  override def compute(splitIn: Partition, context: TaskContext,shuffleMemorySignal :ShuffleMemorySignal): Iterator[U] = {
     val split = splitIn.asInstanceOf[PartitionwiseSampledRDDPartition]
     val thisSampler = sampler.clone
     thisSampler.setSeed(split.seed)
-    if(isRDDCache) {
-      thisSampler.sample(firstParent[T].iterator(split.prev, context))
+    if(shuffleMemorySignal.getIsCache) {
+      thisSampler.sample(firstParent[T].iteratorK(split.prev, context,shuffleMemorySignal))
     }else{
-      thisSampler.sample(firstParent[T].iteratorK(split.prev, context))
+      thisSampler.sample(firstParent[T].iteratorK(split.prev, context,shuffleMemorySignal))
     }
   }
 }
